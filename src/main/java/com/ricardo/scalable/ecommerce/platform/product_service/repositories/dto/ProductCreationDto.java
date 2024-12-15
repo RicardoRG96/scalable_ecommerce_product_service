@@ -1,32 +1,11 @@
-package com.ricardo.scalable.ecommerce.platform.product_service.entities;
-
-import java.sql.Timestamp;
-
-import org.hibernate.annotations.CreationTimestamp;
-
-import com.fasterxml.jackson.annotation.JsonProperty;
+package com.ricardo.scalable.ecommerce.platform.product_service.repositories.dto;
 
 import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.Table;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 
-@Entity
-@Table(name = "products")
-public class Product {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class ProductCreationDto {
 
     @NotBlank
     private String sku;
@@ -40,28 +19,16 @@ public class Product {
     @NotBlank
     private String description;
 
-    @JoinColumn(name = "category_id")
-    // @JoinTable(
-    //     name = "categories",
-    //     joinColumns = @JoinColumn(name = "id")
-    // )
-    @OneToOne
-    @NotNull
-    private Category category;
+    @Min(1)
+    private Long categoryId;
 
-    @JoinColumn(name = "brand_id")
-    // @JoinTable(
-    //     name = "brands",
-    //     joinColumns = @JoinColumn(name = "id")
-    // )
-    @OneToOne
-    @NotNull
-    private Brand brand;
+    @Min(1)
+    private Long brandId;
 
     @DecimalMin("0.00")
     private Double price;
 
-    @Min(0)
+    @Min(1)
     private Integer stock;
 
     @Column(name = "image_url")
@@ -77,43 +44,25 @@ public class Product {
     @Column(name = "is_on_sale")
     private Boolean isOnSale;
 
-    @Column(name = "created_at")
-    @CreationTimestamp
-    private Timestamp createdAt;
-
-    @Column(name = "updated_at")
-    @CreationTimestamp
-    private Timestamp updatedAt;
-
-    public Product() {
+    public ProductCreationDto() {
     }
 
-    public Product(Long id, String sku, String upc, String name, String description, Category category, Brand brand,
-            Double price, Integer stock, String imageUrl, Boolean isActive, Boolean isFeatured, Boolean isOnSale,
-            Timestamp createdAt, Timestamp updatedAt) {
-        this.id = id;
+    public ProductCreationDto(@NotBlank String sku, @NotBlank String upc, @NotBlank String name,
+            @NotBlank String description, @Min(0) Long categoryId, @Min(0) Long brandId,
+            @DecimalMin("0.00") Double price, @Min(0) Integer stock, @NotBlank String imageUrl, Boolean isActive,
+            Boolean isFeatured, Boolean isOnSale) {
         this.sku = sku;
         this.upc = upc;
         this.name = name;
         this.description = description;
-        this.category = category;
-        this.brand = brand;
+        this.categoryId = categoryId;
+        this.brandId = brandId;
         this.price = price;
         this.stock = stock;
         this.imageUrl = imageUrl;
         this.isActive = isActive;
         this.isFeatured = isFeatured;
         this.isOnSale = isOnSale;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getSku() {
@@ -148,20 +97,20 @@ public class Product {
         this.description = description;
     }
 
-    public Category getCategory() {
-        return category;
+    public Long getCategoryId() {
+        return categoryId;
     }
 
-    public void setCategory(Category category) {
-        this.category = category;
+    public void setCategoryId(Long categoryId) {
+        this.categoryId = categoryId;
     }
 
-    public Brand getBrand() {
-        return brand;
+    public Long getBrandId() {
+        return brandId;
     }
 
-    public void setBrand(Brand brand) {
-        this.brand = brand;
+    public void setBrandId(Long brandId) {
+        this.brandId = brandId;
     }
 
     public Double getPrice() {
@@ -210,22 +159,6 @@ public class Product {
 
     public void setIsOnSale(Boolean isOnSale) {
         this.isOnSale = isOnSale;
-    }
-
-    public Timestamp getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(Timestamp createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public Timestamp getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(Timestamp updatedAt) {
-        this.updatedAt = updatedAt;
     }
 
 }
