@@ -3,6 +3,7 @@ package com.ricardo.scalable.ecommerce.platform.product_service.services;
 import java.util.Optional;
 
 import com.ricardo.scalable.ecommerce.platform.product_service.entities.Brand;
+import com.ricardo.scalable.ecommerce.platform.product_service.repositories.dto.BrandCreationDto;
 
 public interface BrandService {
 
@@ -12,7 +13,7 @@ public interface BrandService {
 
     Iterable<Brand> findAll();
 
-    Brand save(Brand brand);
+    Brand save(BrandCreationDto brandCreation);
 
     Optional<Brand> update(Brand brand, Long id);
 

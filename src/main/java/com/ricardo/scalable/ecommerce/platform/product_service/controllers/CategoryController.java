@@ -38,7 +38,7 @@ public class CategoryController {
         return ResponseEntity.notFound().build();
     }
 
-    @GetMapping("/categories/category-name/{name}")
+    @GetMapping("/categories/name/{name}")
     public ResponseEntity<Category> getByName(@PathVariable String name) {
         Optional<Category> categoryOptional = categoryService.findByName(name);
 
