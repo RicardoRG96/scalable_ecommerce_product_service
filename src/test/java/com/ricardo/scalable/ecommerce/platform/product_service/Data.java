@@ -79,6 +79,13 @@ public class Data {
         return Optional.of(product);
     }
 
+    public static List<Category> createListOfCategories() {
+        Category category1 = createCategory001().orElseThrow();
+        Category category2 = createCategory002().orElseThrow();
+
+        return List.of(category1, category2);
+    }
+
     public static Optional<Category> createCategory001() {
         Category category = new Category(
             2L, 
@@ -91,9 +98,41 @@ public class Data {
         return Optional.of(category);
     }
 
+    public static Optional<Category> createCategory002() {
+        Category category = new Category(
+            3L, 
+            "Deportes", 
+            "Descripcion deportes", 
+            Timestamp.from(Instant.now()), 
+            Timestamp.from(Instant.now())
+        );
+
+        return Optional.of(category);
+    }
+
+    public static List<Brand> createListOfBrands() {
+        Brand brand1 = createBrand001().orElseThrow();
+        Brand brand2 = createBrand002().orElseThrow();
+
+        return List.of(brand1, brand2);
+    }
+
     public static Optional<Brand> createBrand001() {
         Brand brand = new Brand(
             2L, 
+            "Apple", 
+            "Marca Apple", 
+            "logo2.png", 
+            Timestamp.from(Instant.now()), 
+            Timestamp.from(Instant.now())
+        );
+
+        return Optional.of(brand);
+    }
+
+    public static Optional<Brand> createBrand002() {
+        Brand brand = new Brand(
+            3L, 
             "Apple", 
             "Marca Apple", 
             "logo2.png", 
