@@ -88,4 +88,23 @@ public class CategoryServiceTest {
         );
     }
 
+    @Test
+    void testUpdate() {
+        Category updateCategoryRequest = new Category();
+        updateCategoryRequest.setId(3L);
+        updateCategoryRequest.setName("Futbol");
+        updateCategoryRequest.setDescription("Descripcion futbol");
+
+        when(categoryRepository.findById(3L)).thenReturn(Data.createCategory002());
+        when(categoryRepository.save(any())).thenReturn(updateCategoryRequest);
+
+        Optional<Category> updateCategoryResponse = categoryService.update(updateCategoryRequest, 3L);
+
+        assertAll(
+            () -> assertTrue(updateCategoryResponse.isPresent()),
+            () -> assertEquals(3L, updateCategoryResponse.orElseThrow().getId()),
+            () -> assertEquals("Futbol", updateCategoryResponse.orElseThrow().getName()),
+            () -> assertEquals("Descripcion futbol", updateCategoryResponse.orElseThrow().getDescription())
+        );
+    }
 }
