@@ -133,8 +133,8 @@ public class Data {
     public static Optional<Brand> createBrand002() {
         Brand brand = new Brand(
             3L, 
-            "Apple", 
-            "Marca Apple", 
+            "Samsung", 
+            "Marca Samsung", 
             "logo2.png", 
             Timestamp.from(Instant.now()), 
             Timestamp.from(Instant.now())
