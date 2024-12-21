@@ -20,21 +20,8 @@ public class Data {
 
     public static Optional<Product> createProduct001() {
         Product product = new Product();
-        Category category = new Category(
-            1L, 
-            "Tecnología", 
-            "Descripcion tecnología", 
-            Timestamp.from(Instant.now()), 
-            Timestamp.from(Instant.now())
-        );
-        Brand brand = new Brand(
-            1L, 
-            "ASUS", 
-            "Marca Asus", 
-            "logo.png", 
-            Timestamp.from(Instant.now()), 
-            Timestamp.from(Instant.now())
-        );
+        Category category = createCategory001().orElseThrow();
+        Brand brand = createBrand002().orElseThrow();
 
         product.setId(1L);
         product.setSku("123456");
@@ -57,8 +44,8 @@ public class Data {
 
     public static Optional<Product> createProduct002() {
         Product product = new Product();
-        Category category = createCategory001().orElseThrow();
-        Brand brand = createBrand001().orElseThrow();
+        Category category = createCategory002().orElseThrow();
+        Brand brand = createBrand002().orElseThrow();
 
         product.setId(2L);
         product.setSku("7891011");
