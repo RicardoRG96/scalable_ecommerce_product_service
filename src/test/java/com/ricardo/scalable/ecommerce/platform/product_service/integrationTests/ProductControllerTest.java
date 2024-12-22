@@ -3,7 +3,10 @@ package com.ricardo.scalable.ecommerce.platform.product_service.integrationTests
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 
 import java.io.IOException;
@@ -61,16 +64,26 @@ public class ProductControllerTest {
                     try {
                         JsonNode json = objectMapper.readTree(response.getResponseBody());
                         assertAll(
-                            () -> assertNull(json),
+                            () -> assertNotNull(json),
                             () -> assertEquals(product.getId(), json.path("id").asLong()),
-                            () -> assertEquals("ñacsn", json.path("name").asText()),
-                            () -> assertEquals("descripcion", json.path("description").asText()),
-                            () -> assertEquals("kaka", json.path("brand").path("name").asText())
+                            () -> assertEquals(product.getName(), json.path("name").asText()),
+                            () -> assertEquals(product.getDescription(), json.path("description").asText()),
+                            () -> assertEquals(product.getCategory().getName(), json.path("category").path("name").asText()),
+                            () -> assertEquals(product.getBrand().getName(), json.path("brand").path("name").asText()),
+                            () -> assertEquals(product.getPrice(), json.path("price").asDouble()),
+                            () -> assertEquals(product.getIsActive(), json.path("isActive").asBoolean())
                         );
                     } catch (IOException ex) {
                         ex.printStackTrace();
                     }
                 });
+
+        String notExistingProductId = "50";
+
+        client.get()
+                .uri("/" + notExistingProductId)
+                .exchange()
+                .expectStatus().isNotFound();
     }
 
     private Product createProduct001() {
@@ -108,6 +121,159 @@ public class ProductControllerTest {
         product.setUpdatedAt(Timestamp.from(Instant.now()));
 
         return product;
+    }
+
+    private Product createProduct002() {
+        Product product = new Product();
+        Category category = new Category(
+            2L, 
+            "Notebooks", 
+            "Computadores portatiles", 
+            Timestamp.from(Instant.now()), 
+            Timestamp.from(Instant.now())
+        );
+        Brand brand = new Brand(
+            1L, 
+            "ASUS", 
+            "Empresa multinacional de tecnología", 
+            "https://example.com/asus_logo.png", 
+            Timestamp.from(Instant.now()), 
+            Timestamp.from(Instant.now())
+        );
+
+        product.setId(2L);
+        product.setSku("SKU2501");
+        product.setUpc("UPC1515");
+        product.setName("Asus Zenbook");
+        product.setDescription("Notebook de ultima generacion");
+        product.setCategory(category);
+        product.setBrand(brand);
+        product.setPrice(999.99);
+        product.setStock(200);
+        product.setImageUrl("https://example.com/images/asus_zenbook.jpg");
+        product.setIsActive(true);
+        product.setIsFeatured(false);
+        product.setIsOnSale(true);
+        product.setCreatedAt(Timestamp.from(Instant.now()));
+        product.setUpdatedAt(Timestamp.from(Instant.now()));
+
+        return product;
+    }
+
+    @Test
+    @Order(2)
+    void testGetByName() {
+        Product product = createProduct001();
+
+        client.get()
+                .uri("/product-name/iPhone 15")
+                .exchange()
+                .expectStatus().isOk()
+                .expectHeader().contentType(MediaType.APPLICATION_JSON)
+                .expectBody()
+                .consumeWith(res -> {
+                    try {
+                        JsonNode json = objectMapper.readTree(res.getResponseBody());
+                        assertAll(
+                            () -> assertNotNull(json),
+                            () -> assertEquals(product.getSku(), json.path("sku").asText()),
+                            () -> assertEquals(product.getName(), json.path("name").asText()),
+                            () -> assertEquals(product.getDescription(), json.path("description").asText()),
+                            () -> assertEquals(product.getCategory().getName(), json.path("category").path("name").asText()),
+                            () -> assertEquals(product.getBrand().getName(), json.path("brand").path("name").asText()),
+                            () -> assertEquals(product.getPrice(), json.path("price").asDouble()),
+                            () -> assertEquals(product.getIsFeatured(), json.path("isFeatured").asBoolean())
+                        );
+                    } catch (IOException ex) {
+                        ex.printStackTrace();
+                    }
+                });
+
+        String notExistingProductName = "Samsung Galaxy s22";
+
+        client.get()
+                .uri("/product-name/" + notExistingProductName)
+                .exchange()
+                .expectStatus().isNotFound();
+    }
+
+    @Test
+    @Order(3)
+    void testGetBySku() {
+        Product product = createProduct001();
+
+        client.get()
+                .uri("/product-sku/SKU2210")
+                .exchange()
+                .expectStatus().isOk()
+                .expectHeader().contentType(MediaType.APPLICATION_JSON)
+                .expectBody()
+                .consumeWith(res -> {
+                    try {
+                        JsonNode json = objectMapper.readTree(res.getResponseBody());
+                        assertAll(
+                            () -> assertNotNull(json),
+                            () -> assertEquals(product.getSku(), json.path("sku").asText()),
+                            () -> assertEquals(product.getName(), json.path("name").asText()),
+                            () -> assertEquals(product.getDescription(), json.path("description").asText()),
+                            () -> assertEquals(product.getCategory().getName(), json.path("category").path("name").asText()),
+                            () -> assertEquals(product.getBrand().getName(), json.path("brand").path("name").asText()),
+                            () -> assertEquals(product.getPrice(), json.path("price").asDouble()),
+                            () -> assertEquals(product.getStock(), json.path("stock").asInt()),
+                            () -> assertEquals(product.getIsOnSale(), json.path("isOnSale").asBoolean())
+
+                        );
+                    } catch (IOException ex) {
+                        ex.printStackTrace();
+                    }
+                });
+
+        String notExistingSku = "12345646";
+
+        client.get()
+                .uri("/product-sku/" + notExistingSku)
+                .exchange()
+                .expectStatus().isNotFound();
+    }
+
+    @Test
+    @Order(4)
+    void testGetAllProducts() {
+        Product product1 = createProduct001();
+        Product product2 = createProduct002();
+
+        client.get()
+                .uri("/")
+                .exchange()
+                .expectStatus().isOk()
+                .expectHeader().contentType(MediaType.APPLICATION_JSON)
+                .expectBody()
+                .consumeWith(res -> {
+                    try {
+                        JsonNode json = objectMapper.readTree(res.getResponseBody());
+                        assertAll(
+                            () -> assertNotNull(json),
+                            () -> assertTrue(json.isArray()),
+                            () -> assertEquals(3, json.size()),
+                            () -> assertEquals(product1.getSku(), json.get(0).path("sku").asText()),
+                            () -> assertEquals(product2.getSku(), json.get(1).path("sku").asText()),
+                            () -> assertEquals(product1.getName(), json.get(0).path("name").asText()),
+                            () -> assertEquals(product2.getName(), json.get(1).path("name").asText()),
+                            () -> assertEquals(product1.getDescription(), json.get(0).path("description").asText()),
+                            () -> assertEquals(product2.getDescription(), json.get(1).path("description").asText()),
+                            () -> assertEquals(product1.getCategory().getName(), json.get(0).path("category").path("name").asText()),
+                            () -> assertEquals(product2.getCategory().getName(), json.get(1).path("category").path("name").asText()),
+                            () -> assertEquals(product1.getBrand().getName(), json.get(0).path("brand").path("name").asText()),
+                            () -> assertEquals(product2.getBrand().getName(), json.get(1).path("brand").path("name").asText()),
+                            () -> assertEquals(product1.getPrice(), json.get(0).path("price").asDouble()),
+                            () -> assertEquals(product2.getPrice(), json.get(1).path("price").asDouble()),
+                            () -> assertEquals(true, json.get(0).path("isFeatured").asBoolean()),
+                            () -> assertEquals(false, json.get(1).path("isFeatured").asBoolean())
+                        );
+                    } catch (IOException ex) {
+                        ex.printStackTrace();
+                    }
+                });
     }
 
     @Test
