@@ -2,6 +2,8 @@ package com.ricardo.scalable.ecommerce.platform.product_service.services;
 
 import java.util.Optional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,6 +27,8 @@ public class ProductServiceImpl implements ProductService {
 
     @Autowired
     private BrandRepository brandRepository;
+
+    private final Logger logger = LoggerFactory.getLogger(ProductServiceImpl.class);
 
     @Override
     @Transactional(readOnly = true)
@@ -55,6 +59,8 @@ public class ProductServiceImpl implements ProductService {
     public Product save(ProductCreationDto productCreation) {
         Category category = categoryRepository.findById(productCreation.getCategoryId()).orElseThrow();
         Brand brand = brandRepository.findById(productCreation.getBrandId()).orElseThrow();
+
+        logger.info(category.getName());
 
         Product product = new Product();
 

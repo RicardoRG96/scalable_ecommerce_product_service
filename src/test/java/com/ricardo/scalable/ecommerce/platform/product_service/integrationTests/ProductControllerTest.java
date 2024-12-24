@@ -30,6 +30,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ricardo.scalable.ecommerce.platform.product_service.entities.Brand;
 import com.ricardo.scalable.ecommerce.platform.product_service.entities.Category;
 import com.ricardo.scalable.ecommerce.platform.product_service.entities.Product;
+import com.ricardo.scalable.ecommerce.platform.product_service.repositories.dto.ProductCreationDto;
 
 @ActiveProfiles("test")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
@@ -269,6 +270,86 @@ public class ProductControllerTest {
                             () -> assertEquals(product2.getPrice(), json.get(1).path("price").asDouble()),
                             () -> assertEquals(true, json.get(0).path("isFeatured").asBoolean()),
                             () -> assertEquals(false, json.get(1).path("isFeatured").asBoolean())
+                        );
+                    } catch (IOException ex) {
+                        ex.printStackTrace();
+                    }
+                });
+    }
+
+    @Test
+    @Order(5)
+    void testCreateProduct() {
+        ProductCreationDto productCreationRequest = new ProductCreationDto();
+        productCreationRequest.setSku("pepe1321");
+        productCreationRequest.setUpc("upcexample");
+        productCreationRequest.setName("Audifonos Huawei");
+        productCreationRequest.setDescription("description example");
+        productCreationRequest.setCategoryId(2L);
+        productCreationRequest.setBrandId(2L);
+        productCreationRequest.setPrice(70.99); 
+        productCreationRequest.setStock(25);
+        productCreationRequest.setImageUrl("/logos/logo-huawei.png");
+        productCreationRequest.setIsActive(true);
+        productCreationRequest.setIsFeatured(true);
+        productCreationRequest.setIsOnSale(false);
+
+        client.post()
+                .uri("/")
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(productCreationRequest)
+                .exchange()
+                .expectStatus().isCreated()
+                .expectHeader().contentType(MediaType.APPLICATION_JSON)
+                .expectBody()
+                .consumeWith(res -> {
+                    try {
+                        JsonNode json = objectMapper.readTree(res.getResponseBody());
+                        assertAll(
+                            () -> assertNull(json),
+                            () -> assertEquals("sku", json.path("sku").asText()),
+                            () -> assertEquals("upc", json.path("upc").asText()),
+                            () -> assertEquals("name", json.path("name").asText()),
+                            () -> assertEquals("categoryName", json.path("category").path("name").asText()),
+                            () -> assertEquals("brandName", json.path("brand").path("name").asText()),
+                            () -> assertEquals(false, json.path("isActive").asBoolean()),
+                            () -> assertEquals(false, json.path("isFeatured").asBoolean()),
+                            () -> assertEquals(true, json.path("isOnSale").asBoolean())
+                        );
+                    } catch (IOException ex) {
+                        ex.printStackTrace();
+                    }
+                });
+    }
+
+    @Test
+    @Order(6)
+    void testUpdateProduct() {
+        Product productUpdateRequest = createProduct001();
+        productUpdateRequest.setName("iPhone 16");
+        productUpdateRequest.setPrice(2000.00);
+
+        client.put()
+                .uri("/1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(productUpdateRequest)
+                .exchange()
+                .expectStatus().isOk()
+                .expectHeader().contentType(MediaType.APPLICATION_JSON)
+                .expectBody()
+                .consumeWith(res -> {
+                    try {
+                        JsonNode json = objectMapper.readTree(res.getResponseBody());
+                        assertAll(
+                            () -> assertNotNull(json),
+                            () -> assertEquals(productUpdateRequest.getSku(), json.path("sku").asText()),
+                            () -> assertEquals(productUpdateRequest.getUpc(), json.path("upc").asText()),
+                            () -> assertEquals(productUpdateRequest.getName(), json.path("name").asText()),
+                            () -> assertEquals(productUpdateRequest.getCategory().getName(), json.path("category").path("name").asText()),
+                            () -> assertEquals(productUpdateRequest.getBrand().getName(), json.path("brand").path("name").asText()),
+                            () -> assertEquals(productUpdateRequest.getIsActive(), json.path("isActive").asBoolean()),
+                            () -> assertEquals(productUpdateRequest.getIsFeatured(), json.path("isFeatured").asBoolean()),
+                            () -> assertEquals(productUpdateRequest.getIsOnSale(), json.path("isOnSale").asBoolean())
                         );
                     } catch (IOException ex) {
                         ex.printStackTrace();
