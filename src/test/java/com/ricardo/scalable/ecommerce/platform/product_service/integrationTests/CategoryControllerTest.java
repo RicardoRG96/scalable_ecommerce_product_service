@@ -102,6 +102,39 @@ public class CategoryControllerTest {
     }
 
     @Test
+    @Order(2)
+    void testGetByName() {
+        Category category = createCategory001();
+
+        client.get()
+                .uri("/categories/name/Smartphone")
+                .exchange()
+                .expectStatus().isOk()
+                .expectHeader().contentType(MediaType.APPLICATION_JSON)
+                .expectBody()
+                .consumeWith(res -> {
+                    try {
+                        JsonNode json = objectMapper.readTree(res.getResponseBody());
+                        assertAll(
+                            () -> assertNotNull(json),
+                            () -> assertEquals(category.getId(), json.path("id").asLong()),
+                            () -> assertEquals(category.getName(), json.path("name").asText()),
+                            () -> assertEquals(category.getDescription(), json.path("description").asText())
+                        );
+                    } catch (IOException ex) {
+                        ex.printStackTrace();
+                    }
+                });
+
+        String notExistingCategoryName = "PlayStation 5";
+
+        client.get()
+                .uri("/categories/name/" + notExistingCategoryName)
+                .exchange()
+                .expectStatus().isNotFound();
+    }
+
+    @Test
     void testProfile() {
         assertArrayEquals(new String[]{"test"}, env.getActiveProfiles());
     }
