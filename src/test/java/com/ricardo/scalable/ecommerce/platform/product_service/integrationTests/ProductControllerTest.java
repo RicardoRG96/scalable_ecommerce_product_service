@@ -358,6 +358,39 @@ public class ProductControllerTest {
     }
 
     @Test
+    @Order(7)
+    void testDeleteProduct() {
+        client.delete()
+                .uri("/3")
+                .exchange()
+                .expectStatus().isNoContent();
+
+        client.get()
+                .uri("/")
+                .exchange()
+                .expectStatus().isOk()
+                .expectHeader().contentType(MediaType.APPLICATION_JSON)
+                .expectBody()
+                .consumeWith(res -> {
+                    try {
+                        JsonNode json = objectMapper.readTree(res.getResponseBody());
+                        assertAll(
+                            () -> assertNotNull(json),
+                            () -> assertEquals(2, json.size()),
+                            () -> assertTrue(json.isArray())
+                        );
+                    } catch (IOException ex) {
+                        ex.printStackTrace();
+                    }
+                });
+
+        client.get()
+                .uri("/3")
+                .exchange()
+                .expectStatus().isNotFound();
+    }
+
+    @Test
     void testProfile() {
         assertArrayEquals(new String[]{"test"}, env.getActiveProfiles());
     }
