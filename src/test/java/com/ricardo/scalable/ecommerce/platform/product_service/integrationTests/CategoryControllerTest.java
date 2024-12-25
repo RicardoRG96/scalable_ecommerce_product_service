@@ -3,8 +3,10 @@ package com.ricardo.scalable.ecommerce.platform.product_service.integrationTests
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 
 import java.io.IOException;
@@ -132,6 +134,38 @@ public class CategoryControllerTest {
                 .uri("/categories/name/" + notExistingCategoryName)
                 .exchange()
                 .expectStatus().isNotFound();
+    }
+
+    @Test
+    @Order(3)
+    void testGetAllCategories() {
+        Category category1 = createCategory001();
+        Category category2 = createCategory002();
+
+        client.get()
+            .uri("/categories")
+            .exchange()
+            .expectStatus().isOk()
+            .expectHeader().contentType(MediaType.APPLICATION_JSON)
+            .expectBody()
+            .consumeWith(res -> {
+                try {
+                    JsonNode json = objectMapper.readTree(res.getResponseBody());
+                    assertAll(
+                        () -> assertNotNull(json),
+                        () -> assertTrue(json.isArray()),
+                        () -> assertEquals(4, json.size()),
+                        () -> assertEquals(category1.getId(), json.get(0).path("id").asLong()),
+                        () -> assertEquals(category2.getId(), json.get(1).path("id").asLong()),
+                        () -> assertEquals(category1.getName(), json.get(0).path("name").asText()),
+                        () -> assertEquals(category2.getName(), json.get(1).path("name").asText()),
+                        () -> assertEquals(category1.getDescription(), json.get(0).path("description").asText()),
+                        () -> assertEquals(category2.getDescription(), json.get(1).path("description").asText())
+                    );
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+            });
     }
 
     @Test
