@@ -28,6 +28,7 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ricardo.scalable.ecommerce.platform.product_service.entities.Category;
+import com.ricardo.scalable.ecommerce.platform.product_service.repositories.dto.CategoryCreationDto;
 
 @ActiveProfiles("test")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
@@ -166,6 +167,45 @@ public class CategoryControllerTest {
                     ex.printStackTrace();
                 }
             });
+    }
+
+    @Test
+    @Order(4)
+    void testCreateCategory() {
+        CategoryCreationDto categoryCreationRequest = new CategoryCreationDto();
+        categoryCreationRequest.setName("Ropa");
+        categoryCreationRequest.setDescription("descripcion ropa");
+
+        client.post()
+                .uri("/categories")
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(categoryCreationRequest)
+                .exchange()
+                .expectStatus().isCreated()
+                .expectHeader().contentType(MediaType.APPLICATION_JSON)
+                .expectBody()
+                .consumeWith(res -> {
+                    try {
+                        JsonNode json = objectMapper.readTree(res.getResponseBody());
+                        assertAll(
+                            () -> assertNotNull(json),
+                            () -> assertEquals(5L, json.path("id").asLong()),
+                            () -> assertEquals(categoryCreationRequest.getName(), json.path("name").asText()),
+                            () -> assertEquals(categoryCreationRequest.getDescription(), json.path("description").asText())
+                        );
+                    } catch (IOException ex) {
+                        ex.printStackTrace();
+                    }
+                });
+
+        CategoryCreationDto categoryCreationBadRequest = new CategoryCreationDto();
+
+        client.post()
+                .uri("/categories")
+                .bodyValue(categoryCreationBadRequest)
+                .exchange()
+                .expectStatus().isBadRequest();
+
     }
 
     @Test
