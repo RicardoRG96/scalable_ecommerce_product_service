@@ -209,6 +209,51 @@ public class CategoryControllerTest {
     }
 
     @Test
+    @Order(5)
+    void testUpdateCategory() {
+        Category category = createCategory001();
+        category.setName("Celulares");
+        category.setDescription("Descripcion celulares");
+
+        client.put()
+                .uri("/categories/1")
+                .bodyValue(category)
+                .exchange()
+                .expectStatus().isOk()
+                .expectHeader().contentType(MediaType.APPLICATION_JSON)
+                .expectBody()
+                .consumeWith(res -> {
+                    try {
+                        JsonNode json = objectMapper.readTree(res.getResponseBody());
+                        assertAll(
+                            () -> assertNotNull(json),
+                            () -> assertEquals(category.getId(), json.path("id").asLong()),
+                            () -> assertEquals(category.getName(), json.path("name").asText()),
+                            () -> assertEquals(category.getDescription(), json.path("description").asText())
+                        );
+                    } catch (IOException ex) {
+                        ex.printStackTrace();
+                    }
+                });
+
+        String notExistingCategoryId = "50";
+
+        client.put()
+                .uri("/categories/" + notExistingCategoryId)
+                .bodyValue(category)
+                .exchange()
+                .expectStatus().isNotFound();
+
+        Category categoryBadRequest = new Category();
+
+        client.put()
+                .uri("/categories/1")
+                .bodyValue(categoryBadRequest)
+                .exchange()
+                .expectStatus().isBadRequest();
+    }
+
+    @Test
     void testProfile() {
         assertArrayEquals(new String[]{"test"}, env.getActiveProfiles());
     }
