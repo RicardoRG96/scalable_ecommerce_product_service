@@ -26,12 +26,14 @@ public class Product {
     private Long id;
 
     @NotBlank
+    @Column(unique = true)
     private String sku;
 
     @NotBlank
     private String upc;
 
     @NotBlank
+    @Column(nullable = false, unique = true)
     private String name;
 
     @NotBlank

@@ -1,12 +1,6 @@
 package com.ricardo.scalable.ecommerce.platform.product_service.integrationTests;
 
-import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.junit.jupiter.api.Assertions.assertArrayEquals;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 
 import java.io.IOException;
@@ -285,7 +279,7 @@ public class ProductControllerTest {
         productCreationRequest.setUpc("upcexample");
         productCreationRequest.setName("Audifonos Huawei");
         productCreationRequest.setDescription("description example");
-        productCreationRequest.setCategoryId(2L);
+        productCreationRequest.setCategoryId(1L);
         productCreationRequest.setBrandId(2L);
         productCreationRequest.setPrice(70.99); 
         productCreationRequest.setStock(25);
@@ -299,13 +293,14 @@ public class ProductControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .bodyValue(productCreationRequest)
                 .exchange()
-                .expectStatus().isCreated()
+                .expectStatus().is5xxServerError()
                 .expectHeader().contentType(MediaType.APPLICATION_JSON)
                 .expectBody()
                 .consumeWith(res -> {
                     try {
                         JsonNode json = objectMapper.readTree(res.getResponseBody());
                         assertAll(
+                            () -> assertEquals("ññañ", json.path("message").asText()),
                             () -> assertNull(json),
                             () -> assertEquals("sku", json.path("sku").asText()),
                             () -> assertEquals("upc", json.path("upc").asText()),

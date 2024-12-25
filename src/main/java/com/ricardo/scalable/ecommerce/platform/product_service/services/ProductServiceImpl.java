@@ -60,8 +60,6 @@ public class ProductServiceImpl implements ProductService {
         Category category = categoryRepository.findById(productCreation.getCategoryId()).orElseThrow();
         Brand brand = brandRepository.findById(productCreation.getBrandId()).orElseThrow();
 
-        logger.info(category.getName());
-
         Product product = new Product();
 
         product.setSku(productCreation.getSku());
