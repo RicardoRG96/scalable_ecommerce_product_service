@@ -139,33 +139,22 @@ public class BrandControllerTest {
         client.get()
             .uri("/brands")
             .exchange()
-            .expectStatus().isNotFound()
+            .expectStatus().isOk()
             .expectHeader().contentType(MediaType.APPLICATION_JSON)
             .expectBody()
             .consumeWith(res -> {
                 try {
                     JsonNode json = objectMapper.readTree(res.getResponseBody());
-                    // assertAll(
-                    //     () -> assertEquals(4, json.size()),
-                    //     () -> assertEquals(brand001.getId(), json.get(0).get("id").asLong()),
-                    //     () -> assertEquals(brand001.getName(), json.get(0).get("name").asText()),
-                    //     () -> assertEquals(brand001.getDescription(), json.get(0).get("description").asText()),
-                    //     () -> assertEquals(brand001.getLogoUrl(), json.get(0).get("logoUrl").asText()),
-                    //     () -> assertEquals(brand002.getId(), json.get(1).get("id").asLong()),
-                    //     () -> assertEquals(brand002.getName(), json.get(1).get("name").asText()),
-                    //     () -> assertEquals(brand002.getDescription(), json.get(1).get("description").asText()),
-                    //     () -> assertEquals(brand002.getLogoUrl(), json.get(1).get("logoUrl").asText())
-                    // );
                     assertAll(
                         () -> assertEquals(4, json.size()),
-                        () -> assertEquals(50L, json.get(0).get("id").asLong()),
-                        () -> assertEquals("name", json.get(0).get("name").asText()),
-                        () -> assertEquals("desc", json.get(0).get("description").asText()),
-                        () -> assertEquals("logo", json.get(0).get("logoUrl").asText()),
-                        () -> assertEquals(100L, json.get(1).get("id").asLong()),
-                        () -> assertEquals("name", json.get(1).get("name").asText()),
-                        () -> assertEquals("desc", json.get(1).get("description").asText()),
-                        () -> assertEquals("logo", json.get(1).get("logoUrl").asText())
+                        () -> assertEquals(brand001.getId(), json.get(0).get("id").asLong()),
+                        () -> assertEquals(brand001.getName(), json.get(0).get("name").asText()),
+                        () -> assertEquals(brand001.getDescription(), json.get(0).get("description").asText()),
+                        () -> assertEquals(brand001.getLogoUrl(), json.get(0).get("logoUrl").asText()),
+                        () -> assertEquals(brand002.getId(), json.get(1).get("id").asLong()),
+                        () -> assertEquals(brand002.getName(), json.get(1).get("name").asText()),
+                        () -> assertEquals(brand002.getDescription(), json.get(1).get("description").asText()),
+                        () -> assertEquals(brand002.getLogoUrl(), json.get(1).get("logoUrl").asText())
                     );
                 } catch (IOException e) {
                     e.printStackTrace();
