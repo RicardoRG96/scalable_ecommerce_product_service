@@ -3,7 +3,6 @@ package com.ricardo.scalable.ecommerce.platform.product_service.integrationTests
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 import static org.junit.jupiter.api.Assertions.*;
 
-
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.time.Instant;
@@ -255,27 +254,30 @@ public class BrandControllerTest {
     @Order(6)
     void testDeleteBrand() {
         client.delete()
-            .uri("/brands/1")
+            .uri("/brands/5")
             .exchange()
-            .expectStatus().isNotFound();
+            .expectStatus().isNoContent();
 
         client.get()
             .uri("/brands")
             .exchange()
-            .expectStatus().isCreated()
+            .expectStatus().isOk()
             .expectHeader().contentType(MediaType.APPLICATION_JSON)
             .expectBody()
             .consumeWith(res -> {
                 try {
                     JsonNode json = objectMapper.readTree(res.getResponseBody());
-                    assertEquals(4, json.size());
+                    assertAll(
+                        () -> assertEquals(4, json.size()),
+                        () -> assertTrue(json.isArray())
+                    );
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
             });
 
         client.get()
-            .uri("/brands/1")
+            .uri("/brands/5")
             .exchange()
             .expectStatus().isNotFound();
     }
