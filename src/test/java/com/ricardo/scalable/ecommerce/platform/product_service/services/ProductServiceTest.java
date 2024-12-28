@@ -124,7 +124,7 @@ public class ProductServiceTest {
         productCreationRequest.setIsFeatured(true);
         productCreationRequest.setIsOnSale(false);
 
-        Product createdProduct = productService.save(productCreationRequest);
+        Product createdProduct = productService.save(productCreationRequest).orElseThrow();
 
         assertAll(
             () -> assertNotNull(createdProduct),

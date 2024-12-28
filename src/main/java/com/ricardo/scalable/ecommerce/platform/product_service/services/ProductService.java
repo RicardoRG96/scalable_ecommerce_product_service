@@ -15,7 +15,7 @@ public interface ProductService {
 
     Iterable<Product> findAll();
 
-    Product save(ProductCreationDto product);
+    Optional<Product> save(ProductCreationDto product);
 
     Optional<Product> update(Product product, Long id);
 

@@ -56,26 +56,30 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     @Transactional
-    public Product save(ProductCreationDto productCreation) {
-        Category category = categoryRepository.findById(productCreation.getCategoryId()).orElseThrow();
-        Brand brand = brandRepository.findById(productCreation.getBrandId()).orElseThrow();
+    public Optional<Product> save(ProductCreationDto productCreation) {
+        Optional<Category> category = categoryRepository.findById(productCreation.getCategoryId());
+        Optional<Brand> brand = brandRepository.findById(productCreation.getBrandId());
 
-        Product product = new Product();
+        if (category.isPresent() && brand.isPresent()) {
+            Product product = new Product();
 
-        product.setSku(productCreation.getSku());
-        product.setUpc(productCreation.getUpc());
-        product.setName(productCreation.getName());
-        product.setDescription(productCreation.getDescription());
-        product.setCategory(category);
-        product.setBrand(brand);
-        product.setPrice(productCreation.getPrice());
-        product.setStock(productCreation.getStock());
-        product.setImageUrl(productCreation.getImageUrl());
-        product.setIsActive(productCreation.getIsActive());
-        product.setIsFeatured(productCreation.getIsFeatured());
-        product.setIsOnSale(productCreation.getIsOnSale());
+            product.setSku(productCreation.getSku());
+            product.setUpc(productCreation.getUpc());
+            product.setName(productCreation.getName());
+            product.setDescription(productCreation.getDescription());
+            product.setCategory(category.get());
+            product.setBrand(brand.get());
+            product.setPrice(productCreation.getPrice());
+            product.setStock(productCreation.getStock());
+            product.setImageUrl(productCreation.getImageUrl());
+            product.setIsActive(productCreation.getIsActive());
+            product.setIsFeatured(productCreation.getIsFeatured());
+            product.setIsOnSale(productCreation.getIsOnSale());
 
-        return productRepository.save(product);
+            return Optional.of(productRepository.save(product));
+        }
+
+        return Optional.empty();
     }
 
     @Override

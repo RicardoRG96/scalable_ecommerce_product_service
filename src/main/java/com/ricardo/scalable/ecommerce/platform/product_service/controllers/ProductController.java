@@ -5,7 +5,6 @@ import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -64,29 +63,17 @@ public class ProductController {
         return ResponseEntity.ok(productService.findAll());
     }
 
-    // @PostMapping
-    // public ResponseEntity<?> createProduct(@Valid @RequestBody ProductCreationDto product, BindingResult result) {
-    //     if (result.hasErrors()) {
-    //         return this.validation(result);
-    //     }
-
-    //     return ResponseEntity.status(HttpStatus.CREATED).body(productService.save(product));
-    // }
-
     @PostMapping
     public ResponseEntity<?> createProduct(@Valid @RequestBody ProductCreationDto product, BindingResult result) {
-        try {
-            if (result.hasErrors()) {
-                return this.validation(result);
-            }
-    
-            return ResponseEntity.status(HttpStatus.CREATED).body(productService.save(product));
-        } catch (DataIntegrityViolationException ex) {
-            Map<String, String> errorResponse = new HashMap<>();
-            errorResponse.put("message", ex.getMessage());
-            errorResponse.put("name", ex.getCause().toString());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
+        if (result.hasErrors()) {
+            return this.validation(result);
         }
+
+        Optional<Product> productOptional = productService.save(product);
+        if (!productOptional.isPresent()) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.status(HttpStatus.CREATED).body(productOptional.orElseThrow());
     }
 
     private ResponseEntity<?> validation(BindingResult result) {

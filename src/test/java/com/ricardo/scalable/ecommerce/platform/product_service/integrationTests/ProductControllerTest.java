@@ -279,8 +279,8 @@ public class ProductControllerTest {
         productCreationRequest.setUpc("upcexample");
         productCreationRequest.setName("Audifonos Huawei");
         productCreationRequest.setDescription("description example");
-        productCreationRequest.setCategoryId(1L);
-        productCreationRequest.setBrandId(2L);
+        productCreationRequest.setCategoryId(3L);
+        productCreationRequest.setBrandId(4L);
         productCreationRequest.setPrice(70.99); 
         productCreationRequest.setStock(25);
         productCreationRequest.setImageUrl("/logos/logo-huawei.png");
@@ -293,23 +293,22 @@ public class ProductControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .bodyValue(productCreationRequest)
                 .exchange()
-                .expectStatus().is5xxServerError()
+                .expectStatus().isCreated()
                 .expectHeader().contentType(MediaType.APPLICATION_JSON)
                 .expectBody()
                 .consumeWith(res -> {
                     try {
                         JsonNode json = objectMapper.readTree(res.getResponseBody());
                         assertAll(
-                            () -> assertEquals("ññañ", json.path("message").asText()),
-                            () -> assertNull(json),
-                            () -> assertEquals("sku", json.path("sku").asText()),
-                            () -> assertEquals("upc", json.path("upc").asText()),
-                            () -> assertEquals("name", json.path("name").asText()),
-                            () -> assertEquals("categoryName", json.path("category").path("name").asText()),
-                            () -> assertEquals("brandName", json.path("brand").path("name").asText()),
-                            () -> assertEquals(false, json.path("isActive").asBoolean()),
-                            () -> assertEquals(false, json.path("isFeatured").asBoolean()),
-                            () -> assertEquals(true, json.path("isOnSale").asBoolean())
+                            () -> assertNotNull(json),
+                            () -> assertEquals(productCreationRequest.getSku(), json.path("sku").asText()),
+                            () -> assertEquals(productCreationRequest.getUpc(), json.path("upc").asText()),
+                            () -> assertEquals(productCreationRequest.getName(), json.path("name").asText()),
+                            () -> assertEquals("Decohogar", json.path("category").path("name").asText()),
+                            () -> assertEquals("Puma", json.path("brand").path("name").asText()),
+                            () -> assertEquals(productCreationRequest.getIsActive(), json.path("isActive").asBoolean()),
+                            () -> assertEquals(productCreationRequest.getIsFeatured(), json.path("isFeatured").asBoolean()),
+                            () -> assertEquals(productCreationRequest.getIsOnSale(), json.path("isOnSale").asBoolean())
                         );
                     } catch (IOException ex) {
                         ex.printStackTrace();
@@ -371,7 +370,7 @@ public class ProductControllerTest {
                         JsonNode json = objectMapper.readTree(res.getResponseBody());
                         assertAll(
                             () -> assertNotNull(json),
-                            () -> assertEquals(2, json.size()),
+                            () -> assertEquals(3, json.size()),
                             () -> assertTrue(json.isArray())
                         );
                     } catch (IOException ex) {
