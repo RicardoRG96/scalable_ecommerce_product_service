@@ -23,6 +23,7 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ricardo.scalable.ecommerce.platform.product_service.entities.Brand;
+import com.ricardo.scalable.ecommerce.platform.product_service.repositories.dto.BrandCreationDto;
 
 @ActiveProfiles("test")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
@@ -155,6 +156,37 @@ public class BrandControllerTest {
                         () -> assertEquals(brand002.getName(), json.get(1).get("name").asText()),
                         () -> assertEquals(brand002.getDescription(), json.get(1).get("description").asText()),
                         () -> assertEquals(brand002.getLogoUrl(), json.get(1).get("logoUrl").asText())
+                    );
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            });
+    }
+
+    @Test
+    @Order(4)
+    void testCreateBrand() {
+        BrandCreationDto brandCreationRequest = new BrandCreationDto();
+        brandCreationRequest.setName("Samsung");
+        brandCreationRequest.setDescription("Empresa multinacional de tecnología");
+        brandCreationRequest.setLogoUrl("https://example.com/samsung_logo.png");
+        
+        client.post()
+            .uri("/brands")
+            .contentType(MediaType.APPLICATION_JSON)
+            .bodyValue(brandCreationRequest)
+            .exchange()
+            .expectStatus().isCreated()
+            .expectHeader().contentType(MediaType.APPLICATION_JSON)
+            .expectBody()
+            .consumeWith(res -> {
+                try {
+                    JsonNode json = objectMapper.readTree(res.getResponseBody());
+                    assertAll(
+                        () -> assertEquals(5, json.get("id").asLong()),
+                        () -> assertEquals(brandCreationRequest.getName(), json.get("name").asText()),
+                        () -> assertEquals(brandCreationRequest.getDescription(), json.get("description").asText()),
+                        () -> assertEquals(brandCreationRequest.getLogoUrl(), json.get("logoUrl").asText())
                     );
                 } catch (IOException e) {
                     e.printStackTrace();
