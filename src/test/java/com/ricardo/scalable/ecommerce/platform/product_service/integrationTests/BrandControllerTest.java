@@ -98,6 +98,82 @@ public class BrandControllerTest {
     }
 
     @Test
+    @Order(2)
+    void testGetByName() {
+        Brand brand = createBrand002();
+
+        client.get()
+            .uri("/brands/name/ASUS")
+            .exchange()
+            .expectStatus().isOk()
+            .expectHeader().contentType(MediaType.APPLICATION_JSON)
+            .expectBody()
+            .consumeWith(res -> {
+                try {
+                    JsonNode json = objectMapper.readTree(res.getResponseBody());
+                    assertAll(
+                        () -> assertEquals(brand.getId(), json.get("id").asLong()),
+                        () -> assertEquals(brand.getName(), json.get("name").asText()),
+                        () -> assertEquals(brand.getDescription(), json.get("description").asText()),
+                        () -> assertEquals(brand.getLogoUrl(), json.get("logoUrl").asText())
+                    );
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            });
+
+        String notExistingBrandName = "NotExistingBrand";
+
+        client.get()
+            .uri("/brands/name/" + notExistingBrandName)
+            .exchange()
+            .expectStatus().isNotFound();
+    }
+
+    @Test
+    @Order(3)
+    void testGetAllBrands() {
+        Brand brand001 = createBrand001();
+        Brand brand002 = createBrand002();
+
+        client.get()
+            .uri("/brands")
+            .exchange()
+            .expectStatus().isNotFound()
+            .expectHeader().contentType(MediaType.APPLICATION_JSON)
+            .expectBody()
+            .consumeWith(res -> {
+                try {
+                    JsonNode json = objectMapper.readTree(res.getResponseBody());
+                    // assertAll(
+                    //     () -> assertEquals(4, json.size()),
+                    //     () -> assertEquals(brand001.getId(), json.get(0).get("id").asLong()),
+                    //     () -> assertEquals(brand001.getName(), json.get(0).get("name").asText()),
+                    //     () -> assertEquals(brand001.getDescription(), json.get(0).get("description").asText()),
+                    //     () -> assertEquals(brand001.getLogoUrl(), json.get(0).get("logoUrl").asText()),
+                    //     () -> assertEquals(brand002.getId(), json.get(1).get("id").asLong()),
+                    //     () -> assertEquals(brand002.getName(), json.get(1).get("name").asText()),
+                    //     () -> assertEquals(brand002.getDescription(), json.get(1).get("description").asText()),
+                    //     () -> assertEquals(brand002.getLogoUrl(), json.get(1).get("logoUrl").asText())
+                    // );
+                    assertAll(
+                        () -> assertEquals(4, json.size()),
+                        () -> assertEquals(50L, json.get(0).get("id").asLong()),
+                        () -> assertEquals("name", json.get(0).get("name").asText()),
+                        () -> assertEquals("desc", json.get(0).get("description").asText()),
+                        () -> assertEquals("logo", json.get(0).get("logoUrl").asText()),
+                        () -> assertEquals(100L, json.get(1).get("id").asLong()),
+                        () -> assertEquals("name", json.get(1).get("name").asText()),
+                        () -> assertEquals("desc", json.get(1).get("description").asText()),
+                        () -> assertEquals("logo", json.get(1).get("logoUrl").asText())
+                    );
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            });
+    }
+
+    @Test
     void testProfile() {
         String[] activeProfiles = env.getActiveProfiles();
         assertArrayEquals(new String[] { "test" }, activeProfiles);
