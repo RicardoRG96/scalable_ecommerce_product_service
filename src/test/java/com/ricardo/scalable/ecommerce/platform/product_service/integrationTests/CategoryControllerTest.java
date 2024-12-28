@@ -254,6 +254,41 @@ public class CategoryControllerTest {
     }
 
     @Test
+    @Order(6)
+    void testDeleteCategory() {
+        client.delete()
+                .uri("/categories/3")
+                .exchange()
+                .expectStatus().isNoContent();
+
+        client.get()
+                .uri("/categories")
+                .exchange()
+                .expectStatus().isOk()
+                .expectHeader().contentType(MediaType.APPLICATION_JSON)
+                .expectBody()
+                .consumeWith(res -> {
+                    try {
+                        JsonNode json = objectMapper.readTree(res.getResponseBody());
+                        assertAll(
+                            () -> assertNotNull(json),
+                            () -> assertEquals(3, json.size()),
+                            () -> assertTrue(json.isArray())
+                        );
+                    } catch (IOException ex) {
+                        ex.printStackTrace();
+                    }
+                });
+
+        client.get()
+                .uri("/categories/3")
+                .exchange()
+                .expectStatus().isNotFound();
+
+        
+    }
+
+    @Test
     void testProfile() {
         assertArrayEquals(new String[]{"test"}, env.getActiveProfiles());
     }
