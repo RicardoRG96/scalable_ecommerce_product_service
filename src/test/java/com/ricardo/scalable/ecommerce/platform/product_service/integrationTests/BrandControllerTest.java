@@ -192,6 +192,92 @@ public class BrandControllerTest {
                     e.printStackTrace();
                 }
             });
+
+        BrandCreationDto brandCreationBadRequest = new BrandCreationDto();
+
+        client.post()
+            .uri("/brands")
+            .contentType(MediaType.APPLICATION_JSON)
+            .bodyValue(brandCreationBadRequest)
+            .exchange()
+            .expectStatus().isBadRequest();
+    }
+
+    @Test
+    @Order(5)
+    void testUpdateBrand() {
+        Brand brandRequest = createBrand001();
+        brandRequest.setName("Apple Inc.");
+        brandRequest.setDescription("Empresa líder en tecnología");
+
+        client.put()
+                .uri("/brands/1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(brandRequest)
+                .exchange()
+                .expectStatus().isOk()
+                .expectHeader().contentType(MediaType.APPLICATION_JSON)
+                .expectBody()
+                .consumeWith(res -> {
+                    try {
+                        JsonNode json = objectMapper.readTree(res.getResponseBody());
+                        assertAll(
+                            () -> assertEquals(brandRequest.getId(), json.get("id").asLong()),
+                            () -> assertEquals(brandRequest.getName(), json.get("name").asText()),
+                            () -> assertEquals(brandRequest.getDescription(), json.get("description").asText()),
+                            () -> assertEquals(brandRequest.getLogoUrl(), json.get("logoUrl").asText())
+                        );
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                });
+
+        Brand brandBadRequest = new Brand();
+
+        client.put()
+                .uri("/brands/1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(brandBadRequest)
+                .exchange()
+                .expectStatus().isBadRequest();
+
+        String notExistingBrandId = "999";
+
+        client.put()
+                .uri("/brands/" + notExistingBrandId)
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(brandRequest)
+                .exchange()
+                .expectStatus().isNotFound();
+    }
+
+    @Test
+    @Order(6)
+    void testDeleteBrand() {
+        client.delete()
+            .uri("/brands/1")
+            .exchange()
+            .expectStatus().isNotFound();
+
+        client.get()
+            .uri("/brands")
+            .exchange()
+            .expectStatus().isCreated()
+            .expectHeader().contentType(MediaType.APPLICATION_JSON)
+            .expectBody()
+            .consumeWith(res -> {
+                try {
+                    JsonNode json = objectMapper.readTree(res.getResponseBody());
+                    assertEquals(4, json.size());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            });
+
+        client.get()
+            .uri("/brands/1")
+            .exchange()
+            .expectStatus().isNotFound();
     }
 
     @Test
