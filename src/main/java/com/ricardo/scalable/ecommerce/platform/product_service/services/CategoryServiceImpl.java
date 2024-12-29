@@ -1,12 +1,15 @@
 package com.ricardo.scalable.ecommerce.platform.product_service.services;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ricardo.scalable.ecommerce.platform.product_service.entities.Category;
+import com.ricardo.scalable.ecommerce.platform.product_service.entities.Product;
 import com.ricardo.scalable.ecommerce.platform.product_service.repositories.CategoryRepository;
+import com.ricardo.scalable.ecommerce.platform.product_service.repositories.ProductRepository;
 import com.ricardo.scalable.ecommerce.platform.product_service.repositories.dto.CategoryCreationDto;
 
 @Service
@@ -14,6 +17,9 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Autowired
     private CategoryRepository categoryRepository;
+
+    @Autowired
+    private ProductRepository productRepository;
 
     @Override
     public Optional<Category> findById(Long id) {
@@ -56,6 +62,14 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public void delete(Long id) {
+        Category unknownCategory = categoryRepository.findByName("Unknown Category").orElseThrow();
+        List<Product> products = productRepository.findByCategoryId(id).orElseThrow();
+
+        products.forEach(product -> {
+            product.setCategory(unknownCategory);
+            productRepository.save(product);
+        });
+
         categoryRepository.deleteById(id);
     }
 

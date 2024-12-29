@@ -38,7 +38,7 @@ public class ProductController {
         return ResponseEntity.notFound().build();
     }
 
-    @GetMapping("/product-name/{name}")
+    @GetMapping("/name/{name}")
     public ResponseEntity<Product> getByName(@PathVariable String name) {
         Optional<Product> productOptional = productService.findByName(name);
 

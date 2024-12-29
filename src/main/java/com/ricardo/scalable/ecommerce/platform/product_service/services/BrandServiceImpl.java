@@ -1,12 +1,15 @@
 package com.ricardo.scalable.ecommerce.platform.product_service.services;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ricardo.scalable.ecommerce.platform.product_service.entities.Brand;
+import com.ricardo.scalable.ecommerce.platform.product_service.entities.Product;
 import com.ricardo.scalable.ecommerce.platform.product_service.repositories.BrandRepository;
+import com.ricardo.scalable.ecommerce.platform.product_service.repositories.ProductRepository;
 import com.ricardo.scalable.ecommerce.platform.product_service.repositories.dto.BrandCreationDto;
 
 @Service
@@ -14,6 +17,9 @@ public class BrandServiceImpl implements BrandService{
 
     @Autowired
     private BrandRepository brandRepository;
+
+    @Autowired
+    private ProductRepository productRepository;
 
     @Override
     public Optional<Brand> findById(Long id) {
@@ -55,6 +61,14 @@ public class BrandServiceImpl implements BrandService{
 
     @Override
     public void delete(Long id) {
+        Brand unknownBrand = brandRepository.findByName("Unknown Brand").orElseThrow();
+        List<Product> products = productRepository.findByBrandId(id).orElseThrow();
+
+        products.forEach(product -> {
+            product.setBrand(unknownBrand);
+            productRepository.save(product);
+        });
+        
         brandRepository.deleteById(id);
     }
 
