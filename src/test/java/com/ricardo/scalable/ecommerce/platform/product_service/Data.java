@@ -3,6 +3,7 @@ package com.ricardo.scalable.ecommerce.platform.product_service;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import com.ricardo.scalable.ecommerce.platform.product_service.entities.Brand;
@@ -132,6 +133,34 @@ public class Data {
 
     public static Product productCreated() {
         return createProduct001().orElseThrow();
+    }
+
+    public static List<Map<String, Object>> createListOfProductsMap() {
+        Product product1 = createProduct001().orElseThrow();
+        Product product2 = createProduct002().orElseThrow();
+
+        return List.of(
+            Map.of(
+                "objectID", product1.getId(),
+                "name", product1.getName(),
+                "description", product1.getDescription(),
+                "price", product1.getPrice(),
+                "sku", product1.getSku(),
+                "upc", product1.getUpc(),
+                "brand", product1.getBrand().getName(),
+                "categories", product1.getCategory().getName()
+            ),
+            Map.of(
+                "objectID", product2.getId(),
+                "name", product2.getName(),
+                "description", product2.getDescription(),
+                "price", product2.getPrice(),
+                "sku", product2.getSku(),
+                "upc", product2.getUpc(),
+                "brand", product2.getBrand().getName(),
+                "categories", product2.getCategory().getName()
+            )
+        );
     }
 
 }
