@@ -39,7 +39,7 @@ public class AlgoliaConfig {
         try {
             searchClient = new SearchClient(applicationId, apiKey);
             setSettings(searchClient);
-            Iterable<Map<String, String>> data = preparedData();
+            Iterable<Map<String, Object>> data = preparedData();
             searchClient.saveObjects(indexName, data);
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -60,28 +60,42 @@ public class AlgoliaConfig {
             indexName,
             new IndexSettings().setSearchableAttributes(Arrays.asList(
                 "name",
-                "description, brand, sku, upc" 
-            ))
+                "description, brand, sku, upc, category"
+            )).setAttributesForFaceting(Arrays.asList(
+                "brand",
+                "categories",
+                "price"
+            )).setAttributesToRetrieve(Arrays.asList(
+                "name",
+                "description",
+                "price",
+                "sku",
+                "upc",
+                "brand",
+                "categories",
+                "imageUrl"
+            )).setHitsPerPage(28)
         );
     }
 
-    private Iterable<Map<String, String>> preparedData() {
+    private Iterable<Map<String, Object>> preparedData() {
         List<Product> products = (List<Product>) getProducts();
  
-        List<Map<String, String>> preparedJson =  products.stream().map(product -> {
-            Map<String, String> productData = new HashMap<>();
-            productData.put("objectID", product.getId().toString());
+        List<Map<String, Object>> preparedJson =  products.stream().map(product -> {
+            Map<String, Object> productData = new HashMap<>();
+            productData.put("objectID", product.getId());
             productData.put("name", product.getName());
             productData.put("description", product.getDescription());
-            productData.put("price", product.getPrice().toString());
+            productData.put("price", product.getPrice());
             productData.put("sku", product.getSku());
             productData.put("upc", product.getUpc());
             productData.put("brand", product.getBrand().getName());
             productData.put("categories", product.getCategory().getName());
+            productData.put("imageUrl", product.getImageUrl());
             return productData;
         }).collect(Collectors.toList());
 
-        return (Iterable<Map<String, String>>) preparedJson;
+        return (Iterable<Map<String, Object>>) preparedJson;
     }
 
     private Iterable<Product> getProducts() {

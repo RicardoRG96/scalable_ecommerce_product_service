@@ -1,6 +1,7 @@
 package com.ricardo.scalable.ecommerce.platform.product_service.controllers;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -14,10 +15,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ricardo.scalable.ecommerce.platform.product_service.entities.Product;
 import com.ricardo.scalable.ecommerce.platform.product_service.repositories.dto.ProductCreationDto;
+import com.ricardo.scalable.ecommerce.platform.product_service.searchService.SearchService;
 import com.ricardo.scalable.ecommerce.platform.product_service.services.ProductService;
 
 import jakarta.validation.Valid;
@@ -27,6 +30,9 @@ public class ProductController {
 
     @Autowired
     private ProductService productService;
+
+    @Autowired
+    private SearchService searchService;
 
     @GetMapping("/{id}")
     public ResponseEntity<Product> getByProductId(@PathVariable Long id) {
@@ -61,6 +67,12 @@ public class ProductController {
     @GetMapping
     public ResponseEntity<Iterable<Product>> getAllProducts() {
         return ResponseEntity.ok(productService.findAll());
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<List<Product>> searchProducts(@RequestParam String query) {
+        List<Product> searchResults = searchService.searchProducts(query);
+        return ResponseEntity.ok(searchResults);
     }
 
     @PostMapping
