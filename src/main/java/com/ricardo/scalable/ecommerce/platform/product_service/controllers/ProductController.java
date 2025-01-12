@@ -67,11 +67,24 @@ public class ProductController {
     @GetMapping
     public ResponseEntity<Iterable<Product>> getAllProducts() {
         return ResponseEntity.ok(productService.findAll());
+
     }
 
     @GetMapping("/search")
-    public ResponseEntity<List<Product>> searchProducts(@RequestParam String query) {
+    public ResponseEntity<List<?>> searchProducts(@RequestParam String query) {
         List<Product> searchResults = searchService.searchProducts(query);
+        return ResponseEntity.ok(searchResults);
+    }
+
+    @GetMapping("/brand")
+    public ResponseEntity<List<?>> filterByBrand(@RequestParam String brand) {
+        List<Product> searchResults = searchService.filterByBrand(brand);
+        return ResponseEntity.ok(searchResults);
+    }
+
+    @GetMapping("/category")
+    public ResponseEntity<List<?>> filterByCategory(@RequestParam String category) {
+        List<Product> searchResults = searchService.filterByCategory(category);
         return ResponseEntity.ok(searchResults);
     }
 

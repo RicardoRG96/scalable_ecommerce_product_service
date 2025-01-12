@@ -43,14 +43,6 @@ public class AlgoliaConfig {
             searchClient.saveObjects(indexName, data);
         } catch (Exception ex) {
             ex.printStackTrace();
-        } finally {
-            if (searchClient != null) {
-                try {
-                    searchClient.close();
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                }
-            }
         }
         return searchClient;
     }
@@ -63,7 +55,7 @@ public class AlgoliaConfig {
                 "description, brand, sku, upc, category"
             )).setAttributesForFaceting(Arrays.asList(
                 "brand",
-                "categories",
+                "category",
                 "price"
             )).setAttributesToRetrieve(Arrays.asList(
                 "name",
@@ -72,7 +64,9 @@ public class AlgoliaConfig {
                 "sku",
                 "upc",
                 "brand",
-                "categories",
+                "brandId",
+                "category",
+                "categoryId",
                 "imageUrl"
             )).setHitsPerPage(28)
         );
@@ -90,7 +84,9 @@ public class AlgoliaConfig {
             productData.put("sku", product.getSku());
             productData.put("upc", product.getUpc());
             productData.put("brand", product.getBrand().getName());
-            productData.put("categories", product.getCategory().getName());
+            productData.put("brandId", product.getBrand().getId());
+            productData.put("category", product.getCategory().getName());
+            productData.put("categoryId", product.getCategory().getId());
             productData.put("imageUrl", product.getImageUrl());
             return productData;
         }).collect(Collectors.toList());

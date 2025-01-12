@@ -8,4 +8,8 @@ public interface SearchService {
     
     List<Product> searchProducts(String query);
 
+    List<Product> filterByBrand(String brand);
+
+    List<Product> filterByCategory(String category);
+
 }
