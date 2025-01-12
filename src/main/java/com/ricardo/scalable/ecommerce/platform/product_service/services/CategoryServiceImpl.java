@@ -62,7 +62,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public void delete(Long id) {
-        Category unknownCategory = categoryRepository.findByName("Unknown Category").orElseThrow();
+        Category unknownCategory = categoryRepository.findByName("Unknown").orElseThrow();
         List<Product> products = productRepository.findByCategoryId(id).orElseThrow();
 
         products.forEach(product -> {

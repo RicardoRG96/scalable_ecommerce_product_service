@@ -10,6 +10,6 @@ public interface SearchService {
 
     List<Product> filterByBrand(List<String> brand);
 
-    List<Product> filterByCategory(String category);
+    List<Product> filterByCategory(List<String> category);
 
 }

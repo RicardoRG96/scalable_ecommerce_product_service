@@ -63,14 +63,27 @@ public class AlgoliaSearchServiceImpl implements SearchService {
                 })
                 .collect(Collectors.toList());
 
-        // SearchResponse<Hit> searchResults = searchClient.searchSingleIndex(
-        //     indexName,
-        //     new SearchParamsObject().setQuery(brand).setFilters("brand:" + brand),
-        //     Hit.class
-        // );
+        List<Product> searchedProductMatches = searchResponses
+                .stream()
+                .map(this::getProductsFromSearchResults)
+                .flatMap(List::stream)
+                .collect(Collectors.toList());
 
-        // SearchForFacetValuesResponse response = searchClient.searchForFacetValues(indexName, brand);
-        // response.getFacetHits().get(0).getValue();
+        return searchedProductMatches;
+    }
+
+    public List<Product> filterByCategory(List<String> category) {
+        List<SearchResponse<Hit>> searchResponses = category
+                .stream()
+                .map(c -> {
+                    SearchResponse<Hit> searchResults = searchClient.searchSingleIndex(
+                        indexName,
+                        new SearchParamsObject().setQuery(c).setFilters("category:" + c),
+                        Hit.class
+                    );
+                    return searchResults;
+                })
+                .collect(Collectors.toList());
 
         List<Product> searchedProductMatches = searchResponses
                 .stream()
@@ -79,23 +92,6 @@ public class AlgoliaSearchServiceImpl implements SearchService {
                 .collect(Collectors.toList());
 
         return searchedProductMatches;
-        // return searchResults
-        //         .getHits()
-        //         .stream()
-        //         .collect(Collectors.toList());
-    }
-
-    public List<Product> filterByCategory(String category) {
-        SearchResponse<Product> searchResults = searchClient.searchSingleIndex(
-            indexName,
-            new SearchParamsObject().setQuery(category).setFilters("category:" + category),
-            Product.class
-        );
-
-        return searchResults
-                .getHits()
-                .stream()
-                .collect(Collectors.toList());
     }
 
 }

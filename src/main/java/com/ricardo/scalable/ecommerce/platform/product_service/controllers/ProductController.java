@@ -70,6 +70,10 @@ public class ProductController {
 
     }
 
+    /*
+     * BEGIN OF ALGOLIA SERVICE ENDPOINTS
+     */
+    
     @GetMapping("/search")
     public ResponseEntity<List<?>> searchProducts(@RequestParam String query) {
         List<Product> searchResults = searchService.searchProducts(query);
@@ -83,10 +87,14 @@ public class ProductController {
     }
 
     @GetMapping("/category")
-    public ResponseEntity<List<?>> filterByCategory(@RequestParam String category) {
+    public ResponseEntity<List<?>> filterByCategory(@RequestParam List<String> category) {
         List<Product> searchResults = searchService.filterByCategory(category);
         return ResponseEntity.ok(searchResults);
     }
+
+    /*
+     * END OF ALGOLIA SERVICE ENDPOINTS
+     */
 
     @PostMapping
     public ResponseEntity<?> createProduct(@Valid @RequestBody ProductCreationDto product, BindingResult result) {

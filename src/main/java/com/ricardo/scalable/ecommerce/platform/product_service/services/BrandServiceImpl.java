@@ -61,7 +61,7 @@ public class BrandServiceImpl implements BrandService{
 
     @Override
     public void delete(Long id) {
-        Brand unknownBrand = brandRepository.findByName("Unknown Brand").orElseThrow();
+        Brand unknownBrand = brandRepository.findByName("Unknown").orElseThrow();
         List<Product> products = productRepository.findByBrandId(id).orElseThrow();
 
         products.forEach(product -> {
