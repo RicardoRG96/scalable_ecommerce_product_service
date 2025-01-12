@@ -37,27 +37,52 @@ public class AlgoliaSearchServiceImpl implements SearchService {
             Hit.class
         );
         
-        List<Product> searchedProductMatches = searchResults
+        List<Product> searchedProductMatches = getProductsFromSearchResults(searchResults);
+
+        return searchedProductMatches;
+    }
+
+    private List<Product> getProductsFromSearchResults(SearchResponse<Hit> searchResults) {
+        return searchResults
                 .getHits()
                 .stream()
                 .map(hit -> productService.findById(Long.parseLong(hit.getObjectID())).orElseThrow())
                 .collect(Collectors.toList());
-
-        
-        return searchedProductMatches;
     }
 
-    public List<Product> filterByBrand(String brand) {
-        SearchResponse<Product> searchResults = searchClient.searchSingleIndex(
-            indexName,
-            new SearchParamsObject().setQuery(brand).setFilters("brand:" + brand),
-            Product.class
-        );
-
-        return searchResults
-                .getHits()
+    public List<Product> filterByBrand(List<String> brand) {
+        List<SearchResponse<Hit>> searchResponses = brand
                 .stream()
+                .map(b -> {
+                    SearchResponse<Hit> searchResults = searchClient.searchSingleIndex(
+                        indexName,
+                        new SearchParamsObject().setQuery(b).setFilters("brand:" + b),
+                        Hit.class
+                    );
+                    return searchResults;
+                })
                 .collect(Collectors.toList());
+
+        // SearchResponse<Hit> searchResults = searchClient.searchSingleIndex(
+        //     indexName,
+        //     new SearchParamsObject().setQuery(brand).setFilters("brand:" + brand),
+        //     Hit.class
+        // );
+
+        // SearchForFacetValuesResponse response = searchClient.searchForFacetValues(indexName, brand);
+        // response.getFacetHits().get(0).getValue();
+
+        List<Product> searchedProductMatches = searchResponses
+                .stream()
+                .map(this::getProductsFromSearchResults)
+                .flatMap(List::stream)
+                .collect(Collectors.toList());
+
+        return searchedProductMatches;
+        // return searchResults
+        //         .getHits()
+        //         .stream()
+        //         .collect(Collectors.toList());
     }
 
     public List<Product> filterByCategory(String category) {

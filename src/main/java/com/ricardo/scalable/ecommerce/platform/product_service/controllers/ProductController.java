@@ -77,7 +77,7 @@ public class ProductController {
     }
 
     @GetMapping("/brand")
-    public ResponseEntity<List<?>> filterByBrand(@RequestParam String brand) {
+    public ResponseEntity<List<?>> filterByBrand(@RequestParam List<String> brand) {
         List<Product> searchResults = searchService.filterByBrand(brand);
         return ResponseEntity.ok(searchResults);
     }
