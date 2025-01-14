@@ -30,6 +30,7 @@ public class AlgoliaSearchServiceImpl implements SearchService {
         this.searchClient = searchClient;
     }
 
+    @Override
     public List<Product> searchProducts(String query) {
         SearchResponse<Hit> searchResults = searchClient.searchSingleIndex(
             indexName,
@@ -50,6 +51,7 @@ public class AlgoliaSearchServiceImpl implements SearchService {
                 .collect(Collectors.toList());
     }
 
+    @Override
     public List<Product> filterByBrand(List<String> brand) {
         List<SearchResponse<Hit>> searchResponses = brand
                 .stream()
@@ -72,6 +74,7 @@ public class AlgoliaSearchServiceImpl implements SearchService {
         return searchedProductMatches;
     }
 
+    @Override
     public List<Product> filterByCategory(List<String> category) {
         List<SearchResponse<Hit>> searchResponses = category
                 .stream()

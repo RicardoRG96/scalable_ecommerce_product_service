@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ricardo.scalable.ecommerce.platform.product_service.entities.Product;
 import com.ricardo.scalable.ecommerce.platform.product_service.repositories.dto.ProductCreationDto;
-import com.ricardo.scalable.ecommerce.platform.product_service.searchService.SearchService;
+import com.ricardo.scalable.ecommerce.platform.product_service.searchService.SearchServiceClient;
 import com.ricardo.scalable.ecommerce.platform.product_service.services.ProductService;
 
 import jakarta.validation.Valid;
@@ -32,7 +32,7 @@ public class ProductController {
     private ProductService productService;
 
     @Autowired
-    private SearchService searchService;
+    private SearchServiceClient searchServiceClient;
 
     @GetMapping("/{id}")
     public ResponseEntity<Product> getByProductId(@PathVariable Long id) {
@@ -76,19 +76,19 @@ public class ProductController {
     
     @GetMapping("/search")
     public ResponseEntity<List<?>> searchProducts(@RequestParam String query) {
-        List<Product> searchResults = searchService.searchProducts(query);
+        List<Product> searchResults = searchServiceClient.searchProducts(query);
         return ResponseEntity.ok(searchResults);
     }
 
     @GetMapping("/brand")
     public ResponseEntity<List<?>> filterByBrand(@RequestParam List<String> brand) {
-        List<Product> searchResults = searchService.filterByBrand(brand);
+        List<Product> searchResults = searchServiceClient.filterByBrand(brand);
         return ResponseEntity.ok(searchResults);
     }
 
     @GetMapping("/category")
     public ResponseEntity<List<?>> filterByCategory(@RequestParam List<String> category) {
-        List<Product> searchResults = searchService.filterByCategory(category);
+        List<Product> searchResults = searchServiceClient.filterByCategory(category);
         return ResponseEntity.ok(searchResults);
     }
 
