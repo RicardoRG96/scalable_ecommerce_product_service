@@ -10,6 +10,8 @@ public interface SearchServiceClient {
 
     List<Product> filterByBrand(List<String> brand);
 
-    List<Product> filterByCategory(List<String> category); 
+    List<Product> filterByCategory(List<String> category);
+
+    List<Product> filterByPriceRange(Double minPrice, Double maxPrice);
 
 }

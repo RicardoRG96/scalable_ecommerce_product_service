@@ -32,4 +32,9 @@ public class SearchServiceClientImpl implements SearchServiceClient {
         return searchService.filterByCategory(category);
     }
 
+    @Override
+    public List<Product> filterByPriceRange(Double minPrice, Double maxPrice) {
+        return searchService.filterByPriceRange(minPrice, maxPrice);
+    }
+
 }

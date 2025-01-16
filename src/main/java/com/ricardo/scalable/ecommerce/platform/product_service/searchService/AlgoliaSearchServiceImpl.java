@@ -97,4 +97,17 @@ public class AlgoliaSearchServiceImpl implements SearchService {
         return searchedProductMatches;
     }
 
+    @Override
+    public List<Product> filterByPriceRange(Double minPrice, Double maxPrice) {
+        SearchResponse<Hit> searchResponses = searchClient.searchSingleIndex(
+            indexName,
+            new SearchParamsObject().setFilters("price: " + minPrice + " TO " + maxPrice), 
+            Hit.class
+        );
+
+        List<Product> searchedProductMatches = getProductsFromSearchResults(searchResponses);
+
+        return searchedProductMatches;
+    }
+
 }

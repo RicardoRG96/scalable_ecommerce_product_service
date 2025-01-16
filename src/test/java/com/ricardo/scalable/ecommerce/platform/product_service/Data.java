@@ -208,4 +208,11 @@ public class Data {
         return List.of(product1, product2);
     }
 
+    public static List<Product> createListOfFilterByPriceRange() {
+        Product product1 = createProduct001().orElseThrow();
+        Product product2 = createProduct002().orElseThrow();
+
+        return List.of(product1, product2);
+    }
+
 }

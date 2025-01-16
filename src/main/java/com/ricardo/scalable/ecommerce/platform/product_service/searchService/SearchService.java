@@ -12,4 +12,6 @@ public interface SearchService {
 
     List<Product> filterByCategory(List<String> category);
 
+    List<Product> filterByPriceRange(Double minPrice, Double maxPrice);
+
 }

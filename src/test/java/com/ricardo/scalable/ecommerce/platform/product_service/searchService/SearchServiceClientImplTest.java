@@ -64,4 +64,18 @@ public class SearchServiceClientImplTest {
         );
     }
 
+    @Test
+    void testFilterByPriceRange() {
+        when(searchService.filterByPriceRange(1000.0, 1300.0)).thenReturn(Data.createListOfFilterByPriceRange());
+
+        List<Product> productSearchResponse = searchServiceClient.filterByPriceRange(1000.0, 1300.0);
+
+        assertAll(
+            () -> assertNotNull(productSearchResponse),
+            () -> assertEquals(2, productSearchResponse.size()),
+            () -> assertEquals("Notebook ASUS", productSearchResponse.get(0).getName()),
+            () -> assertEquals("Macbook Apple", productSearchResponse.get(1).getName())
+        );
+    }
+
 }

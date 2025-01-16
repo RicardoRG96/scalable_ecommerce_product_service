@@ -155,13 +155,50 @@ public class ProductControllerTest {
         return product;
     }
 
+    private Product createProduct003() {
+        Product product = new Product();
+        Category category = new Category(
+            4L, 
+            "Deportes", 
+            "Equipamiento deportivo, ropa deportiva, accesorios", 
+            Timestamp.from(Instant.now()), 
+            Timestamp.from(Instant.now())
+        );
+        Brand brand = new Brand(
+            3L, 
+            "Nike", 
+            "Marca deportiva estadounidense", 
+            "https://example.com/nike_logo.png", 
+            Timestamp.from(Instant.now()), 
+            Timestamp.from(Instant.now())
+        );
+
+        product.setId(3L);
+        product.setSku("SKU1010");
+        product.setUpc("UPC7436");
+        product.setName("Camiseta Liverpool");
+        product.setDescription("Camiseta de futbol");
+        product.setCategory(category);
+        product.setBrand(brand);
+        product.setPrice(100.99);
+        product.setStock(158);
+        product.setImageUrl("https://example.com/images/camiseta_liverpool.jpg");
+        product.setIsActive(true);
+        product.setIsFeatured(true);
+        product.setIsOnSale(false);
+        product.setCreatedAt(Timestamp.from(Instant.now()));
+        product.setUpdatedAt(Timestamp.from(Instant.now()));
+
+        return product;
+    }
+
     @Test
     @Order(2)
     void testGetByName() {
         Product product = createProduct001();
 
         client.get()
-                .uri("/product-name/iPhone 15")
+                .uri("/name/iPhone 15")
                 .exchange()
                 .expectStatus().isOk()
                 .expectHeader().contentType(MediaType.APPLICATION_JSON)
@@ -382,6 +419,31 @@ public class ProductControllerTest {
                 .uri("/3")
                 .exchange()
                 .expectStatus().isNotFound();
+    }
+
+    @Test
+    void testSearchProducts() {
+        Product product3 = createProduct003();
+
+        client.get()
+                .uri("/search?query=Camiseta")
+                .exchange()
+                .expectStatus().isOk()
+                .expectHeader().contentType(MediaType.APPLICATION_JSON)
+                .expectBody()
+                .consumeWith(res -> {
+                    try {
+                        JsonNode json = objectMapper.readTree(res.getResponseBody());
+                        assertAll(
+                            () -> assertNull(json),
+                            () -> assertFalse(json.isArray()),
+                            () -> assertEquals(2, json.size()),
+                            () -> assertEquals("leverpool", json.get(0).path("name").asText())
+                        );
+                    } catch (IOException ex) {
+                        ex.printStackTrace();
+                    }
+                });
     }
 
     @Test
