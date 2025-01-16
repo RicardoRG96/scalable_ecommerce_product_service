@@ -67,6 +67,30 @@ public class Data {
         return Optional.of(product);
     }
 
+    public static Optional<Product> createProduct003() {
+        Product product = new Product();
+        Category category = createCategory002().orElseThrow();
+        Brand brand = createBrand001().orElseThrow();
+
+        product.setId(3L);
+        product.setSku("789ads4248");
+        product.setUpc("fs748542a");
+        product.setName("Notebook Lenovo");
+        product.setDescription("Computador de ultima generacion Lenovo");
+        product.setCategory(category);
+        product.setBrand(brand);
+        product.setPrice(1500.99);
+        product.setStock(850);
+        product.setImageUrl("image3.png");
+        product.setIsActive(true);
+        product.setIsFeatured(true);
+        product.setIsOnSale(false);
+        product.setCreatedAt(Timestamp.from(Instant.now()));
+        product.setUpdatedAt(Timestamp.from(Instant.now()));
+
+        return Optional.of(product);
+    }
+
     public static List<Category> createListOfCategories() {
         Category category1 = createCategory001().orElseThrow();
         Category category2 = createCategory002().orElseThrow();
@@ -161,6 +185,27 @@ public class Data {
                 "categories", product2.getCategory().getName()
             )
         );
+    }
+
+    public static List<Product> createListOfProductsForSearch() {
+        Product product1 = createProduct001().orElseThrow();
+        Product product3 = createProduct003().orElseThrow();
+
+        return List.of(product1, product3);
+    }
+
+    public static List<Product> createListOfFilterByCategory() {
+        Product product2 = createProduct002().orElseThrow();
+        Product product3 = createProduct003().orElseThrow();
+
+        return List.of(product2, product3);
+    }
+
+    public static List<Product> createListOfFilterByBrand() {
+        Product product1 = createProduct001().orElseThrow();
+        Product product2 = createProduct002().orElseThrow();
+
+        return List.of(product1, product2);
     }
 
 }
