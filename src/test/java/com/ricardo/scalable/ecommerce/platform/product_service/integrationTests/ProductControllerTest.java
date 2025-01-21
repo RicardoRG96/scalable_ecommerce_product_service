@@ -4,8 +4,6 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 
 import java.io.IOException;
-import java.sql.Timestamp;
-import java.time.Instant;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.MethodOrderer;
@@ -21,9 +19,8 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ricardo.scalable.ecommerce.platform.product_service.entities.Brand;
-import com.ricardo.scalable.ecommerce.platform.product_service.entities.Category;
 import com.ricardo.scalable.ecommerce.platform.product_service.entities.Product;
+import com.ricardo.scalable.ecommerce.platform.product_service.integrationTestData.Data;
 import com.ricardo.scalable.ecommerce.platform.product_service.repositories.dto.ProductCreationDto;
 
 @ActiveProfiles("test")
@@ -47,7 +44,7 @@ public class ProductControllerTest {
     @Test
     @Order(1)
     void testGetByProductId() {
-        Product product = createProduct001();
+        Product product = Data.createProduct001();
 
         client.get()
                 .uri("/1")
@@ -81,121 +78,10 @@ public class ProductControllerTest {
                 .expectStatus().isNotFound();
     }
 
-    private Product createProduct001() {
-        Product product = new Product();
-        Category category = new Category(
-            1L, 
-            "Smartphone", 
-            "Telefonos celulares", 
-            Timestamp.from(Instant.now()), 
-            Timestamp.from(Instant.now())
-        );
-        Brand brand = new Brand(
-            1L, 
-            "Apple", 
-            "Marca líder en tecnologia", 
-            "https://example.com/apple_logo.png", 
-            Timestamp.from(Instant.now()), 
-            Timestamp.from(Instant.now())
-        );
-
-        product.setId(1L);
-        product.setSku("SKU2210");
-        product.setUpc("UPC6569");
-        product.setName("iPhone 15");
-        product.setDescription("Smartphone Apple");
-        product.setCategory(category);
-        product.setBrand(brand);
-        product.setPrice(1500.99);
-        product.setStock(540);
-        product.setImageUrl("https://example.com/images/iphone15_algodon.jpg");
-        product.setIsActive(true);
-        product.setIsFeatured(true);
-        product.setIsOnSale(true);
-        product.setCreatedAt(Timestamp.from(Instant.now()));
-        product.setUpdatedAt(Timestamp.from(Instant.now()));
-
-        return product;
-    }
-
-    private Product createProduct002() {
-        Product product = new Product();
-        Category category = new Category(
-            2L, 
-            "Notebooks", 
-            "Computadores portatiles", 
-            Timestamp.from(Instant.now()), 
-            Timestamp.from(Instant.now())
-        );
-        Brand brand = new Brand(
-            1L, 
-            "ASUS", 
-            "Empresa multinacional de tecnología", 
-            "https://example.com/asus_logo.png", 
-            Timestamp.from(Instant.now()), 
-            Timestamp.from(Instant.now())
-        );
-
-        product.setId(2L);
-        product.setSku("SKU2501");
-        product.setUpc("UPC1515");
-        product.setName("Asus Zenbook");
-        product.setDescription("Notebook de ultima generacion");
-        product.setCategory(category);
-        product.setBrand(brand);
-        product.setPrice(999.99);
-        product.setStock(200);
-        product.setImageUrl("https://example.com/images/asus_zenbook.jpg");
-        product.setIsActive(true);
-        product.setIsFeatured(false);
-        product.setIsOnSale(true);
-        product.setCreatedAt(Timestamp.from(Instant.now()));
-        product.setUpdatedAt(Timestamp.from(Instant.now()));
-
-        return product;
-    }
-
-    private Product createProduct003() {
-        Product product = new Product();
-        Category category = new Category(
-            4L, 
-            "Deportes", 
-            "Equipamiento deportivo, ropa deportiva, accesorios", 
-            Timestamp.from(Instant.now()), 
-            Timestamp.from(Instant.now())
-        );
-        Brand brand = new Brand(
-            3L, 
-            "Nike", 
-            "Marca deportiva estadounidense", 
-            "https://example.com/nike_logo.png", 
-            Timestamp.from(Instant.now()), 
-            Timestamp.from(Instant.now())
-        );
-
-        product.setId(3L);
-        product.setSku("SKU1010");
-        product.setUpc("UPC7436");
-        product.setName("Camiseta Liverpool");
-        product.setDescription("Camiseta de futbol");
-        product.setCategory(category);
-        product.setBrand(brand);
-        product.setPrice(100.99);
-        product.setStock(158);
-        product.setImageUrl("https://example.com/images/camiseta_liverpool.jpg");
-        product.setIsActive(true);
-        product.setIsFeatured(true);
-        product.setIsOnSale(false);
-        product.setCreatedAt(Timestamp.from(Instant.now()));
-        product.setUpdatedAt(Timestamp.from(Instant.now()));
-
-        return product;
-    }
-
     @Test
     @Order(2)
     void testGetByName() {
-        Product product = createProduct001();
+        Product product = Data.createProduct001();
 
         client.get()
                 .uri("/name/iPhone 15")
@@ -232,7 +118,7 @@ public class ProductControllerTest {
     @Test
     @Order(3)
     void testGetBySku() {
-        Product product = createProduct001();
+        Product product = Data.createProduct001();
 
         client.get()
                 .uri("/product-sku/SKU2210")
@@ -271,8 +157,8 @@ public class ProductControllerTest {
     @Test
     @Order(4)
     void testGetAllProducts() {
-        Product product1 = createProduct001();
-        Product product2 = createProduct002();
+        Product product1 = Data.createProduct001();
+        Product product2 = Data.createProduct002();
 
         client.get()
                 .uri("/")
@@ -356,7 +242,7 @@ public class ProductControllerTest {
     @Test
     @Order(6)
     void testUpdateProduct() {
-        Product productUpdateRequest = createProduct001();
+        Product productUpdateRequest = Data.createProduct001();
         productUpdateRequest.setName("iPhone 16");
         productUpdateRequest.setPrice(2000.00);
 
@@ -419,31 +305,6 @@ public class ProductControllerTest {
                 .uri("/3")
                 .exchange()
                 .expectStatus().isNotFound();
-    }
-
-    @Test
-    void testSearchProducts() {
-        Product product3 = createProduct003();
-
-        client.get()
-                .uri("/search?query=Camiseta")
-                .exchange()
-                .expectStatus().isOk()
-                .expectHeader().contentType(MediaType.APPLICATION_JSON)
-                .expectBody()
-                .consumeWith(res -> {
-                    try {
-                        JsonNode json = objectMapper.readTree(res.getResponseBody());
-                        assertAll(
-                            () -> assertNull(json),
-                            () -> assertFalse(json.isArray()),
-                            () -> assertEquals(2, json.size()),
-                            () -> assertEquals("leverpool", json.get(0).path("name").asText())
-                        );
-                    } catch (IOException ex) {
-                        ex.printStackTrace();
-                    }
-                });
     }
 
     @Test

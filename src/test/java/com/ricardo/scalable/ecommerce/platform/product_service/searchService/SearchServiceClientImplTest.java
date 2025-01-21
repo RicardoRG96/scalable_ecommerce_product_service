@@ -5,8 +5,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
-import com.ricardo.scalable.ecommerce.platform.product_service.Data;
 import com.ricardo.scalable.ecommerce.platform.product_service.entities.Product;
+import com.ricardo.scalable.ecommerce.platform.product_service.unitTestData.Data;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;

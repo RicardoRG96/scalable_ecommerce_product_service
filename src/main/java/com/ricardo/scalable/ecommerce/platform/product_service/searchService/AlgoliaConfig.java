@@ -32,7 +32,6 @@ public class AlgoliaConfig {
     @Autowired
     private ProductRepository productRepository;
 
-
     @Bean
     SearchClient searchClient() {
         SearchClient searchClient = null;
