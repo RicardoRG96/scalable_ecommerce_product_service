@@ -104,6 +104,102 @@ public class SearchEndpointsTest {
     }
 
     @Test
+    void testSearchProductsByBrand() {
+        Product product1 = Data.createProduct001();
+
+        client.get()
+                .uri("/search?query=Apple")
+                .exchange()
+                .expectStatus().isOk()
+                .expectHeader().contentType(MediaType.APPLICATION_JSON)
+                .expectBody()
+                .consumeWith(res -> {
+                    try {
+                        JsonNode json = objectMapper.readTree(res.getResponseBody());
+                        assertAll(
+                            () -> assertNotNull(json),
+                            () -> assertTrue(json.isArray()),
+                            () -> assertEquals(1, json.size()),
+                            () -> assertEquals(product1.getId(), json.get(0).path("id").asLong()),
+                            () -> assertEquals(product1.getName(), json.get(0).path("name").asText()),
+                            () -> assertEquals(product1.getDescription(), json.get(0).path("description").asText()),
+                            () -> assertEquals(product1.getBrand().getName(), json.get(0).path("brand").path("name").asText()),
+                            () -> assertEquals(product1.getSku(), json.get(0).path("sku").asText()),
+                            () -> assertEquals(product1.getUpc(), json.get(0).path("upc").asText()),
+                            () -> assertEquals(product1.getCategory().getName(), json.get(0).path("category").path("name").asText()),
+                            () -> assertEquals(product1.getPrice(), json.get(0).path("price").asDouble())
+                        );
+                    } catch (IOException ex) {
+                        ex.printStackTrace();
+                    }
+                });
+    }
+
+    @Test
+    void testSearchProductBySku() {
+        Product product1 = Data.createProduct001();
+
+        client.get()
+                .uri("/search?query=SKU2210")
+                .exchange()
+                .expectStatus().isOk()
+                .expectHeader().contentType(MediaType.APPLICATION_JSON)
+                .expectBody()
+                .consumeWith(res -> {
+                    try {
+                        JsonNode json = objectMapper.readTree(res.getResponseBody());
+                        assertAll(
+                            () -> assertNotNull(json),
+                            () -> assertTrue(json.isArray()),
+                            () -> assertEquals(1, json.size()),
+                            () -> assertEquals(product1.getId(), json.get(0).path("id").asLong()),
+                            () -> assertEquals(product1.getName(), json.get(0).path("name").asText()),
+                            () -> assertEquals(product1.getDescription(), json.get(0).path("description").asText()),
+                            () -> assertEquals(product1.getBrand().getName(), json.get(0).path("brand").path("name").asText()),
+                            () -> assertEquals(product1.getSku(), json.get(0).path("sku").asText()),
+                            () -> assertEquals(product1.getUpc(), json.get(0).path("upc").asText()),
+                            () -> assertEquals(product1.getCategory().getName(), json.get(0).path("category").path("name").asText()),
+                            () -> assertEquals(product1.getPrice(), json.get(0).path("price").asDouble())
+                        );
+                    } catch (IOException ex) {
+                        ex.printStackTrace();
+                    }
+                });
+    }
+
+    @Test
+    void searchProductByUpc() {
+        Product product1 = Data.createProduct001();
+
+        client.get()
+                .uri("/search?query=UPC6569")
+                .exchange()
+                .expectStatus().isOk()
+                .expectHeader().contentType(MediaType.APPLICATION_JSON)
+                .expectBody()
+                .consumeWith(res -> {
+                    try {
+                        JsonNode json = objectMapper.readTree(res.getResponseBody());
+                        assertAll(
+                            () -> assertNotNull(json),
+                            () -> assertTrue(json.isArray()),
+                            () -> assertEquals(1, json.size()),
+                            () -> assertEquals(product1.getId(), json.get(0).path("id").asLong()),
+                            () -> assertEquals(product1.getName(), json.get(0).path("name").asText()),
+                            () -> assertEquals(product1.getDescription(), json.get(0).path("description").asText()),
+                            () -> assertEquals(product1.getBrand().getName(), json.get(0).path("brand").path("name").asText()),
+                            () -> assertEquals(product1.getSku(), json.get(0).path("sku").asText()),
+                            () -> assertEquals(product1.getUpc(), json.get(0).path("upc").asText()),
+                            () -> assertEquals(product1.getCategory().getName(), json.get(0).path("category").path("name").asText()),
+                            () -> assertEquals(product1.getPrice(), json.get(0).path("price").asDouble())
+                        );
+                    } catch (IOException ex) {
+                        ex.printStackTrace();
+                    }
+                });
+    }
+
+    @Test
     void testProfile() {
         assertArrayEquals(new String[]{"test"}, env.getActiveProfiles());
     }
