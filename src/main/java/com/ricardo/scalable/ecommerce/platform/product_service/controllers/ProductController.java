@@ -75,22 +75,31 @@ public class ProductController {
      */
     
     @GetMapping("/search")
-    public ResponseEntity<List<?>> searchProducts(@RequestParam String query) {
+    public ResponseEntity<List<Product>> searchProducts(@RequestParam String query) {
         List<Product> searchResults = searchServiceClient.searchProducts(query);
         return ResponseEntity.ok(searchResults);
     }
 
     @GetMapping("/brand")
-    public ResponseEntity<List<?>> filterByBrand(@RequestParam List<String> brand) {
+    public ResponseEntity<List<Product>> filterByBrand(@RequestParam List<String> brand) {
         List<Product> searchResults = searchServiceClient.filterByBrand(brand);
         return ResponseEntity.ok(searchResults);
     }
 
     @GetMapping("/category")
-    public ResponseEntity<List<?>> filterByCategory(@RequestParam List<String> category) {
+    public ResponseEntity<List<Product>> filterByCategory(@RequestParam List<String> category) {
         List<Product> searchResults = searchServiceClient.filterByCategory(category);
         return ResponseEntity.ok(searchResults);
     }
+
+    @GetMapping("/price")
+    public ResponseEntity<List<Product>> filterByPriceRange(
+        @RequestParam Double minPrice, 
+        @RequestParam Double maxPrice
+    ) {
+        List<Product> searchResults = searchServiceClient.filterByPriceRange(minPrice, maxPrice);
+        return ResponseEntity.ok(searchResults);
+    } 
 
     /*
      * END OF ALGOLIA SERVICE ENDPOINTS

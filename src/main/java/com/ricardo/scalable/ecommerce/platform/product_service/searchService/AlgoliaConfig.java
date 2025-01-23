@@ -56,6 +56,8 @@ public class AlgoliaConfig {
                 "brand",
                 "category",
                 "price"
+            )).setCustomRanking(Arrays.asList(
+                "asc(price)"
             )).setAttributesToRetrieve(Arrays.asList(
                 "name",
                 "description",
