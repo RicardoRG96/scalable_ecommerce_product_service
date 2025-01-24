@@ -16,6 +16,8 @@ import com.algolia.model.search.IgnorePlurals;
 import com.algolia.model.search.IndexSettings;
 import com.algolia.model.search.RemoveStopWords;
 import com.algolia.model.search.SupportedLanguage;
+import com.algolia.model.search.SynonymHit;
+import com.algolia.model.search.SynonymType;
 import com.ricardo.scalable.ecommerce.platform.product_service.entities.Product;
 import com.ricardo.scalable.ecommerce.platform.product_service.repositories.ProductRepository;
 
@@ -76,6 +78,28 @@ public class AlgoliaConfig {
             .setQueryLanguages(Arrays.asList(SupportedLanguage.ES))
             .setRemoveStopWords(RemoveStopWords.of(true))
             .setIgnorePlurals(IgnorePlurals.of(true))
+        );
+
+        searchClient.saveSynonyms(
+            indexName,
+            Arrays.asList(
+                new SynonymHit()
+                    .setObjectID("7")
+                    .setType(SynonymType.SYNONYM)
+                    .setSynonyms(Arrays.asList(
+                        "balon",
+                        "pelota",
+                        "bola",
+                        "esferico"
+                    )),
+                new SynonymHit()
+                    .setObjectID("52")
+                    .setType(SynonymType.ONEWAYSYNONYM)
+                    .setInput("iphone")
+                    .setSynonyms(Arrays.asList("ephone", "aphone", "yphone"))
+            ),
+            true,
+            true
         );
     }
 
