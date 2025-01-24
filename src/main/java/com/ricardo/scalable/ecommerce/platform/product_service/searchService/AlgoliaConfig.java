@@ -13,6 +13,8 @@ import org.springframework.context.annotation.Configuration;
 
 import com.algolia.api.SearchClient;
 import com.algolia.model.search.IndexSettings;
+import com.algolia.model.search.RemoveStopWords;
+import com.algolia.model.search.SupportedLanguage;
 import com.ricardo.scalable.ecommerce.platform.product_service.entities.Product;
 import com.ricardo.scalable.ecommerce.platform.product_service.repositories.ProductRepository;
 
@@ -70,6 +72,8 @@ public class AlgoliaConfig {
                 "categoryId",
                 "imageUrl"
             )).setHitsPerPage(28)
+            .setQueryLanguages(Arrays.asList(SupportedLanguage.ES))
+            .setRemoveStopWords(RemoveStopWords.of(true))
         );
     }
 
