@@ -12,6 +12,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import com.algolia.api.SearchClient;
+import com.algolia.model.search.IgnorePlurals;
 import com.algolia.model.search.IndexSettings;
 import com.algolia.model.search.RemoveStopWords;
 import com.algolia.model.search.SupportedLanguage;
@@ -74,6 +75,7 @@ public class AlgoliaConfig {
             )).setHitsPerPage(28)
             .setQueryLanguages(Arrays.asList(SupportedLanguage.ES))
             .setRemoveStopWords(RemoveStopWords.of(true))
+            .setIgnorePlurals(IgnorePlurals.of(true))
         );
     }
 
