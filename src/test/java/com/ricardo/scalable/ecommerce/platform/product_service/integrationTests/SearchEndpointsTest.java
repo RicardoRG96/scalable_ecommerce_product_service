@@ -44,7 +44,7 @@ public class SearchEndpointsTest {
         Product product3 = Data.createProduct003();
 
         client.get()
-                .uri("/search?query=camiseta")
+                .uri("/search?query=balon")
                 .exchange()
                 .expectStatus().isOk()
                 .expectHeader().contentType(MediaType.APPLICATION_JSON)
@@ -168,7 +168,7 @@ public class SearchEndpointsTest {
     }
 
     @Test
-    void searchProductByUpc() {
+    void testSearchProductByUpc() {
         Product product1 = Data.createProduct001();
 
         client.get()
@@ -379,6 +379,132 @@ public class SearchEndpointsTest {
                             () -> assertEquals(product1.getCategory().getName(), json.get(1).path("category").path("name").asText()),
                             () -> assertEquals(product2.getPrice(), json.get(0).path("price").asDouble()),
                             () -> assertEquals(product1.getPrice(), json.get(1).path("price").asDouble())
+                        );
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                });
+    }
+
+    @Test
+    void testSearchWithStopWords() {
+        Product product3 = Data.createProduct003();
+
+        client.get()
+                .uri("/search?query=el balon")
+                .exchange()
+                .expectStatus().isOk()
+                .expectHeader().contentType(MediaType.APPLICATION_JSON)
+                .expectBody()
+                .consumeWith(res -> {
+                    try {
+                        JsonNode json = objectMapper.readTree(res.getResponseBody());
+                        assertAll(
+                            () -> assertNotNull(json),
+                            () -> assertTrue(json.isArray()),
+                            () -> assertEquals(1, json.size()),
+                            () -> assertEquals(product3.getId(), json.get(0).path("id").asLong()),
+                            () -> assertEquals(product3.getName(), json.get(0).path("name").asText()),
+                            () -> assertEquals(product3.getDescription(), json.get(0).path("description").asText()),
+                            () -> assertEquals(product3.getBrand().getName(), json.get(0).path("brand").path("name").asText()),
+                            () -> assertEquals(product3.getSku(), json.get(0).path("sku").asText()),
+                            () -> assertEquals(product3.getUpc(), json.get(0).path("upc").asText()),
+                            () -> assertEquals(product3.getCategory().getName(), json.get(0).path("category").path("name").asText()),
+                            () -> assertEquals(product3.getPrice(), json.get(0).path("price").asDouble())
+
+                        );
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                });
+    }
+
+    @Test
+    void testSearchWithSynonyms() {
+        Product product3 = Data.createProduct003();
+
+        client.get()
+                .uri("/search?query=pelota")
+                .exchange()
+                .expectStatus().isOk()
+                .expectHeader().contentType(MediaType.APPLICATION_JSON)
+                .expectBody()
+                .consumeWith(res -> {
+                    try {
+                        JsonNode json = objectMapper.readTree(res.getResponseBody());
+                        assertAll(
+                            () -> assertNotNull(json),
+                            () -> assertTrue(json.isArray()),
+                            () -> assertEquals(1, json.size()),
+                            () -> assertEquals(product3.getId(), json.get(0).path("id").asLong()),
+                            () -> assertEquals(product3.getName(), json.get(0).path("name").asText()),
+                            () -> assertEquals(product3.getDescription(), json.get(0).path("description").asText()),
+                            () -> assertEquals(product3.getBrand().getName(), json.get(0).path("brand").path("name").asText()),
+                            () -> assertEquals(product3.getSku(), json.get(0).path("sku").asText()),
+                            () -> assertEquals(product3.getUpc(), json.get(0).path("upc").asText()),
+                            () -> assertEquals(product3.getCategory().getName(), json.get(0).path("category").path("name").asText()),
+                            () -> assertEquals(product3.getPrice(), json.get(0).path("price").asDouble())
+
+                        );
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                });
+
+                client.get()
+                .uri("/search?query=esferico")
+                .exchange()
+                .expectStatus().isOk()
+                .expectHeader().contentType(MediaType.APPLICATION_JSON)
+                .expectBody()
+                .consumeWith(res -> {
+                    try {
+                        JsonNode json = objectMapper.readTree(res.getResponseBody());
+                        assertAll(
+                            () -> assertNotNull(json),
+                            () -> assertTrue(json.isArray()),
+                            () -> assertEquals(1, json.size()),
+                            () -> assertEquals(product3.getId(), json.get(0).path("id").asLong()),
+                            () -> assertEquals(product3.getName(), json.get(0).path("name").asText()),
+                            () -> assertEquals(product3.getDescription(), json.get(0).path("description").asText()),
+                            () -> assertEquals(product3.getBrand().getName(), json.get(0).path("brand").path("name").asText()),
+                            () -> assertEquals(product3.getSku(), json.get(0).path("sku").asText()),
+                            () -> assertEquals(product3.getUpc(), json.get(0).path("upc").asText()),
+                            () -> assertEquals(product3.getCategory().getName(), json.get(0).path("category").path("name").asText()),
+                            () -> assertEquals(product3.getPrice(), json.get(0).path("price").asDouble())
+                        );
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                });
+    }
+
+    @Test
+    void testSearchWithIgnorePlurals() {
+        Product product3 = Data.createProduct003();
+
+        client.get()
+                .uri("/search?query=balones")
+                .exchange()
+                .expectStatus().isOk()
+                .expectHeader().contentType(MediaType.APPLICATION_JSON)
+                .expectBody()
+                .consumeWith(res -> {
+                    try {
+                        JsonNode json = objectMapper.readTree(res.getResponseBody());
+                        assertAll(
+                            () -> assertNotNull(json),
+                            () -> assertTrue(json.isArray()),
+                            () -> assertEquals(1, json.size()),
+                            () -> assertEquals(product3.getId(), json.get(0).path("id").asLong()),
+                            () -> assertEquals(product3.getName(), json.get(0).path("name").asText()),
+                            () -> assertEquals(product3.getDescription(), json.get(0).path("description").asText()),
+                            () -> assertEquals(product3.getBrand().getName(), json.get(0).path("brand").path("name").asText()),
+                            () -> assertEquals(product3.getSku(), json.get(0).path("sku").asText()),
+                            () -> assertEquals(product3.getUpc(), json.get(0).path("upc").asText()),
+                            () -> assertEquals(product3.getCategory().getName(), json.get(0).path("category").path("name").asText()),
+                            () -> assertEquals(product3.getPrice(), json.get(0).path("price").asDouble())
+
                         );
                     } catch (Exception ex) {
                         ex.printStackTrace();

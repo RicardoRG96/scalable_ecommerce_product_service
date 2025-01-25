@@ -16,4 +16,4 @@ INSERT INTO products (sku, upc, name, description, category_id, brand_id, price,
 VALUES
     ('SKU2210', 'UPC6569', 'iPhone 15', 'Smartphone Apple', 1, 1, 1500.99, 540, 'https://example.com/images/iphone15_algodon.jpg', TRUE, TRUE, TRUE),
     ('SKU2501', 'UPC1515', 'Asus Zenbook', 'Notebook de ultima generacion', 2, 2, 999.99, 200, 'https://example.com/images/asus_zenbook.jpg', TRUE, FALSE, TRUE),
-    ('SKU1010', 'UPC7436', 'Camiseta Liverpool', 'Camiseta de futbol', 4, 3, 100.99, 158, 'https://example.com/images/camiseta_liverpool.jpg', TRUE, TRUE, FALSE);
+    ('SKU9820', 'UPC281852', 'Balon premier league 2025', 'Balon oficial Premier League', 4, 3, 29.99, 958, 'https://example.com/images/balon_pl.jpg', TRUE, TRUE, TRUE);

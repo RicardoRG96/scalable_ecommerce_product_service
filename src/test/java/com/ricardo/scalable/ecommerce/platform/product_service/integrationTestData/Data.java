@@ -102,18 +102,18 @@ public class Data {
         );
 
         product.setId(3L);
-        product.setSku("SKU1010");
-        product.setUpc("UPC7436");
-        product.setName("Camiseta Liverpool");
-        product.setDescription("Camiseta de futbol");
+        product.setSku("SKU9820");
+        product.setUpc("UPC281852");
+        product.setName("Balon premier league 2025");
+        product.setDescription("Balon oficial Premier League");
         product.setCategory(category);
         product.setBrand(brand);
-        product.setPrice(100.99);
-        product.setStock(158);
-        product.setImageUrl("https://example.com/images/camiseta_liverpool.jpg");
+        product.setPrice(29.99);
+        product.setStock(958);
+        product.setImageUrl("https://example.com/images/balon_pl.jpg");
         product.setIsActive(true);
         product.setIsFeatured(true);
-        product.setIsOnSale(false);
+        product.setIsOnSale(true);
         product.setCreatedAt(Timestamp.from(Instant.now()));
         product.setUpdatedAt(Timestamp.from(Instant.now()));
 
