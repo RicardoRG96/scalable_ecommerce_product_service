@@ -30,7 +30,7 @@ public class CategoryController {
 
     @GetMapping("/categories/{id}")
     public ResponseEntity<Category> getById(@PathVariable Long id) {
-        Optional<Category> categoryOptional = categoryService.findById(id);
+        Optional<Category> categoryOptional = categoryService.findByCategoryId(id);
 
         if (categoryOptional.isPresent()) {
             return ResponseEntity.ok(categoryOptional.orElseThrow());
@@ -93,7 +93,7 @@ public class CategoryController {
 
     @DeleteMapping("/categories/{id}")
     public ResponseEntity<Category> deleteCategory(@PathVariable Long id) {
-        Optional<Category> categoryOptional = categoryService.findById(id);
+        Optional<Category> categoryOptional = categoryService.findByCategoryId(id);
 
         if (categoryOptional.isPresent()) {
             categoryService.delete(id);

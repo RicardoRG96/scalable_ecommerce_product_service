@@ -12,8 +12,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.DecimalMin;
-import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
@@ -24,13 +22,6 @@ public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @NotBlank
-    @Column(unique = true)
-    private String sku;
-
-    @NotBlank
-    private String upc;
 
     @NotBlank
     @Column(nullable = false, unique = true)
@@ -49,24 +40,8 @@ public class Product {
     @NotNull
     private Brand brand;
 
-    @DecimalMin("0.00")
-    private Double price;
-
-    @Min(0)
-    private Integer stock;
-
-    @Column(name = "image_url")
     @NotBlank
-    private String imageUrl;
-
-    @Column(name = "is_active")
-    private Boolean isActive;
-
-    @Column(name = "is_featured")
-    private Boolean isFeatured;
-
-    @Column(name = "is_on_sale")
-    private Boolean isOnSale;
+    private String cover;
 
     @Column(name = "created_at")
     @CreationTimestamp
@@ -79,22 +54,14 @@ public class Product {
     public Product() {
     }
 
-    public Product(Long id, String sku, String upc, String name, String description, Category category, Brand brand,
-            Double price, Integer stock, String imageUrl, Boolean isActive, Boolean isFeatured, Boolean isOnSale,
-            Timestamp createdAt, Timestamp updatedAt) {
+    public Product(Long id, String name, String description, Category category, Brand brand,
+        String cover, Timestamp createdAt, Timestamp updatedAt) {
         this.id = id;
-        this.sku = sku;
-        this.upc = upc;
         this.name = name;
         this.description = description;
         this.category = category;
         this.brand = brand;
-        this.price = price;
-        this.stock = stock;
-        this.imageUrl = imageUrl;
-        this.isActive = isActive;
-        this.isFeatured = isFeatured;
-        this.isOnSale = isOnSale;
+        this.cover = cover;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
     }
@@ -105,22 +72,6 @@ public class Product {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public String getSku() {
-        return sku;
-    }
-
-    public void setSku(String sku) {
-        this.sku = sku;
-    }
-
-    public String getUpc() {
-        return upc;
-    }
-
-    public void setUpc(String upc) {
-        this.upc = upc;
     }
 
     public String getName() {
@@ -155,52 +106,12 @@ public class Product {
         this.brand = brand;
     }
 
-    public Double getPrice() {
-        return price;
+    public String getCover() {
+        return cover;
     }
 
-    public void setPrice(Double price) {
-        this.price = price;
-    }
-
-    public Integer getStock() {
-        return stock;
-    }
-
-    public void setStock(Integer stock) {
-        this.stock = stock;
-    }
-
-    public String getImageUrl() {
-        return imageUrl;
-    }
-
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
-    }
-
-    public Boolean getIsActive() {
-        return isActive;
-    }
-
-    public void setIsActive(Boolean isActive) {
-        this.isActive = isActive;
-    }
-
-    public Boolean getIsFeatured() {
-        return isFeatured;
-    }
-
-    public void setIsFeatured(Boolean isFeatured) {
-        this.isFeatured = isFeatured;
-    }
-
-    public Boolean getIsOnSale() {
-        return isOnSale;
-    }
-
-    public void setIsOnSale(Boolean isOnSale) {
-        this.isOnSale = isOnSale;
+    public void setCover(String cover) {
+        this.cover = cover;
     }
 
     public Timestamp getCreatedAt() {

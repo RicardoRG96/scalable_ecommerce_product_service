@@ -12,23 +12,18 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 
-@Entity
-@Table(name = "categories")
-public class Category {
+@Entity@Table(name = "product_attributes")
+public class ProductAttribute {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "category_id")
-    private Long categoryId;
+    private Long id;
 
     @NotBlank
-    private String name;
+    private String type;
 
     @NotBlank
-    private String description;
-
-    @Column(name = "parent")
-    private Category parent;
+    private String value;
 
     @Column(name = "created_at")
     @CreationTimestamp
@@ -38,48 +33,39 @@ public class Category {
     @CreationTimestamp
     private Timestamp updatedAt;
 
-    public Category() {
+    public ProductAttribute() {
     }
 
-    public Category(Long categoryId, String name, String description, Category parent, Timestamp createdAt, Timestamp updatedAt) {
-        this.categoryId = categoryId;
-        this.name = name;
-        this.description = description;
-        this.parent = parent;
+    public ProductAttribute(Long id, String type, String value, Timestamp createdAt, Timestamp updatedAt) {
+        this.id = id;
+        this.type = type;
+        this.value = value;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
     }
 
-    public Long getCategoryId() {
-        return categoryId;
+    public Long getId() {
+        return id;
     }
 
-    public void setCategoryId(Long categoryId) {
-        this.categoryId = categoryId;
+    public void setId(Long id) {
+        this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getType() {
+        return type;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setType(String type) {
+        this.type = type;
     }
 
-    public String getDescription() {
-        return description;
+    public String getValue() {
+        return value;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public Category getParent() {
-        return parent;
-    }
-
-    public void setParent(Category parent) {
-        this.parent = parent;
+    public void setValue(String value) {
+        this.value = value;
     }
 
     public Timestamp getCreatedAt() {

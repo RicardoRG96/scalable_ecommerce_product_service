@@ -22,8 +22,8 @@ public class CategoryServiceImpl implements CategoryService {
     private ProductRepository productRepository;
 
     @Override
-    public Optional<Category> findById(Long id) {
-        return categoryRepository.findById(id);
+    public Optional<Category> findByCategoryId(Long categoryId) {
+        return categoryRepository.findByCategoryId(categoryId);
     }
 
     @Override
@@ -39,8 +39,10 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public Category save(CategoryCreationDto categoryCreation) {
         Category category = new Category();
+        Category parentCategory = categoryRepository.findByCategoryId(categoryCreation.getParentId()).orElseThrow();
         category.setName(categoryCreation.getName());
         category.setDescription(categoryCreation.getDescription());
+        category.setParent(parentCategory);
         
         return categoryRepository.save(category);
     }
