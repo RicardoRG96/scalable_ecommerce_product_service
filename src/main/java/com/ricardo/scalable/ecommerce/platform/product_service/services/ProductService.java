@@ -11,8 +11,6 @@ public interface ProductService {
 
     Optional<Product> findByName(String name);
 
-    Optional<Product> findBySku(String sku);
-
     Iterable<Product> findAll();
 
     Optional<Product> save(ProductCreationDto product);

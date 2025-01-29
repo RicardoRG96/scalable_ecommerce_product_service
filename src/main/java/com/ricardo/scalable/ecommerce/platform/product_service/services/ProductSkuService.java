@@ -7,11 +7,22 @@ import com.ricardo.scalable.ecommerce.platform.product_service.repositories.dto.
 
 public interface ProductSkuService {
 
-    Optional<ProductSku> findByProductId(Long id);
+    Optional<ProductSku> findById(Long id);
+
+    Optional<Iterable<ProductSku>> findByProductId(Long id);
 
     Optional<ProductSku> findBySku(String sku);
 
     Optional<ProductSku> findBySkuAndIsActive(String sku, Boolean isActive);
+
+    Optional<Iterable<ProductSku>> findByProductIdAndSizeAttributeId(Long productId, Long sizeAttributeId);
+
+    Optional<Iterable<ProductSku>> findByProductIdAndColorAttributeId(Long productId, Long colorAttributeId);
+
+    Optional<ProductSku> findByProductIdAndSizeAttributeIdAndColorAttributeId(
+        Long productId, Long sizeAttributeId, Long colorAttributeId);
+
+    Iterable<ProductSku> findAll();
 
     Optional<ProductSku> save(ProductSkuCreationDto productSku);
 

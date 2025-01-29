@@ -54,16 +54,6 @@ public class ProductController {
         return ResponseEntity.notFound().build();
     }
 
-    @GetMapping("/product-sku/{sku}")
-    public ResponseEntity<Product> getBySku(@PathVariable String sku) {
-        Optional<Product> productOptional = productService.findBySku(sku);
-
-        if (productOptional.isPresent()) {
-            return ResponseEntity.ok(productOptional.orElseThrow());
-        }
-        return ResponseEntity.notFound().build();
-    }
-
     @GetMapping
     public ResponseEntity<Iterable<Product>> getAllProducts() {
         return ResponseEntity.ok(productService.findAll());

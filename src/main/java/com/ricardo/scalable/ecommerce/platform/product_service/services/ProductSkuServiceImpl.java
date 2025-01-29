@@ -26,7 +26,12 @@ public class ProductSkuServiceImpl implements ProductSkuService {
     private ProductAttributeRepository productAttributeRepository;
 
     @Override
-    public Optional<ProductSku> findByProductId(Long id) {
+    public Optional<ProductSku> findById(Long id) {
+        return productSkuRepository.findById(id);
+    }
+
+    @Override
+    public Optional<Iterable<ProductSku>> findByProductId(Long id) {
         return productSkuRepository.findByProductId(id);
     }
 
@@ -38,6 +43,38 @@ public class ProductSkuServiceImpl implements ProductSkuService {
     @Override
     public Optional<ProductSku> findBySkuAndIsActive(String sku, Boolean isActive) {
         return productSkuRepository.findBySkuAndIsActive(sku, isActive);
+    }
+
+    @Override
+    public Optional<Iterable<ProductSku>> findByProductIdAndSizeAttributeId(
+            Long productId, 
+            Long sizeAttributeId
+        ) {
+        return productSkuRepository.findByProductIdAndSizeAttributeId(productId, sizeAttributeId);
+    }
+
+    @Override
+    public Optional<Iterable<ProductSku>> findByProductIdAndColorAttributeId(
+            Long productId, 
+            Long colorAttributeId
+        ) {
+        return productSkuRepository.findByProductIdAndColorAttributeId(productId, colorAttributeId);
+    }
+
+    @Override
+    public Optional<ProductSku> findByProductIdAndSizeAttributeIdAndColorAttributeId(
+            Long productId, 
+            Long sizeAttributeId, 
+            Long colorAttributeId
+        ) {
+        return productSkuRepository.findByProductIdAndSizeAttributeIdAndColorAttributeId(
+            productId, sizeAttributeId, colorAttributeId
+        );
+    }
+
+    @Override
+    public Iterable<ProductSku> findAll() {
+        return productSkuRepository.findAll();
     }
 
     @Override

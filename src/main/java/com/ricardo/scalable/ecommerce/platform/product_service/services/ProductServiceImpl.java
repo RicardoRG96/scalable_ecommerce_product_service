@@ -40,12 +40,6 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     @Transactional(readOnly = true)
-    public Optional<Product> findBySku(String sku) {
-        return productRepository.findBySku(sku);
-    }
-
-    @Override
-    @Transactional(readOnly = true)
     public Iterable<Product> findAll() {
         return productRepository.findAll();
     }
@@ -59,18 +53,12 @@ public class ProductServiceImpl implements ProductService {
         if (category.isPresent() && brand.isPresent()) {
             Product product = new Product();
 
-            product.setSku(productCreation.getSku());
-            product.setUpc(productCreation.getUpc());
+
             product.setName(productCreation.getName());
             product.setDescription(productCreation.getDescription());
-            product.setCategory(category.get());
-            product.setBrand(brand.get());
-            product.setPrice(productCreation.getPrice());
-            product.setStock(productCreation.getStock());
-            product.setImageUrl(productCreation.getImageUrl());
-            product.setIsActive(productCreation.getIsActive());
-            product.setIsFeatured(productCreation.getIsFeatured());
-            product.setIsOnSale(productCreation.getIsOnSale());
+            product.setCategory(category.orElseThrow());
+            product.setBrand(brand.orElseThrow());
+            product.setCover(productCreation.getCover());
 
             return Optional.of(productRepository.save(product));
         }
@@ -88,12 +76,7 @@ public class ProductServiceImpl implements ProductService {
             dbProduct.setDescription(product.getDescription());
             dbProduct.setCategory(product.getCategory());
             dbProduct.setBrand(product.getBrand());
-            dbProduct.setPrice(product.getPrice());
-            dbProduct.setStock(product.getStock());
-            dbProduct.setImageUrl(product.getImageUrl());
-            dbProduct.setIsActive(product.getIsActive());
-            dbProduct.setIsFeatured(product.getIsFeatured());
-            dbProduct.setIsOnSale(product.getIsOnSale());
+            dbProduct.setCover(product.getCover());
             
             return Optional.of(productRepository.save(dbProduct));
         }).orElseGet(Optional::empty);
