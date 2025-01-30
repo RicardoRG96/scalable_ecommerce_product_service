@@ -4,6 +4,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.ricardo.scalable.ecommerce.platform.product_service.entities.Product;
 import com.ricardo.scalable.ecommerce.platform.product_service.entities.ProductAttribute;
@@ -26,26 +27,31 @@ public class ProductSkuServiceImpl implements ProductSkuService {
     private ProductAttributeRepository productAttributeRepository;
 
     @Override
+    @Transactional(readOnly = true)
     public Optional<ProductSku> findById(Long id) {
         return productSkuRepository.findById(id);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Optional<Iterable<ProductSku>> findByProductId(Long id) {
         return productSkuRepository.findByProductId(id);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Optional<ProductSku> findBySku(String sku) {
         return productSkuRepository.findBySku(sku);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Optional<ProductSku> findBySkuAndIsActive(String sku, Boolean isActive) {
         return productSkuRepository.findBySkuAndIsActive(sku, isActive);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Optional<Iterable<ProductSku>> findByProductIdAndSizeAttributeId(
             Long productId, 
             Long sizeAttributeId
@@ -54,6 +60,7 @@ public class ProductSkuServiceImpl implements ProductSkuService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Optional<Iterable<ProductSku>> findByProductIdAndColorAttributeId(
             Long productId, 
             Long colorAttributeId
@@ -62,6 +69,7 @@ public class ProductSkuServiceImpl implements ProductSkuService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Optional<ProductSku> findByProductIdAndSizeAttributeIdAndColorAttributeId(
             Long productId, 
             Long sizeAttributeId, 
@@ -73,11 +81,13 @@ public class ProductSkuServiceImpl implements ProductSkuService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Iterable<ProductSku> findAll() {
         return productSkuRepository.findAll();
     }
 
     @Override
+    @Transactional
     public Optional<ProductSku> save(ProductSkuCreationDto productSku) {
         Optional<Product> product = productRepository.findById(productSku.getProductId());
         Optional<ProductAttribute> sizeAttribute = productAttributeRepository.findById(productSku.getSizeAttributeId());
@@ -101,6 +111,7 @@ public class ProductSkuServiceImpl implements ProductSkuService {
     }
 
     @Override
+    @Transactional
     public Optional<ProductSku> update(ProductSku productSku, Long id) {
         Optional<ProductSku> existingProductSku = productSkuRepository.findById(id);
 
@@ -119,6 +130,7 @@ public class ProductSkuServiceImpl implements ProductSkuService {
     }
 
     @Override
+    @Transactional
     public void delete(Long id) {
         productSkuRepository.deleteById(id);
     }

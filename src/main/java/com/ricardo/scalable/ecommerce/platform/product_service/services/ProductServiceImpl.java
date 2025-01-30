@@ -53,7 +53,6 @@ public class ProductServiceImpl implements ProductService {
         if (category.isPresent() && brand.isPresent()) {
             Product product = new Product();
 
-
             product.setName(productCreation.getName());
             product.setDescription(productCreation.getDescription());
             product.setCategory(category.orElseThrow());
