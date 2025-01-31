@@ -39,11 +39,8 @@ public class ProductSkuController {
 
     @GetMapping("/product-sku/{productId}")
     public ResponseEntity<Iterable<ProductSku>> getByProductId(@PathVariable Long id) {
-        Optional<Iterable<ProductSku>> productSkuOptional = productSkuService.findByProductId(id);
-        if (productSkuOptional.isPresent()) {
-            return ResponseEntity.ok(productSkuOptional.orElseThrow());
-        }
-        return ResponseEntity.notFound().build();
+        Iterable<ProductSku>productsSku = productSkuService.findByProductId(id);
+        return ResponseEntity.ok(productsSku);
     }
 
     @GetMapping("/product-sku/sku/{sku}")
@@ -69,13 +66,10 @@ public class ProductSkuController {
             @PathVariable Long productId, 
             @PathVariable Long sizeAttributeId
         ) {
-        Optional<Iterable<ProductSku>> productSkuOptional = 
+        Iterable<ProductSku> productsSku = 
             productSkuService.findByProductIdAndSizeAttributeId(productId, sizeAttributeId);
 
-        if (productSkuOptional.isPresent()) {
-            return ResponseEntity.ok(productSkuOptional.orElseThrow());
-        }
-        return ResponseEntity.notFound().build();
+        return ResponseEntity.ok(productsSku);
     }
 
     @GetMapping("/product-sku/productId/{productId}/colorAttributeId/{colorAttributeId}")
@@ -83,13 +77,10 @@ public class ProductSkuController {
             @PathVariable Long productId, 
             @PathVariable Long colorAttributeId
         ) {
-        Optional<Iterable<ProductSku>> productSkuOptional = 
+        Iterable<ProductSku> productsSku = 
             productSkuService.findByProductIdAndColorAttributeId(productId, colorAttributeId);
 
-        if (productSkuOptional.isPresent()) {
-            return ResponseEntity.ok(productSkuOptional.orElseThrow());
-        }
-        return ResponseEntity.notFound().build();
+        return ResponseEntity.ok(productsSku);
     }
 
     @GetMapping("/product-sku/productId/{productId}/sizeAttributeId/{sizeAttributeId}/colorAttributeId/{colorAttributeId}")

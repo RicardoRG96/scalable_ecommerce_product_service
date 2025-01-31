@@ -34,7 +34,7 @@ public class ProductSkuServiceImpl implements ProductSkuService {
 
     @Override
     @Transactional(readOnly = true)
-    public Optional<Iterable<ProductSku>> findByProductId(Long id) {
+    public Iterable<ProductSku> findByProductId(Long id) {
         return productSkuRepository.findByProductId(id);
     }
 
@@ -52,7 +52,7 @@ public class ProductSkuServiceImpl implements ProductSkuService {
 
     @Override
     @Transactional(readOnly = true)
-    public Optional<Iterable<ProductSku>> findByProductIdAndSizeAttributeId(
+    public Iterable<ProductSku> findByProductIdAndSizeAttributeId(
             Long productId, 
             Long sizeAttributeId
         ) {
@@ -61,7 +61,7 @@ public class ProductSkuServiceImpl implements ProductSkuService {
 
     @Override
     @Transactional(readOnly = true)
-    public Optional<Iterable<ProductSku>> findByProductIdAndColorAttributeId(
+    public Iterable<ProductSku> findByProductIdAndColorAttributeId(
             Long productId, 
             Long colorAttributeId
         ) {
@@ -89,16 +89,16 @@ public class ProductSkuServiceImpl implements ProductSkuService {
     @Override
     @Transactional
     public Optional<ProductSku> save(ProductSkuCreationDto productSku) {
-        Optional<Product> product = productRepository.findById(productSku.getProductId());
-        Optional<ProductAttribute> sizeAttribute = productAttributeRepository.findById(productSku.getSizeAttributeId());
-        Optional<ProductAttribute> colorAttribute = productAttributeRepository.findById(productSku.getColorAttributeId());
+        Optional<Product> productOptional = productRepository.findById(productSku.getProductId());
+        Optional<ProductAttribute> sizeAttributeOptional = productAttributeRepository.findById(productSku.getSizeAttributeId());
+        Optional<ProductAttribute> colorAttributeOptional = productAttributeRepository.findById(productSku.getColorAttributeId());
 
-        if (product.isPresent() && sizeAttribute.isPresent() && colorAttribute.isPresent()) {
+        if (productOptional.isPresent() && sizeAttributeOptional.isPresent() && colorAttributeOptional.isPresent()) {
             ProductSku newProductSku = new ProductSku();
 
-            newProductSku.setProduct(product.get());
-            newProductSku.setSizeAttribute(sizeAttribute.get());
-            newProductSku.setColorAttribute(colorAttribute.get());
+            newProductSku.setProduct(productOptional.orElseThrow());
+            newProductSku.setSizeAttribute(sizeAttributeOptional.orElseThrow());
+            newProductSku.setColorAttribute(colorAttributeOptional.orElseThrow());
             newProductSku.setSku(productSku.getSku());
             newProductSku.setPrice(productSku.getPrice());
             newProductSku.setStock(productSku.getStock());

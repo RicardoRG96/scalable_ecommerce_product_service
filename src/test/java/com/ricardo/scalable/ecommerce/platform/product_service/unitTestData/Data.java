@@ -12,84 +12,65 @@ import com.ricardo.scalable.ecommerce.platform.product_service.entities.Product;
 
 public class Data {
 
-    // public static List<Product> createListOfProducts() {
-    //     Product product1 = createProduct001().orElseThrow();
-    //     Product product2 = createProduct002().orElseThrow();
+    public static List<Product> createListOfProducts() {
+        Product product1 = createProduct001().orElseThrow();
+        Product product2 = createProduct002().orElseThrow();
 
-    //     return List.of(product1, product2);
-    // }
+        return List.of(product1, product2);
+    }
 
-    // public static Optional<Product> createProduct001() {
-    //     Product product = new Product();
-    //     Category category = createSubCategory001().orElseThrow();
-    //     Brand brand = createBrand002().orElseThrow();
+    // public static
 
-    //     product.setId(1L);
-    //     product.setSku("123456");
-    //     product.setUpc("abcde");
-    //     product.setName("Notebook ASUS");
-    //     product.setDescription("Computador de ultima generacion ASUS");
-    //     product.setCategory(category);
-    //     product.setBrand(brand);
-    //     product.setPrice(1000.99);
-    //     product.setStock(100);
-    //     product.setImageUrl("image.png");
-    //     product.setIsActive(true);
-    //     product.setIsFeatured(true);
-    //     product.setIsOnSale(false);
-    //     product.setCreatedAt(Timestamp.from(Instant.now()));
-    //     product.setUpdatedAt(Timestamp.from(Instant.now()));
+    public static Optional<Product> createProduct001() {
+        Product product = new Product();
+        Category category = createSubCategory001().orElseThrow();
+        Brand brand = createBrand002().orElseThrow();
 
-    //     return Optional.of(product);
-    // }
+        product.setId(1L);
+        product.setName("Notebook ASUS");
+        product.setDescription("Computador de ultima generacion ASUS");
+        product.setCategory(category);
+        product.setBrand(brand);
+        product.setCover("image.png");
+        product.setCreatedAt(Timestamp.from(Instant.now()));
+        product.setUpdatedAt(Timestamp.from(Instant.now()));
 
-    // public static Optional<Product> createProduct002() {
-    //     Product product = new Product();
-    //     Category category = createSubCategory002().orElseThrow();
-    //     Brand brand = createBrand002().orElseThrow();
+        return Optional.of(product);
+    }
 
-    //     product.setId(2L);
-    //     product.setSku("7891011");
-    //     product.setUpc("fghijk");
-    //     product.setName("Macbook Apple");
-    //     product.setDescription("Computador de ultima generacion Apple");
-    //     product.setCategory(category);
-    //     product.setBrand(brand);
-    //     product.setPrice(1300.99);
-    //     product.setStock(80);
-    //     product.setImageUrl("image2.png");
-    //     product.setIsActive(true);
-    //     product.setIsFeatured(true);
-    //     product.setIsOnSale(false);
-    //     product.setCreatedAt(Timestamp.from(Instant.now()));
-    //     product.setUpdatedAt(Timestamp.from(Instant.now()));
+    public static Optional<Product> createProduct002() {
+        Product product = new Product();
+        Category category = createSubCategory002().orElseThrow();
+        Brand brand = createBrand002().orElseThrow();
 
-    //     return Optional.of(product);
-    // }
+        product.setId(2L);
+        product.setName("iPhone Apple");
+        product.setDescription("Celular de ultima generacion Apple");
+        product.setCategory(category);
+        product.setBrand(brand);
+        product.setCover("image2.png");
+        product.setCreatedAt(Timestamp.from(Instant.now()));
+        product.setUpdatedAt(Timestamp.from(Instant.now()));
 
-    // public static Optional<Product> createProduct003() {
-    //     Product product = new Product();
-    //     Category category = createSubCategory001().orElseThrow();
-    //     Brand brand = createBrand001().orElseThrow();
+        return Optional.of(product);
+    }
 
-    //     product.setId(3L);
-    //     product.setSku("789ads4248");
-    //     product.setUpc("fs748542a");
-    //     product.setName("Notebook Lenovo");
-    //     product.setDescription("Computador de ultima generacion Lenovo");
-    //     product.setCategory(category);
-    //     product.setBrand(brand);
-    //     product.setPrice(1500.99);
-    //     product.setStock(850);
-    //     product.setImageUrl("image3.png");
-    //     product.setIsActive(true);
-    //     product.setIsFeatured(true);
-    //     product.setIsOnSale(false);
-    //     product.setCreatedAt(Timestamp.from(Instant.now()));
-    //     product.setUpdatedAt(Timestamp.from(Instant.now()));
+    public static Optional<Product> createProduct003() {
+        Product product = new Product();
+        Category category = createSubCategory001().orElseThrow();
+        Brand brand = createBrand001().orElseThrow();
 
-    //     return Optional.of(product);
-    // }
+        product.setId(3L);
+        product.setName("Notebook Lenovo");
+        product.setDescription("Computador de ultima generacion Lenovo");
+        product.setCategory(category);
+        product.setBrand(brand);
+        product.setCover("image3.png");
+        product.setCreatedAt(Timestamp.from(Instant.now()));
+        product.setUpdatedAt(Timestamp.from(Instant.now()));
+
+        return Optional.of(product);
+    }
 
     public static List<Category> createListOfCategories() {
         Category category1 = createCategory001().orElseThrow();
@@ -185,9 +166,9 @@ public class Data {
         return Optional.of(brand);
     }
 
-    // public static Product productCreated() {
-    //     return createProduct001().orElseThrow();
-    // }
+    public static Product productCreated() {
+        return createProduct001().orElseThrow();
+    }
 
     // public static List<Map<String, Object>> createListOfProductsMap() {
     //     Product product1 = createProduct001().orElseThrow();
@@ -217,32 +198,32 @@ public class Data {
     //     );
     // }
 
-    // public static List<Product> createListOfProductsForSearch() {
-    //     Product product1 = createProduct001().orElseThrow();
-    //     Product product3 = createProduct003().orElseThrow();
+    public static List<Product> createListOfProductsForSearch() {
+        Product product1 = createProduct001().orElseThrow();
+        Product product3 = createProduct003().orElseThrow();
 
-    //     return List.of(product1, product3);
-    // }
+        return List.of(product1, product3);
+    }
 
-    // public static List<Product> createListOfFilterByCategory() {
-    //     Product product2 = createProduct002().orElseThrow();
-    //     Product product3 = createProduct003().orElseThrow();
+    public static List<Product> createListOfFilterByCategory() {
+        Product product2 = createProduct002().orElseThrow();
+        Product product3 = createProduct003().orElseThrow();
 
-    //     return List.of(product2, product3);
-    // }
+        return List.of(product2, product3);
+    }
 
-    // public static List<Product> createListOfFilterByBrand() {
-    //     Product product1 = createProduct001().orElseThrow();
-    //     Product product2 = createProduct002().orElseThrow();
+    public static List<Product> createListOfFilterByBrand() {
+        Product product1 = createProduct001().orElseThrow();
+        Product product2 = createProduct002().orElseThrow();
 
-    //     return List.of(product1, product2);
-    // }
+        return List.of(product1, product2);
+    }
 
-    // public static List<Product> createListOfFilterByPriceRange() {
-    //     Product product1 = createProduct001().orElseThrow();
-    //     Product product2 = createProduct002().orElseThrow();
+    public static List<Product> createListOfFilterByPriceRange() {
+        Product product1 = createProduct001().orElseThrow();
+        Product product2 = createProduct002().orElseThrow();
 
-    //     return List.of(product1, product2);
-    // }
+        return List.of(product1, product2);
+    }
 
 }

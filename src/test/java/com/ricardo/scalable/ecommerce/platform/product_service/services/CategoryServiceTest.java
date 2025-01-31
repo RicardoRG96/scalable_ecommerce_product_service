@@ -28,22 +28,22 @@ public class CategoryServiceTest {
 
     @Test
     void testFindByCategoryId() {
-        when(categoryRepository.findByCategoryId(2L)).thenReturn(Data.createCategory001());
-        when(categoryRepository.findByCategoryId(4L)).thenReturn(Data.createSubCategory001());
+        when(categoryRepository.findById(2L)).thenReturn(Data.createCategory001());
+        when(categoryRepository.findById(4L)).thenReturn(Data.createSubCategory001());
 
-        Optional<Category> categoryOptional = categoryService.findByCategoryId(2L);
-        Optional<Category> subCategoryOptional = categoryService.findByCategoryId(4L);
+        Optional<Category> categoryOptional = categoryService.findById(2L);
+        Optional<Category> subCategoryOptional = categoryService.findById(4L);
 
         assertAll(
             () -> assertTrue(categoryOptional.isPresent()),
-            () -> assertEquals(2L, categoryOptional.orElseThrow().getCategoryId()),
+            () -> assertEquals(2L, categoryOptional.orElseThrow().getId()),
             () -> assertEquals("Tecnología", categoryOptional.orElseThrow().getName()),
             () -> assertEquals("Descripcion tecnología 2", categoryOptional.orElseThrow().getDescription())
         );
 
         assertAll(
             () -> assertTrue(subCategoryOptional.isPresent()),
-            () -> assertEquals(4L, subCategoryOptional.orElseThrow().getCategoryId()),
+            () -> assertEquals(4L, subCategoryOptional.orElseThrow().getId()),
             () -> assertEquals("Computadoras", subCategoryOptional.orElseThrow().getName()),
             () -> assertEquals("Descripcion computadoras", subCategoryOptional.orElseThrow().getDescription())
         );
@@ -59,14 +59,14 @@ public class CategoryServiceTest {
 
         assertAll(
             () -> assertTrue(categoryOptional.isPresent()),
-            () -> assertEquals(2L, categoryOptional.orElseThrow().getCategoryId()),
+            () -> assertEquals(2L, categoryOptional.orElseThrow().getId()),
             () -> assertEquals("Tecnología", categoryOptional.orElseThrow().getName()),
             () -> assertEquals("Descripcion tecnología 2", categoryOptional.orElseThrow().getDescription())
         );
 
         assertAll(
             () -> assertTrue(subCategoryOptional.isPresent()),
-            () -> assertEquals(5L, subCategoryOptional.orElseThrow().getCategoryId()),
+            () -> assertEquals(5L, subCategoryOptional.orElseThrow().getId()),
             () -> assertEquals("Celulares", subCategoryOptional.orElseThrow().getName()),
             () -> assertEquals("Descripcion celulares", subCategoryOptional.orElseThrow().getDescription())
         );
@@ -81,10 +81,10 @@ public class CategoryServiceTest {
         assertAll(
             () -> assertNotNull(categoryList),
             () -> assertEquals(4, categoryList.size()),
-            () -> assertEquals(2L, categoryList.get(0).getCategoryId()),
-            () -> assertEquals(3L, categoryList.get(1).getCategoryId()),
-            () -> assertEquals(4L, categoryList.get(2).getCategoryId()),
-            () -> assertEquals(5L, categoryList.get(3).getCategoryId()),
+            () -> assertEquals(2L, categoryList.get(0).getId()),
+            () -> assertEquals(3L, categoryList.get(1).getId()),
+            () -> assertEquals(4L, categoryList.get(2).getId()),
+            () -> assertEquals(5L, categoryList.get(3).getId()),
             () -> assertEquals("Tecnología", categoryList.get(0).getName()),
             () -> assertEquals("Deportes", categoryList.get(1).getName()),
             () -> assertEquals("Computadoras", categoryList.get(2).getName()),
@@ -105,7 +105,7 @@ public class CategoryServiceTest {
 
         assertAll(
             () -> assertNotNull(categoryResponse),
-            () -> assertEquals(5L, categoryResponse.getCategoryId()),
+            () -> assertEquals(3L, categoryResponse.getId()),
             () -> assertEquals("Deportes", categoryResponse.getName()),
             () -> assertEquals("Descripcion deportes", categoryResponse.getDescription())
         );
@@ -114,19 +114,19 @@ public class CategoryServiceTest {
     @Test
     void testUpdate() {
         Category updateCategoryRequest = new Category();
-        updateCategoryRequest.setCategoryId(5L);
+        updateCategoryRequest.setId(5L);
         updateCategoryRequest.setName("Futbol");
         updateCategoryRequest.setDescription("Descripcion futbol");
         updateCategoryRequest.setParent(null);
 
-        when(categoryRepository.findByCategoryId(5L)).thenReturn(Data.createCategory002());
+        when(categoryRepository.findById(3L)).thenReturn(Data.createCategory002());
         when(categoryRepository.save(any())).thenReturn(updateCategoryRequest);
 
         Optional<Category> updateCategoryResponse = categoryService.update(updateCategoryRequest, 3L);
 
         assertAll(
             () -> assertTrue(updateCategoryResponse.isPresent()),
-            () -> assertEquals(5L, updateCategoryResponse.orElseThrow().getCategoryId()),
+            () -> assertEquals(5L, updateCategoryResponse.orElseThrow().getId()),
             () -> assertEquals("Futbol", updateCategoryResponse.orElseThrow().getName()),
             () -> assertEquals("Descripcion futbol", updateCategoryResponse.orElseThrow().getDescription())
         );

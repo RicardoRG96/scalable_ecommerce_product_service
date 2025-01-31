@@ -58,7 +58,7 @@ public class CategoryControllerTest {
                         JsonNode json = objectMapper.readTree(res.getResponseBody());
                         assertAll(
                             () -> assertNotNull(json),
-                            () -> assertEquals(category.getCategoryId(), json.path("id").asLong()),
+                            () -> assertEquals(category.getId(), json.path("id").asLong()),
                             () -> assertEquals(category.getName(), json.path("name").asText()),
                             () -> assertEquals(category.getDescription(), json.path("description").asText())
                         );
@@ -78,7 +78,7 @@ public class CategoryControllerTest {
 
     private Category createCategory001() {
         Category category = new Category();
-        category.setCategoryId(1L);
+        category.setId(1L);
         category.setName("Smartphone");
         category.setDescription("Telefonos celulares");
         category.setCreatedAt(Timestamp.from(Instant.now()));
@@ -89,7 +89,7 @@ public class CategoryControllerTest {
 
     private Category createCategory002() {
         Category category = new Category();
-        category.setCategoryId(2L);
+        category.setId(2L);
         category.setName("Notebooks");
         category.setDescription("Computadores portatiles");
         category.setCreatedAt(Timestamp.from(Instant.now()));
@@ -114,7 +114,7 @@ public class CategoryControllerTest {
                         JsonNode json = objectMapper.readTree(res.getResponseBody());
                         assertAll(
                             () -> assertNotNull(json),
-                            () -> assertEquals(category.getCategoryId(), json.path("id").asLong()),
+                            () -> assertEquals(category.getId(), json.path("id").asLong()),
                             () -> assertEquals(category.getName(), json.path("name").asText()),
                             () -> assertEquals(category.getDescription(), json.path("description").asText())
                         );
@@ -150,8 +150,8 @@ public class CategoryControllerTest {
                         () -> assertNotNull(json),
                         () -> assertTrue(json.isArray()),
                         () -> assertEquals(4, json.size()),
-                        () -> assertEquals(category1.getCategoryId(), json.get(0).path("id").asLong()),
-                        () -> assertEquals(category2.getCategoryId(), json.get(1).path("id").asLong()),
+                        () -> assertEquals(category1.getId(), json.get(0).path("id").asLong()),
+                        () -> assertEquals(category2.getId(), json.get(1).path("id").asLong()),
                         () -> assertEquals(category1.getName(), json.get(0).path("name").asText()),
                         () -> assertEquals(category2.getName(), json.get(1).path("name").asText()),
                         () -> assertEquals(category1.getDescription(), json.get(0).path("description").asText()),
@@ -221,7 +221,7 @@ public class CategoryControllerTest {
                         JsonNode json = objectMapper.readTree(res.getResponseBody());
                         assertAll(
                             () -> assertNotNull(json),
-                            () -> assertEquals(category.getCategoryId(), json.path("id").asLong()),
+                            () -> assertEquals(category.getId(), json.path("id").asLong()),
                             () -> assertEquals(category.getName(), json.path("name").asText()),
                             () -> assertEquals(category.getDescription(), json.path("description").asText())
                         );

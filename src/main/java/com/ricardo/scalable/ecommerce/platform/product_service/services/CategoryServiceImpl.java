@@ -22,8 +22,8 @@ public class CategoryServiceImpl implements CategoryService {
     private ProductRepository productRepository;
 
     @Override
-    public Optional<Category> findByCategoryId(Long categoryId) {
-        return categoryRepository.findByCategoryId(categoryId);
+    public Optional<Category> findById(Long id) {
+        return categoryRepository.findById(id);
     }
 
     @Override
@@ -39,10 +39,14 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public Category save(CategoryCreationDto categoryCreation) {
         Category category = new Category();
-        Category parentCategory = categoryRepository.findByCategoryId(categoryCreation.getParentId()).orElseThrow();
+        Optional<Category> parentCategory = categoryRepository.findById(categoryCreation.getParentId());
         category.setName(categoryCreation.getName());
         category.setDescription(categoryCreation.getDescription());
-        category.setParent(parentCategory);
+        if (parentCategory.isPresent()) {
+            category.setParent(parentCategory.orElseThrow());
+        } else {
+            category.setParent(null);
+        }
         
         return categoryRepository.save(category);
     }
@@ -55,6 +59,7 @@ public class CategoryServiceImpl implements CategoryService {
             Category dbCategory = categoryOptional.orElseThrow();
             dbCategory.setName(category.getName());
             dbCategory.setDescription(category.getDescription());
+            dbCategory.setParent(category.getParent());
 
             return Optional.of(categoryRepository.save(dbCategory));
         }

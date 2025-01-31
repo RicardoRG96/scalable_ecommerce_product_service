@@ -7,7 +7,7 @@ import com.ricardo.scalable.ecommerce.platform.product_service.repositories.dto.
 
 public interface CategoryService {
 
-    Optional<Category> findByCategoryId(Long id);
+    Optional<Category> findById(Long id);
 
     Optional<Category> findByName(String name);
 
