@@ -18,7 +18,6 @@ import com.algolia.model.search.RemoveStopWords;
 import com.algolia.model.search.SupportedLanguage;
 import com.algolia.model.search.SynonymHit;
 import com.algolia.model.search.SynonymType;
-import com.ricardo.scalable.ecommerce.platform.product_service.entities.Product;
 import com.ricardo.scalable.ecommerce.platform.product_service.entities.ProductSku;
 import com.ricardo.scalable.ecommerce.platform.product_service.repositories.ProductRepository;
 import com.ricardo.scalable.ecommerce.platform.product_service.repositories.ProductSkuRepository;
@@ -111,34 +110,70 @@ public class AlgoliaConfig {
         );
     }
 
-    private Iterable<Map<String, Object>> preparedData() {
-        List<Product> products = (List<Product>) getProducts();
+    // private Iterable<Map<String, Object>> preparedData() {
+    //     List<Product> products = (List<Product>) getProducts();
  
-        List<Map<String, Object>> preparedJson =  products.stream().map(product -> {
+    //     List<Map<String, Object>> preparedJson =  products.stream().map(product -> {
+    //         Map<String, Object> productData = new HashMap<>();
+    //         List<ProductSku> productSkus = (List<ProductSku>) productSkuRepository.findByProductId(product.getId());
+    //         productSkus.stream().forEach(prodSku -> {
+    //             productData.put("objectID", prodSku.getId());
+    //             productData.put("size", prodSku.getSizeAttribute().getValue());
+    //             productData.put("color", prodSku.getColorAttribute().getValue());
+    //             productData.put("price", prodSku.getPrice());
+    //             productData.put("sku", prodSku.getSku());
+    //         });
+    //         productData.put("name", product.getName());
+    //         productData.put("description", product.getDescription());
+    //         productData.put("brand", product.getBrand().getName());
+    //         productData.put("brandId", product.getBrand().getId());
+    //         productData.put("category", product.getCategory().getName());
+    //         productData.put("categoryId", product.getCategory().getId());
+    //         productData.put("cover", product.getCover());
+    //         return productData;
+    //     }).collect(Collectors.toList());
+
+    //     return (Iterable<Map<String, Object>>) preparedJson;
+    // }
+
+    private Iterable<Map<String, Object>> preparedData() {
+        List<ProductSku> productsSku = (List<ProductSku>) getProductsSku();
+ 
+        List<Map<String, Object>> preparedJson =  productsSku.stream().map(productSku -> {
             Map<String, Object> productData = new HashMap<>();
-            List<ProductSku> productSkus = (List<ProductSku>) productSkuRepository.findByProductId(product.getId());
-            productSkus.stream().forEach(prodSku -> {
-                productData.put("objectID", prodSku.getId());
-                productData.put("size", prodSku.getSizeAttribute().getValue());
-                productData.put("color", prodSku.getColorAttribute().getValue());
-                productData.put("price", prodSku.getPrice());
-                productData.put("sku", prodSku.getSku());
-            });
-            productData.put("name", product.getName());
-            productData.put("description", product.getDescription());
-            productData.put("brand", product.getBrand().getName());
-            productData.put("brandId", product.getBrand().getId());
-            productData.put("category", product.getCategory().getName());
-            productData.put("categoryId", product.getCategory().getId());
-            productData.put("cover", product.getCover());
+            Long productId = productSku.getProduct().getId();
+            String productName = productRepository.findById(productId).orElseThrow().getName();
+            String productDescription = productRepository.findById(productId).orElseThrow().getDescription();
+            String productBrand = productRepository.findById(productId).orElseThrow().getBrand().getName();
+            String productCategory = productRepository.findById(productId).orElseThrow().getCategory().getName();
+            Long productBrandId = productRepository.findById(productId).orElseThrow().getBrand().getId();
+            Long productCategoryId = productRepository.findById(productId).orElseThrow().getCategory().getId();
+            String productCover = productRepository.findById(productId).orElseThrow().getCover();
+
+            productData.put("objectID", productSku.getId());
+            productData.put("size", productSku.getSizeAttribute().getValue());
+            productData.put("color", productSku.getColorAttribute().getValue());
+            productData.put("price", productSku.getPrice());
+            productData.put("sku", productSku.getSku());
+            productData.put("name", productName);
+            productData.put("description", productDescription);
+            productData.put("brand", productBrand);
+            productData.put("brandId", productBrandId);
+            productData.put("category", productCategory);
+            productData.put("categoryId", productCategoryId);
+            productData.put("cover", productCover);
             return productData;
         }).collect(Collectors.toList());
 
         return (Iterable<Map<String, Object>>) preparedJson;
     }
 
-    private Iterable<Product> getProducts() {
-        return productRepository.findAll();
+    // private Iterable<Product> getProducts() {
+    //     return productRepository.findAll();
+    // }
+
+    private Iterable<ProductSku> getProductsSku() {
+        return productSkuRepository.findAll();
     }
 
 }
