@@ -44,6 +44,9 @@ INSERT INTO categories (name, description, parent)
 INSERT INTO categories (name, description, parent)
     VALUES ('Futbol', 'Descripcion futbol', 3);
 
+INSERT INTO categories (name, description, parent)
+    VALUES ('Unknown', 'Unknown', null);
+
 
 -- BRANDS
 

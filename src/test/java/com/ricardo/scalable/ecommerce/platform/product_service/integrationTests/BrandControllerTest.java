@@ -45,8 +45,6 @@ public class BrandControllerTest {
     @Test
     @Order(1)
     void testGetById() {
-        Brand brand = createBrand001();
-
         client.get()
             .uri("/brands/1")
             .exchange()
@@ -70,7 +68,7 @@ public class BrandControllerTest {
 
     @Test
     @Order(2)
-    void testGetNonExistingBrand() {
+    void testGetNonExistingBrandId() {
         String notExistingBrandId = "999";
 
         client.get()
@@ -90,22 +88,9 @@ public class BrandControllerTest {
         return brand;
     }
 
-    private Brand createBrand002() {
-        Brand brand = new Brand();
-        brand.setId(2L);
-        brand.setName("Apple");
-        brand.setDescription("Marca líder en tecnologia");
-        brand.setLogoUrl("https://example.com/apple_logo.png");
-        brand.setCreatedAt(Timestamp.from(Instant.now()));
-        brand.setUpdatedAt(Timestamp.from(Instant.now()));
-        return brand;
-    }
-
     @Test
     @Order(3)
     void testGetByName() {
-        Brand brand = createBrand002();
-
         client.get()
             .uri("/brands/name/Apple")
             .exchange()
@@ -130,7 +115,7 @@ public class BrandControllerTest {
 
     @Test
     @Order(4)
-    void testGetByNonExistingName() {
+    void testGetByNonExistingCategoryName() {
         String notExistingBrandName = "NotExistingBrand";
 
         client.get()
@@ -142,9 +127,6 @@ public class BrandControllerTest {
     @Test
     @Order(5)
     void testGetAllBrands() {
-        Brand brand001 = createBrand001();
-        Brand brand002 = createBrand002();
-
         client.get()
             .uri("/brands")
             .exchange()

@@ -45,8 +45,6 @@ public class CategoryControllerTest {
     @Test
     @Order(1)
     void testGetById() {
-        Category category = createCategory001();
-
         client.get()
                 .uri("/categories/1")
                 .exchange()
@@ -58,40 +56,34 @@ public class CategoryControllerTest {
                         JsonNode json = objectMapper.readTree(res.getResponseBody());
                         assertAll(
                             () -> assertNotNull(json),
-                            () -> assertEquals(category.getId(), json.path("id").asLong()),
-                            () -> assertEquals(category.getName(), json.path("name").asText()),
-                            () -> assertEquals(category.getDescription(), json.path("description").asText())
+                            () -> assertEquals(1L, json.path("id").asLong()),
+                            () -> assertEquals("Hombre", json.path("name").asText()),
+                            () -> assertEquals("Descripcion hombre", json.path("description").asText()),
+                            () -> assertEquals("null", json.path("parent").asText())
                         );
                     } catch (IOException ex) {
                         ex.printStackTrace();
                     }
                 });
+    }
 
+    @Test
+    @Order(2)
+    void testGetNonExistingCategoryId() {
         String notExistingCategoryId = "50";
 
         client.get()
                 .uri("/" + notExistingCategoryId)
                 .exchange()
                 .expectStatus().isNotFound();
-
-    }
-
-    private Category createCategory001() {
-        Category category = new Category();
-        category.setId(1L);
-        category.setName("Smartphone");
-        category.setDescription("Telefonos celulares");
-        category.setCreatedAt(Timestamp.from(Instant.now()));
-        category.setUpdatedAt(Timestamp.from(Instant.now()));
-
-        return category;
     }
 
     private Category createCategory002() {
         Category category = new Category();
         category.setId(2L);
-        category.setName("Notebooks");
+        category.setName("Tecnologia");
         category.setDescription("Computadores portatiles");
+        category.setParent(null);
         category.setCreatedAt(Timestamp.from(Instant.now()));
         category.setUpdatedAt(Timestamp.from(Instant.now()));
 
@@ -99,10 +91,8 @@ public class CategoryControllerTest {
     }
 
     @Test
-    @Order(2)
+    @Order(3)
     void testGetByName() {
-        Category category = createCategory001();
-
         client.get()
                 .uri("/categories/name/Smartphone")
                 .exchange()
@@ -114,15 +104,21 @@ public class CategoryControllerTest {
                         JsonNode json = objectMapper.readTree(res.getResponseBody());
                         assertAll(
                             () -> assertNotNull(json),
-                            () -> assertEquals(category.getId(), json.path("id").asLong()),
-                            () -> assertEquals(category.getName(), json.path("name").asText()),
-                            () -> assertEquals(category.getDescription(), json.path("description").asText())
+                            () -> assertEquals(6L, json.path("id").asLong()),
+                            () -> assertEquals("Smartphone", json.path("name").asText()),
+                            () -> assertEquals("Telefonos celulares", json.path("description").asText()),
+                            () -> assertEquals("Tecnologia", json.path("parent").path("name").asText())
                         );
                     } catch (IOException ex) {
                         ex.printStackTrace();
                     }
                 });
 
+    }
+
+    @Test
+    @Order(4)
+    void testGetNonExistingCategoryName() {
         String notExistingCategoryName = "PlayStation 5";
 
         client.get()
@@ -132,11 +128,8 @@ public class CategoryControllerTest {
     }
 
     @Test
-    @Order(3)
+    @Order(5)
     void testGetAllCategories() {
-        Category category1 = createCategory001();
-        Category category2 = createCategory002();
-
         client.get()
             .uri("/categories")
             .exchange()
@@ -149,13 +142,15 @@ public class CategoryControllerTest {
                     assertAll(
                         () -> assertNotNull(json),
                         () -> assertTrue(json.isArray()),
-                        () -> assertEquals(4, json.size()),
-                        () -> assertEquals(category1.getId(), json.get(0).path("id").asLong()),
-                        () -> assertEquals(category2.getId(), json.get(1).path("id").asLong()),
-                        () -> assertEquals(category1.getName(), json.get(0).path("name").asText()),
-                        () -> assertEquals(category2.getName(), json.get(1).path("name").asText()),
-                        () -> assertEquals(category1.getDescription(), json.get(0).path("description").asText()),
-                        () -> assertEquals(category2.getDescription(), json.get(1).path("description").asText())
+                        () -> assertEquals(9, json.size()),
+                        () -> assertEquals(1L, json.get(0).path("id").asLong()),
+                        () -> assertEquals(2L, json.get(1).path("id").asLong()),
+                        () -> assertEquals("Hombre", json.get(0).path("name").asText()),
+                        () -> assertEquals("Tecnologia", json.get(1).path("name").asText()),
+                        () -> assertEquals("Descripcion hombre", json.get(0).path("description").asText()),
+                        () -> assertEquals("Descripcion tecnologia", json.get(1).path("description").asText()),
+                        () -> assertEquals("null", json.get(0).path("parent").asText()),
+                        () -> assertEquals("null", json.get(1).path("parent").asText())
                     );
                 } catch (IOException ex) {
                     ex.printStackTrace();
@@ -164,11 +159,12 @@ public class CategoryControllerTest {
     }
 
     @Test
-    @Order(4)
+    @Order(6)
     void testCreateCategory() {
         CategoryCreationDto categoryCreationRequest = new CategoryCreationDto();
-        categoryCreationRequest.setName("Ropa");
-        categoryCreationRequest.setDescription("descripcion ropa");
+        categoryCreationRequest.setName("Running");
+        categoryCreationRequest.setDescription("Descripcion Running");
+        categoryCreationRequest.setParentId(3L);
 
         client.post()
                 .uri("/categories")
@@ -183,15 +179,20 @@ public class CategoryControllerTest {
                         JsonNode json = objectMapper.readTree(res.getResponseBody());
                         assertAll(
                             () -> assertNotNull(json),
-                            () -> assertEquals(5L, json.path("id").asLong()),
+                            () -> assertEquals(10L, json.path("id").asLong()),
                             () -> assertEquals(categoryCreationRequest.getName(), json.path("name").asText()),
-                            () -> assertEquals(categoryCreationRequest.getDescription(), json.path("description").asText())
+                            () -> assertEquals(categoryCreationRequest.getDescription(), json.path("description").asText()),
+                            () -> assertEquals("Deportes", json.path("parent").path("name").asText())
                         );
                     } catch (IOException ex) {
                         ex.printStackTrace();
                     }
                 });
+    }
 
+    @Test
+    @Order(7)
+    void testBadRequestCreateCategory() {
         CategoryCreationDto categoryCreationBadRequest = new CategoryCreationDto();
 
         client.post()
@@ -199,18 +200,18 @@ public class CategoryControllerTest {
                 .bodyValue(categoryCreationBadRequest)
                 .exchange()
                 .expectStatus().isBadRequest();
-
     }
 
     @Test
-    @Order(5)
+    @Order(8)
     void testUpdateCategory() {
-        Category category = createCategory001();
-        category.setName("Celulares");
-        category.setDescription("Descripcion celulares");
+        Category category = createCategory002();
+        category.setName("Tecno");
+        category.setDescription("Descripcion tecno");
+        category.setParent(null);
 
         client.put()
-                .uri("/categories/1")
+                .uri("/categories/2")
                 .bodyValue(category)
                 .exchange()
                 .expectStatus().isOk()
@@ -221,14 +222,33 @@ public class CategoryControllerTest {
                         JsonNode json = objectMapper.readTree(res.getResponseBody());
                         assertAll(
                             () -> assertNotNull(json),
-                            () -> assertEquals(category.getId(), json.path("id").asLong()),
+                            () -> assertEquals(2L, json.path("id").asLong()),
                             () -> assertEquals(category.getName(), json.path("name").asText()),
-                            () -> assertEquals(category.getDescription(), json.path("description").asText())
+                            () -> assertEquals(category.getDescription(), json.path("description").asText()),
+                            () -> assertEquals("null", json.path("parent").asText())
                         );
                     } catch (IOException ex) {
                         ex.printStackTrace();
                     }
                 });
+    }
+
+    @Test
+    @Order(9)
+    void testBadRequestUpdateCategory() {
+        Category categoryBadRequest = new Category();
+
+        client.put()
+                .uri("/categories/2")
+                .bodyValue(categoryBadRequest)
+                .exchange()
+                .expectStatus().isBadRequest();
+    }
+
+    @Test
+    @Order(10)
+    void testUpdateNonExistingCategory() {
+        Category category = createCategory002();
 
         String notExistingCategoryId = "50";
 
@@ -237,21 +257,13 @@ public class CategoryControllerTest {
                 .bodyValue(category)
                 .exchange()
                 .expectStatus().isNotFound();
-
-        Category categoryBadRequest = new Category();
-
-        client.put()
-                .uri("/categories/1")
-                .bodyValue(categoryBadRequest)
-                .exchange()
-                .expectStatus().isBadRequest();
     }
 
     @Test
-    @Order(6)
+    @Order(11)
     void testDeleteCategory() {
         client.delete()
-                .uri("/categories/3")
+                .uri("/categories/10")
                 .exchange()
                 .expectStatus().isNoContent();
 
@@ -266,7 +278,7 @@ public class CategoryControllerTest {
                         JsonNode json = objectMapper.readTree(res.getResponseBody());
                         assertAll(
                             () -> assertNotNull(json),
-                            () -> assertEquals(4, json.size()),
+                            () -> assertEquals(9, json.size()),
                             () -> assertTrue(json.isArray())
                         );
                     } catch (IOException ex) {
@@ -275,7 +287,7 @@ public class CategoryControllerTest {
                 });
 
         client.get()
-                .uri("/categories/3")
+                .uri("/categories/10")
                 .exchange()
                 .expectStatus().isNotFound();
 
@@ -289,7 +301,7 @@ public class CategoryControllerTest {
 
     @Test
     void testApplicationPropertyFile() {
-        assertEquals("jdbc:h2:mem:public", env.getProperty("spring.datasource.url"));
+        assertEquals("jdbc:h2:mem:public;NON_KEYWORDS=value", env.getProperty("spring.datasource.url"));
     }
 
 }
