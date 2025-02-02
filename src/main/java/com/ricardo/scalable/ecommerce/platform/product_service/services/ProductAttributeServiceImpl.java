@@ -1,5 +1,6 @@
 package com.ricardo.scalable.ecommerce.platform.product_service.services;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +25,7 @@ public class ProductAttributeServiceImpl implements ProductAttributeService {
 
     @Override
     @Transactional(readOnly = true)
-    public Optional<ProductAttribute> findByType(String type) {
+    public Optional<List<ProductAttribute>> findByType(String type) {
         return productAttributeRepository.findByType(type);
     }
 

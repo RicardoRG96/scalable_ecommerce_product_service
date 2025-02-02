@@ -1,5 +1,6 @@
 package com.ricardo.scalable.ecommerce.platform.product_service.services;
 
+import java.util.List;
 import java.util.Optional;
 
 import com.ricardo.scalable.ecommerce.platform.product_service.entities.ProductAttribute;
@@ -9,7 +10,7 @@ public interface ProductAttributeService {
 
     Optional<ProductAttribute> findById(Long id);
 
-    Optional<ProductAttribute> findByType(String type);
+    Optional<List<ProductAttribute>> findByType(String type);
 
     Optional<ProductAttribute> findByValue(String value);
 

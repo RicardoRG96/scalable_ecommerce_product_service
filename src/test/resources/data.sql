@@ -72,7 +72,7 @@ INSERT INTO brands (name, description, logo_url)
 -- PRODUCTS
 
 INSERT INTO products (name, description, category_id, brand_id, cover) 
-    VALUES ('iPhone 15', 'Smartphone Apple', 6, 2, 'https://example.com/images/iphone15_algodon.jpg');
+    VALUES ('iPhone 15', 'Smartphone Apple', 6, 2, 'https://example.com/images/iphone15.jpg');
 
 INSERT INTO products (name, description, category_id, brand_id, cover) 
     VALUES ('Asus Zenbook', 'Notebook de ultima generacion', 7, 3, 'https://example.com/images/asus_zenbook.jpg');

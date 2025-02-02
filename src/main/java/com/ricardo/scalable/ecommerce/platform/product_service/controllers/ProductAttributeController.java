@@ -1,6 +1,7 @@
 package com.ricardo.scalable.ecommerce.platform.product_service.controllers;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -31,16 +32,21 @@ public class ProductAttributeController {
     @GetMapping("/product-attribute/{id}")
     public ResponseEntity<ProductAttribute> getByProductAttributeId(@PathVariable Long id) {
         Optional<ProductAttribute> productAttributeOptional = productAttributeService.findById(id);
-        if (productAttributeOptional.isPresent()) {
+        boolean isPresent = productAttributeOptional.isPresent();
+
+        if (isPresent) {
             return ResponseEntity.ok(productAttributeOptional.orElseThrow());
         }
         return ResponseEntity.notFound().build();
     }
 
     @GetMapping("/product-attribute/type/{type}")
-    public ResponseEntity<ProductAttribute> getByType(@PathVariable String type) {
-        Optional<ProductAttribute> productAttributeOptional = productAttributeService.findByType(type);
-        if (productAttributeOptional.isPresent()) {
+    public ResponseEntity<List<ProductAttribute>> getByType(@PathVariable String type) {
+        Optional<List<ProductAttribute>> productAttributeOptional = productAttributeService.findByType(type);
+        boolean isPresent = productAttributeOptional.isPresent();
+        boolean isEmpty = productAttributeOptional.orElseThrow().isEmpty();
+
+        if (isPresent && !isEmpty) {
             return ResponseEntity.ok(productAttributeOptional.orElseThrow());
         }
         return ResponseEntity.notFound().build();
@@ -49,10 +55,17 @@ public class ProductAttributeController {
     @GetMapping("/product-attribute/value/{value}")
     public ResponseEntity<ProductAttribute> getByValue(@PathVariable String value) {
         Optional<ProductAttribute> productAttributeOptional = productAttributeService.findByValue(value);
-        if (productAttributeOptional.isPresent()) {
+        boolean isPresent = productAttributeOptional.isPresent();
+
+        if (isPresent) {
             return ResponseEntity.ok(productAttributeOptional.orElseThrow());
         }
         return ResponseEntity.notFound().build();
+    }
+
+    @GetMapping("/product-attribute")
+    public ResponseEntity<Iterable<ProductAttribute>> getAllProductAttributes() {
+        return ResponseEntity.ok(productAttributeService.findAll());
     }
 
     @PostMapping("/product-attribute")
