@@ -27,14 +27,6 @@ public class AlgoliaConfigTest {
 
     @Test
     void testPreparedData() {
-        // Iterable<ProductSku> skusProductId1 = createListOfProductSkus(Data.createProductSku001().orElseThrow());
-        // Iterable<ProductSku> skusProductId2 = createListOfProductSkus(Data.createProductSku002().orElseThrow());
-        // Iterable<ProductSku> skusProductId3 = createListOfProductSkus(Data.createProductSku003().orElseThrow());
-        // Iterable<ProductSku> skusProductId4 =
-        //     createListOfProductSkus(Data.createProductSku004().orElseThrow(), Data.createProductSku006().orElseThrow());
-        // Iterable<ProductSku> skusProductId5 = 
-        //     createListOfProductSkus(Data.createProductSku005().orElseThrow(), Data.createProductSku007().orElseThrow());
-
         Optional<Product> product1 = Data.createProduct001();
         Optional<Product> product2 = Data.createProduct002();
         Optional<Product> product3 = Data.createProduct003();
@@ -85,14 +77,5 @@ public class AlgoliaConfigTest {
             () -> assertEquals("azul", preparedData.get(6).get("color"))
         );
     }
-
-
-    // private Iterable<ProductSku> createListOfProductSkus(ProductSku...productSku) {
-    //     List<ProductSku> productSkusList = new ArrayList<>();
-    //     for (int i = 0; i < productSku.length; i++) {
-    //         productSkusList.add(productSku[i]);
-    //     }
-    //     return (Iterable<ProductSku>) productSkusList;
-
-    // }
+    
 }

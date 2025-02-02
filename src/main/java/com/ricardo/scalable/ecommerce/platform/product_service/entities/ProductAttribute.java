@@ -12,7 +12,8 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 
-@Entity@Table(name = "product_attributes")
+@Entity
+@Table(name = "product_attributes")
 public class ProductAttribute {
 
     @Id

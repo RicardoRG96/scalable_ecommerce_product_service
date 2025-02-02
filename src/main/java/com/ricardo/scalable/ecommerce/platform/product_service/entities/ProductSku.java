@@ -22,16 +22,16 @@ public class ProductSku {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @JoinColumn(name = "product_id")
+    @JoinColumn(name = "product_id", unique = false)
     @ManyToOne
     private Product product;
 
-    @JoinColumn(name = "size_attribute_id")
-    @OneToOne
+    @JoinColumn(name = "size_attribute_id", unique = false)
+    @ManyToOne
     private ProductAttribute sizeAttribute;
 
-    @JoinColumn(name = "color_attribute_id")
-    @OneToOne
+    @JoinColumn(name = "color_attribute_id", unique = false)
+    @ManyToOne
     private ProductAttribute colorAttribute;
 
     private String sku;

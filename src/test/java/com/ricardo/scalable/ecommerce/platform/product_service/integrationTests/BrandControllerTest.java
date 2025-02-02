@@ -57,16 +57,20 @@ public class BrandControllerTest {
                 try {
                     JsonNode json = objectMapper.readTree(res.getResponseBody());
                     assertAll(
-                        () -> assertEquals(brand.getId(), json.get("id").asLong()),
-                        () -> assertEquals(brand.getName(), json.get("name").asText()),
-                        () -> assertEquals(brand.getDescription(), json.get("description").asText()),
-                        () -> assertEquals(brand.getLogoUrl(), json.get("logoUrl").asText())
+                        () -> assertEquals(1L, json.get("id").asLong()),
+                        () -> assertEquals("Lee", json.get("name").asText()),
+                        () -> assertEquals("Marca líder en moda", json.get("description").asText()),
+                        () -> assertEquals("https://example.com/lee_logo.png", json.get("logoUrl").asText())
                     );
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
             });
+    }
 
+    @Test
+    @Order(2)
+    void testGetNonExistingBrand() {
         String notExistingBrandId = "999";
 
         client.get()
@@ -78,9 +82,9 @@ public class BrandControllerTest {
     private Brand createBrand001() {
         Brand brand = new Brand();
         brand.setId(1L);
-        brand.setName("Apple");
-        brand.setDescription("Marca líder en tecnologia");
-        brand.setLogoUrl("https://example.com/apple_logo.png");
+        brand.setName("Lee");
+        brand.setDescription("Marca líder en moda");
+        brand.setLogoUrl("https://example.com/lee_logo.png");
         brand.setCreatedAt(Timestamp.from(Instant.now()));
         brand.setUpdatedAt(Timestamp.from(Instant.now()));
         return brand;
@@ -89,21 +93,21 @@ public class BrandControllerTest {
     private Brand createBrand002() {
         Brand brand = new Brand();
         brand.setId(2L);
-        brand.setName("ASUS");
-        brand.setDescription("Empresa multinacional de tecnología");
-        brand.setLogoUrl("https://example.com/asus_logo.png");
+        brand.setName("Apple");
+        brand.setDescription("Marca líder en tecnologia");
+        brand.setLogoUrl("https://example.com/apple_logo.png");
         brand.setCreatedAt(Timestamp.from(Instant.now()));
         brand.setUpdatedAt(Timestamp.from(Instant.now()));
         return brand;
     }
 
     @Test
-    @Order(2)
+    @Order(3)
     void testGetByName() {
         Brand brand = createBrand002();
 
         client.get()
-            .uri("/brands/name/ASUS")
+            .uri("/brands/name/Apple")
             .exchange()
             .expectStatus().isOk()
             .expectHeader().contentType(MediaType.APPLICATION_JSON)
@@ -112,16 +116,21 @@ public class BrandControllerTest {
                 try {
                     JsonNode json = objectMapper.readTree(res.getResponseBody());
                     assertAll(
-                        () -> assertEquals(brand.getId(), json.get("id").asLong()),
-                        () -> assertEquals(brand.getName(), json.get("name").asText()),
-                        () -> assertEquals(brand.getDescription(), json.get("description").asText()),
-                        () -> assertEquals(brand.getLogoUrl(), json.get("logoUrl").asText())
+                        () -> assertEquals(2L, json.get("id").asLong()),
+                        () -> assertEquals("Apple", json.get("name").asText()),
+                        () -> assertEquals("Marca líder en tecnologia", json.get("description").asText()),
+                        () -> assertEquals("https://example.com/apple_logo.png", json.get("logoUrl").asText())
                     );
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
             });
 
+    }
+
+    @Test
+    @Order(4)
+    void testGetByNonExistingName() {
         String notExistingBrandName = "NotExistingBrand";
 
         client.get()
@@ -131,7 +140,7 @@ public class BrandControllerTest {
     }
 
     @Test
-    @Order(3)
+    @Order(5)
     void testGetAllBrands() {
         Brand brand001 = createBrand001();
         Brand brand002 = createBrand002();
@@ -146,15 +155,15 @@ public class BrandControllerTest {
                 try {
                     JsonNode json = objectMapper.readTree(res.getResponseBody());
                     assertAll(
-                        () -> assertEquals(4, json.size()),
-                        () -> assertEquals(brand001.getId(), json.get(0).get("id").asLong()),
-                        () -> assertEquals(brand001.getName(), json.get(0).get("name").asText()),
-                        () -> assertEquals(brand001.getDescription(), json.get(0).get("description").asText()),
-                        () -> assertEquals(brand001.getLogoUrl(), json.get(0).get("logoUrl").asText()),
-                        () -> assertEquals(brand002.getId(), json.get(1).get("id").asLong()),
-                        () -> assertEquals(brand002.getName(), json.get(1).get("name").asText()),
-                        () -> assertEquals(brand002.getDescription(), json.get(1).get("description").asText()),
-                        () -> assertEquals(brand002.getLogoUrl(), json.get(1).get("logoUrl").asText())
+                        () -> assertEquals(6, json.size()),
+                        () -> assertEquals(1L, json.get(0).get("id").asLong()),
+                        () -> assertEquals("Lee", json.get(0).get("name").asText()),
+                        () -> assertEquals("Marca líder en moda", json.get(0).get("description").asText()),
+                        () -> assertEquals("https://example.com/lee_logo.png", json.get(0).get("logoUrl").asText()),
+                        () -> assertEquals(2L, json.get(1).get("id").asLong()),
+                        () -> assertEquals("Apple", json.get(1).get("name").asText()),
+                        () -> assertEquals("Marca líder en tecnologia", json.get(1).get("description").asText()),
+                        () -> assertEquals("https://example.com/apple_logo.png", json.get(1).get("logoUrl").asText())
                     );
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -163,7 +172,7 @@ public class BrandControllerTest {
     }
 
     @Test
-    @Order(4)
+    @Order(6)
     void testCreateBrand() {
         BrandCreationDto brandCreationRequest = new BrandCreationDto();
         brandCreationRequest.setName("Samsung");
@@ -182,7 +191,7 @@ public class BrandControllerTest {
                 try {
                     JsonNode json = objectMapper.readTree(res.getResponseBody());
                     assertAll(
-                        () -> assertEquals(5, json.get("id").asLong()),
+                        () -> assertEquals(7, json.get("id").asLong()),
                         () -> assertEquals(brandCreationRequest.getName(), json.get("name").asText()),
                         () -> assertEquals(brandCreationRequest.getDescription(), json.get("description").asText()),
                         () -> assertEquals(brandCreationRequest.getLogoUrl(), json.get("logoUrl").asText())
@@ -191,7 +200,11 @@ public class BrandControllerTest {
                     e.printStackTrace();
                 }
             });
+    }
 
+    @Test
+    @Order(7)
+    void testBadRequestCreateBrand() {
         BrandCreationDto brandCreationBadRequest = new BrandCreationDto();
 
         client.post()
@@ -203,11 +216,11 @@ public class BrandControllerTest {
     }
 
     @Test
-    @Order(5)
+    @Order(8)
     void testUpdateBrand() {
         Brand brandRequest = createBrand001();
-        brandRequest.setName("Apple Inc.");
-        brandRequest.setDescription("Empresa líder en tecnología");
+        brandRequest.setName("Lee Inc.");
+        brandRequest.setDescription("Empresa líder en moda callejera");
 
         client.put()
                 .uri("/brands/1")
@@ -251,10 +264,37 @@ public class BrandControllerTest {
     }
 
     @Test
-    @Order(6)
+    @Order(9)
+    void testBadRequestUpdateBrand() {
+        Brand brandBadRequest = new Brand();
+
+        client.put()
+            .uri("/brands/1")
+            .contentType(MediaType.APPLICATION_JSON)
+            .bodyValue(brandBadRequest)
+            .exchange()
+            .expectStatus().isBadRequest();
+    }
+
+    @Test
+    @Order(10)
+    void testNotFoundUpdateBrand() {
+        Brand brandRequest = createBrand001();
+        String notExistingBrandId = "999";
+
+        client.put()
+            .uri("/brands/" + notExistingBrandId)
+            .contentType(MediaType.APPLICATION_JSON)
+            .bodyValue(brandRequest)
+            .exchange()
+            .expectStatus().isNotFound();
+    }
+
+    @Test
+    @Order(11)
     void testDeleteBrand() {
         client.delete()
-            .uri("/brands/5")
+            .uri("/brands/7")
             .exchange()
             .expectStatus().isNoContent();
 
@@ -268,7 +308,7 @@ public class BrandControllerTest {
                 try {
                     JsonNode json = objectMapper.readTree(res.getResponseBody());
                     assertAll(
-                        () -> assertEquals(4, json.size()),
+                        () -> assertEquals(6, json.size()),
                         () -> assertTrue(json.isArray())
                     );
                 } catch (IOException e) {
@@ -277,7 +317,7 @@ public class BrandControllerTest {
             });
 
         client.get()
-            .uri("/brands/5")
+            .uri("/brands/7")
             .exchange()
             .expectStatus().isNotFound();
     }
@@ -290,7 +330,7 @@ public class BrandControllerTest {
 
     @Test
     void testApplicationPropertyFile() {
-        assertEquals("jdbc:h2:mem:public", env.getProperty("spring.datasource.url"));
+        assertEquals("jdbc:h2:mem:public;NON_KEYWORDS=value", env.getProperty("spring.datasource.url"));
     }
 
 }
