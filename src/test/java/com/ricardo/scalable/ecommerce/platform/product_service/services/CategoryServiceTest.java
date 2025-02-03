@@ -153,7 +153,8 @@ public class CategoryServiceTest {
 
         categoryService.delete(3L);
 
+        verify(productRepository, times(2)).save(any());
         verify(categoryRepository, times(1)).deleteById(3L);
     }
-    
+
 }

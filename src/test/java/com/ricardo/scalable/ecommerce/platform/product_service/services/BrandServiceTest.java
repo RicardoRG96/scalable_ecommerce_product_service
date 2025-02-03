@@ -5,7 +5,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
 import com.ricardo.scalable.ecommerce.platform.product_service.entities.Brand;
+import com.ricardo.scalable.ecommerce.platform.product_service.entities.Product;
 import com.ricardo.scalable.ecommerce.platform.product_service.repositories.BrandRepository;
+import com.ricardo.scalable.ecommerce.platform.product_service.repositories.ProductRepository;
 import com.ricardo.scalable.ecommerce.platform.product_service.repositories.dto.BrandCreationDto;
 import com.ricardo.scalable.ecommerce.platform.product_service.unitTestData.Data;
 
@@ -23,6 +25,9 @@ public class BrandServiceTest {
 
     @MockitoBean
     BrandRepository brandRepository;
+
+    @MockitoBean
+    ProductRepository productRepository;
 
     @Autowired
     BrandService brandService;
@@ -110,5 +115,23 @@ public class BrandServiceTest {
             () -> assertEquals("Apple", brandOptionalResponse.orElseThrow().getName()),
             () -> assertEquals("Marca Apple nueva", brandOptionalResponse.orElseThrow().getDescription())
         );
+    }
+
+    @Test
+    void testDelete() {
+        Optional<List<Product>> productsWithSameBrand = Optional.of(
+            List.of(
+                Data.createProduct002().orElseThrow(),
+                Data.createProduct003().orElseThrow()
+            )
+        );
+
+        when(brandRepository.findByName("Unknown")).thenReturn(Data.createUnknownBrand());
+        when(productRepository.findByBrandId(2L)).thenReturn(productsWithSameBrand);
+
+        brandService.delete(2L);
+
+        verify(productRepository, times(2)).save(any());
+        verify(brandRepository, times(1)).deleteById(2L);
     }
 }

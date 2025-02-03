@@ -270,6 +270,19 @@ public class Data {
         return Optional.of(brand);
     }
 
+    public static Optional<Brand> createUnknownBrand() {
+        Brand brand = new Brand(
+            5L, 
+            "Unknown", 
+            "Unknown", 
+            "Unknown", 
+            Timestamp.from(Instant.now()), 
+            Timestamp.from(Instant.now())
+        );
+
+        return Optional.of(brand);
+    }
+
     public static Product productCreated() {
         return createProduct001().orElseThrow();
     }
