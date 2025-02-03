@@ -136,4 +136,24 @@ public class CategoryServiceTest {
             () -> assertEquals("Descripcion futbol", updateCategoryResponse.orElseThrow().getDescription())
         );
     }
+
+    @Test
+    void testDelete() {
+        Optional<List<Product>> productsWithSameCategory = Optional.of(
+            List.of(
+                Data.createProduct001().orElseThrow(),
+                Data.createProduct003().orElseThrow()
+            )
+        );
+
+        when(categoryRepository.findByName("Unknown")).thenReturn(Data.createUnknownCategory());
+        when(productRepository.findByCategoryId(3L)).thenReturn(productsWithSameCategory);
+
+        doNothing().when(categoryRepository).deleteById(3L);
+
+        categoryService.delete(3L);
+
+        verify(categoryRepository, times(1)).deleteById(3L);
+    }
+    
 }
