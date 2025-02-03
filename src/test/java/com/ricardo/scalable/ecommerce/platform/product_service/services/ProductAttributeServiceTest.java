@@ -8,11 +8,14 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
 import com.ricardo.scalable.ecommerce.platform.product_service.entities.ProductAttribute;
 import com.ricardo.scalable.ecommerce.platform.product_service.repositories.ProductAttributeRepository;
+import com.ricardo.scalable.ecommerce.platform.product_service.repositories.dto.ProductAttributeCreationDto;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
+import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 
@@ -139,6 +142,55 @@ public class ProductAttributeServiceTest {
             () -> assertEquals("M", productAttributeList.get(4).getValue()),
             () -> assertEquals("L", productAttributeList.get(5).getValue())
         );
+    }
+
+    @Test
+    void testSave() {
+        ProductAttributeCreationDto productAttributeCreationRequest = new ProductAttributeCreationDto();
+        productAttributeCreationRequest.setType("size");
+        productAttributeCreationRequest.setValue("XL");
+
+        ProductAttribute productAttributeCreationResponse = new ProductAttribute(
+            7L, "size", "XL", Timestamp.from(Instant.now()), Timestamp.from(Instant.now()));
+
+        when(productAttributeRepository.save(any())).thenReturn(productAttributeCreationResponse);
+
+        ProductAttribute productAttribute = productAttributeService.save(productAttributeCreationRequest);
+
+        assertAll(
+            () -> assertNotNull(productAttribute),
+            () -> assertEquals(7L, productAttribute.getId()),
+            () -> assertEquals("size", productAttribute.getType()),
+            () -> assertEquals("XL", productAttribute.getValue())
+        );
+    }
+
+    @Test
+    void testUpdate() {
+        ProductAttribute productAttributeUpdated = new ProductAttribute(
+            2L, "color", "azul marino", Timestamp.from(Instant.now()), Timestamp.from(Instant.now()));
+
+        when(productAttributeRepository.findById(2L)).thenReturn(createProductAttribute002());
+        when(productAttributeRepository.save(any())).thenReturn(productAttributeUpdated);
+
+        Optional<ProductAttribute> productAttributeOptional = 
+            productAttributeService.update(productAttributeUpdated, 2L);
+
+        assertAll(
+            () -> assertTrue(productAttributeOptional.isPresent()),
+            () -> assertEquals(2L, productAttributeOptional.orElseThrow().getId()),
+            () -> assertEquals("color", productAttributeOptional.orElseThrow().getType()),
+            () -> assertEquals("azul marino", productAttributeOptional.orElseThrow().getValue())
+        );
+    }
+
+    @Test
+    void testDelete() {
+        doNothing().when(productAttributeRepository).deleteById(3L);
+
+        productAttributeService.delete(3L);
+
+        verify(productAttributeRepository, times(1)).deleteById(3L);
     }
 
 }

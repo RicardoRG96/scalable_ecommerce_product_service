@@ -43,12 +43,12 @@ public class ProductAttributeServiceImpl implements ProductAttributeService {
 
     @Override
     @Transactional
-    public Optional<ProductAttribute> save(ProductAttributeCreationDto productAttribute) {
+    public ProductAttribute save(ProductAttributeCreationDto productAttribute) {
         ProductAttribute attribute = new ProductAttribute();
         attribute.setType(productAttribute.getType());
         attribute.setValue(productAttribute.getValue());
 
-        return Optional.of(productAttributeRepository.save(attribute));
+        return productAttributeRepository.save(attribute);
     }
 
     @Override

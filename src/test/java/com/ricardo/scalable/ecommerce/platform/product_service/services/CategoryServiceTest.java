@@ -6,7 +6,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
 import com.ricardo.scalable.ecommerce.platform.product_service.entities.Category;
+import com.ricardo.scalable.ecommerce.platform.product_service.entities.Product;
 import com.ricardo.scalable.ecommerce.platform.product_service.repositories.CategoryRepository;
+import com.ricardo.scalable.ecommerce.platform.product_service.repositories.ProductRepository;
 import com.ricardo.scalable.ecommerce.platform.product_service.repositories.dto.CategoryCreationDto;
 import com.ricardo.scalable.ecommerce.platform.product_service.unitTestData.Data;
 
@@ -22,6 +24,9 @@ public class CategoryServiceTest {
 
     @MockitoBean
     CategoryRepository categoryRepository;
+
+    @MockitoBean
+    ProductRepository productRepository;
 
     @Autowired
     CategoryService categoryService;

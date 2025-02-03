@@ -76,11 +76,9 @@ public class ProductAttributeController {
         if (result.hasErrors()) {
             return this.validation(result);
         }
-        Optional<ProductAttribute> productAttributeOptional = productAttributeService.save(productAttribute);
-        if (productAttributeOptional.isPresent()) {
-            return ResponseEntity.status(HttpStatus.CREATED).body(productAttributeOptional.orElseThrow());
-        }
-        return ResponseEntity.notFound().build();
+        ProductAttribute createdProductAttribute = productAttributeService.save(productAttribute);
+        
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdProductAttribute);
     }
 
     private ResponseEntity<?> validation(BindingResult result) {

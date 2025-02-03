@@ -16,7 +16,7 @@ public interface ProductAttributeService {
 
     Iterable<ProductAttribute> findAll();
 
-    Optional<ProductAttribute> save(ProductAttributeCreationDto productAttribute);
+    ProductAttribute save(ProductAttributeCreationDto productAttribute);
 
     Optional<ProductAttribute> update(ProductAttribute productAttribute, Long id);
 

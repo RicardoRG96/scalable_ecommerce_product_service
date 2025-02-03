@@ -159,6 +159,19 @@ public class Data {
         return Optional.of(category);
     }
 
+    public static Optional<Category> createUnknownCategory() {
+        Category category = new Category(
+            8L, 
+            "Unknown", 
+            "Unknown",
+            null, 
+            Timestamp.from(Instant.now()), 
+            Timestamp.from(Instant.now())
+        );
+
+        return Optional.of(category);
+    }
+
     public static Optional<Category> createSubCategory001() {
         Category category = new Category(
             4L, 
