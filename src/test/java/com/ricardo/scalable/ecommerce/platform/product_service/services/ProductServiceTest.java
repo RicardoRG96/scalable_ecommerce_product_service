@@ -142,4 +142,13 @@ public class ProductServiceTest {
         );
     }
 
+    @Test
+    void testDelete() {
+        doNothing().when(productRepository).deleteById(1L);
+
+        productService.delete(1L);
+
+        verify(productRepository, times(1)).deleteById(1L);
+    }
+
 }
