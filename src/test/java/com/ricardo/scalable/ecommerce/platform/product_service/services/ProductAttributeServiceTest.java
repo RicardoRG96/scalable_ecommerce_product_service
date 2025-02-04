@@ -122,7 +122,7 @@ public class ProductAttributeServiceTest {
 
         assertAll(
             () -> assertNotNull(productAttributeList),
-            () -> assertEquals(6, productAttributeList.size()),
+            () -> assertEquals(7, productAttributeList.size()),
             () -> assertEquals(1L, productAttributeList.get(0).getId()),
             () -> assertEquals(2L, productAttributeList.get(1).getId()),
             () -> assertEquals(3L, productAttributeList.get(2).getId()),

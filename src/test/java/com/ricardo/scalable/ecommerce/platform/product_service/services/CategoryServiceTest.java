@@ -10,12 +10,16 @@ import com.ricardo.scalable.ecommerce.platform.product_service.entities.Product;
 import com.ricardo.scalable.ecommerce.platform.product_service.repositories.CategoryRepository;
 import com.ricardo.scalable.ecommerce.platform.product_service.repositories.ProductRepository;
 import com.ricardo.scalable.ecommerce.platform.product_service.repositories.dto.CategoryCreationDto;
-import com.ricardo.scalable.ecommerce.platform.product_service.unitTestData.Data;
+
+import static com.ricardo.scalable.ecommerce.platform.product_service.services.testData.CategoryServiceTestData.*;
+import static com.ricardo.scalable.ecommerce.platform.product_service.services.testData.ProductServiceTestData.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
+import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 
@@ -33,17 +37,17 @@ public class CategoryServiceTest {
 
     @Test
     void testFindByCategoryId() {
-        when(categoryRepository.findById(2L)).thenReturn(Data.createCategory001());
-        when(categoryRepository.findById(4L)).thenReturn(Data.createSubCategory001());
+        when(categoryRepository.findById(1L)).thenReturn(createParentCategory001());
+        when(categoryRepository.findById(4L)).thenReturn(createSubCategory001());
 
-        Optional<Category> categoryOptional = categoryService.findById(2L);
+        Optional<Category> categoryOptional = categoryService.findById(1L);
         Optional<Category> subCategoryOptional = categoryService.findById(4L);
 
         assertAll(
             () -> assertTrue(categoryOptional.isPresent()),
-            () -> assertEquals(2L, categoryOptional.orElseThrow().getId()),
+            () -> assertEquals(1L, categoryOptional.orElseThrow().getId()),
             () -> assertEquals("Tecnología", categoryOptional.orElseThrow().getName()),
-            () -> assertEquals("Descripcion tecnología 2", categoryOptional.orElseThrow().getDescription())
+            () -> assertEquals("Descripcion tecnología", categoryOptional.orElseThrow().getDescription())
         );
 
         assertAll(
@@ -56,17 +60,17 @@ public class CategoryServiceTest {
 
     @Test
     void testFindByName() {
-        when(categoryRepository.findByName("Tecnología")).thenReturn(Data.createCategory001());
-        when(categoryRepository.findByName("Celulares")).thenReturn(Data.createSubCategory002());
+        when(categoryRepository.findByName("Tecnología")).thenReturn(createParentCategory001());
+        when(categoryRepository.findByName("Celulares")).thenReturn(createSubCategory002());
 
         Optional<Category> categoryOptional = categoryService.findByName("Tecnología");
         Optional<Category> subCategoryOptional = categoryService.findByName("Celulares");
 
         assertAll(
             () -> assertTrue(categoryOptional.isPresent()),
-            () -> assertEquals(2L, categoryOptional.orElseThrow().getId()),
+            () -> assertEquals(1L, categoryOptional.orElseThrow().getId()),
             () -> assertEquals("Tecnología", categoryOptional.orElseThrow().getName()),
-            () -> assertEquals("Descripcion tecnología 2", categoryOptional.orElseThrow().getDescription())
+            () -> assertEquals("Descripcion tecnología", categoryOptional.orElseThrow().getDescription())
         );
 
         assertAll(
@@ -79,40 +83,49 @@ public class CategoryServiceTest {
 
     @Test
     void testFindAll() {
-        when(categoryRepository.findAll()).thenReturn(Data.createListOfCategories());
+        when(categoryRepository.findAll()).thenReturn(createListOfCategories());
 
         List<Category> categoryList = (List<Category>) categoryService.findAll();
 
         assertAll(
             () -> assertNotNull(categoryList),
-            () -> assertEquals(4, categoryList.size()),
-            () -> assertEquals(2L, categoryList.get(0).getId()),
-            () -> assertEquals(3L, categoryList.get(1).getId()),
-            () -> assertEquals(4L, categoryList.get(2).getId()),
-            () -> assertEquals(5L, categoryList.get(3).getId()),
+            () -> assertEquals(8, categoryList.size()),
+            () -> assertEquals(1L, categoryList.get(0).getId()),
+            () -> assertEquals(2L, categoryList.get(1).getId()),
+            () -> assertEquals(3L, categoryList.get(2).getId()),
+            () -> assertEquals(4L, categoryList.get(3).getId()),
             () -> assertEquals("Tecnología", categoryList.get(0).getName()),
             () -> assertEquals("Deportes", categoryList.get(1).getName()),
-            () -> assertEquals("Computadoras", categoryList.get(2).getName()),
-            () -> assertEquals("Celulares", categoryList.get(3).getName())
+            () -> assertEquals("Ropa Hombre", categoryList.get(2).getName()),
+            () -> assertEquals("Computadoras", categoryList.get(3).getName())
         );
     }
 
     @Test
     void testSave() {
         CategoryCreationDto categoryCreationRequest = new CategoryCreationDto();
-        categoryCreationRequest.setName("Deportes");
-        categoryCreationRequest.setDescription("Descripcion deportes");
+        categoryCreationRequest.setName("Electrohogar");
+        categoryCreationRequest.setDescription("Descripcion electrohogar");
         categoryCreationRequest.setParentId(null);
 
-        when(categoryRepository.save(any())).thenReturn(Data.createCategory002().orElseThrow());
+        Category categoryCreationResponse = new Category(
+            9L, 
+            "Electrohogar", 
+            "Descripcion electrohogar", 
+            null, 
+            Timestamp.from(Instant.now()), 
+            Timestamp.from(Instant.now())
+        );
 
-        Category categoryResponse = categoryService.save(categoryCreationRequest);
+        when(categoryRepository.save(any())).thenReturn(categoryCreationResponse);
+
+        Category createdCategory = categoryService.save(categoryCreationRequest);
 
         assertAll(
-            () -> assertNotNull(categoryResponse),
-            () -> assertEquals(3L, categoryResponse.getId()),
-            () -> assertEquals("Deportes", categoryResponse.getName()),
-            () -> assertEquals("Descripcion deportes", categoryResponse.getDescription())
+            () -> assertNotNull(createdCategory),
+            () -> assertEquals(9L, createdCategory.getId()),
+            () -> assertEquals("Electrohogar", createdCategory.getName()),
+            () -> assertEquals("Descripcion electrohogar", createdCategory.getDescription())
         );
     }
 
@@ -124,7 +137,7 @@ public class CategoryServiceTest {
         updateCategoryRequest.setDescription("Descripcion futbol");
         updateCategoryRequest.setParent(null);
 
-        when(categoryRepository.findById(3L)).thenReturn(Data.createCategory002());
+        when(categoryRepository.findById(3L)).thenReturn(createParentCategory002());
         when(categoryRepository.save(any())).thenReturn(updateCategoryRequest);
 
         Optional<Category> updateCategoryResponse = categoryService.update(updateCategoryRequest, 3L);
@@ -141,12 +154,12 @@ public class CategoryServiceTest {
     void testDelete() {
         Optional<List<Product>> productsWithSameCategory = Optional.of(
             List.of(
-                Data.createProduct001().orElseThrow(),
-                Data.createProduct003().orElseThrow()
+                createProduct001().orElseThrow(),
+                createProduct003().orElseThrow()
             )
         );
 
-        when(categoryRepository.findByName("Unknown")).thenReturn(Data.createUnknownCategory());
+        when(categoryRepository.findByName("Unknown")).thenReturn(createUnknownCategory());
         when(productRepository.findByCategoryId(3L)).thenReturn(productsWithSameCategory);
 
         doNothing().when(categoryRepository).deleteById(3L);

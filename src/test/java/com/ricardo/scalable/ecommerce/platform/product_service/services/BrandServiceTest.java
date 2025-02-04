@@ -9,12 +9,16 @@ import com.ricardo.scalable.ecommerce.platform.product_service.entities.Product;
 import com.ricardo.scalable.ecommerce.platform.product_service.repositories.BrandRepository;
 import com.ricardo.scalable.ecommerce.platform.product_service.repositories.ProductRepository;
 import com.ricardo.scalable.ecommerce.platform.product_service.repositories.dto.BrandCreationDto;
-import com.ricardo.scalable.ecommerce.platform.product_service.unitTestData.Data;
+
+import static com.ricardo.scalable.ecommerce.platform.product_service.services.testData.BrandServiceTestData.*;
+import static com.ricardo.scalable.ecommerce.platform.product_service.services.testData.ProductServiceTestData.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
+import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 
@@ -34,13 +38,13 @@ public class BrandServiceTest {
 
     @Test
     void testFindById() {
-        when(brandRepository.findById(2L)).thenReturn(Data.createBrand001());
+        when(brandRepository.findById(2L)).thenReturn(createBrand001());
 
         Optional<Brand> brandOptional = brandService.findById(2L);
 
         assertAll(
             () -> assertTrue(brandOptional.isPresent()),
-            () -> assertEquals(2L, brandOptional.orElseThrow().getId()),
+            () -> assertEquals(1L, brandOptional.orElseThrow().getId()),
             () -> assertEquals("Apple", brandOptional.orElseThrow().getName()),
             () -> assertEquals("Marca Apple", brandOptional.orElseThrow().getDescription())
         );
@@ -48,13 +52,13 @@ public class BrandServiceTest {
 
     @Test
     void testFindByName() {
-        when(brandRepository.findByName("Apple")).thenReturn(Data.createBrand001());
+        when(brandRepository.findByName("Apple")).thenReturn(createBrand001());
 
         Optional<Brand> brandOptional = brandService.findByName("Apple");
 
         assertAll(
             () -> assertTrue(brandOptional.isPresent()),
-            () -> assertEquals(2L, brandOptional.orElseThrow().getId()),
+            () -> assertEquals(1L, brandOptional.orElseThrow().getId()),
             () -> assertEquals("Apple", brandOptional.orElseThrow().getName()),
             () -> assertEquals("Marca Apple", brandOptional.orElseThrow().getDescription())
         );
@@ -62,38 +66,48 @@ public class BrandServiceTest {
 
     @Test
     void testFindAll() {
-        when(brandRepository.findAll()).thenReturn(Data.createListOfBrands());
+        when(brandRepository.findAll()).thenReturn(createListOfBrands());
 
         List<Brand> brandList = (List<Brand>) brandService.findAll();
 
         assertAll(
             () -> assertNotNull(brandList),
-            () -> assertEquals(2L, brandList.get(0).getId()),
-            () -> assertEquals(3L, brandList.get(1).getId()),
+            () -> assertFalse(brandList.isEmpty()),
+            () -> assertEquals(2, brandList.size()),
+            () -> assertEquals(1L, brandList.get(0).getId()),
+            () -> assertEquals(2L, brandList.get(1).getId()),
             () -> assertEquals("Apple", brandList.get(0).getName()),
             () -> assertEquals("Samsung", brandList.get(1).getName()),
             () -> assertEquals("Marca Apple", brandList.get(0).getDescription()),
-            () -> assertEquals("Marca Samsung", brandList.get(1).getDescription()),
-            () -> assertEquals(2, brandList.size())
+            () -> assertEquals("Marca Samsung", brandList.get(1).getDescription())
         );
     }
 
     @Test
     void testSave() {
         BrandCreationDto brandCreationRequest = new BrandCreationDto();
-        brandCreationRequest.setName("Apple");
-        brandCreationRequest.setDescription("Marca Apple");
+        brandCreationRequest.setName("Nike");
+        brandCreationRequest.setDescription("Marca nike");
         brandCreationRequest.setLogoUrl("logo2.png");
 
-        when(brandRepository.save(any())).thenReturn(Data.createBrand001().orElseThrow());
+        Brand brandCreationResponse = new Brand(
+            8L, 
+            "Nike", 
+            "Marca nike", 
+            "logo2.png", 
+            Timestamp.from(Instant.now()),
+            Timestamp.from(Instant.now())
+        );
 
-        Brand brandResponse = brandService.save(brandCreationRequest);
+        when(brandRepository.save(any())).thenReturn(brandCreationResponse);
+
+        Brand createdBrand = brandService.save(brandCreationRequest);
 
         assertAll(
-            () -> assertNotNull(brandResponse),
-            () -> assertEquals(2L, brandResponse.getId()),
-            () -> assertEquals("Apple", brandResponse.getName()),
-            () -> assertEquals("Marca Apple", brandResponse.getDescription())
+            () -> assertNotNull(createdBrand),
+            () -> assertEquals(8L, createdBrand.getId()),
+            () -> assertEquals("Nike", createdBrand.getName()),
+            () -> assertEquals("Marca nike", createdBrand.getDescription())
         );
     }
 
@@ -104,7 +118,7 @@ public class BrandServiceTest {
         brandUpdateRequest.setName("Apple");
         brandUpdateRequest.setDescription("Marca Apple nueva");
 
-        when(brandRepository.findById(3L)).thenReturn(Data.createBrand002());
+        when(brandRepository.findById(3L)).thenReturn(createBrand002());
         when(brandRepository.save(any())).thenReturn(brandUpdateRequest);
 
         Optional<Brand> brandOptionalResponse = brandService.update(brandUpdateRequest, 3L);
@@ -121,12 +135,12 @@ public class BrandServiceTest {
     void testDelete() {
         Optional<List<Product>> productsWithSameBrand = Optional.of(
             List.of(
-                Data.createProduct002().orElseThrow(),
-                Data.createProduct003().orElseThrow()
+                createProduct002().orElseThrow(),
+                createProduct003().orElseThrow()
             )
         );
 
-        when(brandRepository.findByName("Unknown")).thenReturn(Data.createUnknownBrand());
+        when(brandRepository.findByName("Unknown")).thenReturn(createUnknownBrand());
         when(productRepository.findByBrandId(2L)).thenReturn(productsWithSameBrand);
 
         brandService.delete(2L);
@@ -134,4 +148,5 @@ public class BrandServiceTest {
         verify(productRepository, times(2)).save(any());
         verify(brandRepository, times(1)).deleteById(2L);
     }
+    
 }
