@@ -10,12 +10,17 @@ import com.ricardo.scalable.ecommerce.platform.product_service.repositories.Bran
 import com.ricardo.scalable.ecommerce.platform.product_service.repositories.CategoryRepository;
 import com.ricardo.scalable.ecommerce.platform.product_service.repositories.ProductRepository;
 import com.ricardo.scalable.ecommerce.platform.product_service.repositories.dto.ProductCreationDto;
-import com.ricardo.scalable.ecommerce.platform.product_service.unitTestData.Data;
+
+import static com.ricardo.scalable.ecommerce.platform.product_service.services.testData.ProductServiceTestData.*;
+import static com.ricardo.scalable.ecommerce.platform.product_service.services.testData.CategoryServiceTestData.*;
+import static com.ricardo.scalable.ecommerce.platform.product_service.services.testData.BrandServiceTestData.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
+import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 
@@ -36,8 +41,8 @@ public class ProductServiceTest {
 
     @Test
     void testFindById() {
-        when(productRepository.findById(1L)).thenReturn(Data.createProduct001());
-        when(productRepository.findById(2L)).thenReturn(Data.createProduct002());
+        when(productRepository.findById(1L)).thenReturn(createProduct001());
+        when(productRepository.findById(2L)).thenReturn(createProduct002());
 
         Optional<Product> product1 = productService.findById(1L);
         Optional<Product> product2 = productService.findById(2L);
@@ -58,8 +63,8 @@ public class ProductServiceTest {
 
     @Test
     void testFindByName() {
-        when(productRepository.findByName("Notebook Samsung")).thenReturn(Data.createProduct001());
-        when(productRepository.findByName("Macbook Apple")).thenReturn(Data.createProduct002());
+        when(productRepository.findByName("Notebook Samsung")).thenReturn(createProduct001());
+        when(productRepository.findByName("Macbook Apple")).thenReturn(createProduct002());
 
         Optional<Product> producOptional1 = productService.findByName("Notebook Samsung");
         Optional<Product> producOptional2 = productService.findByName("Macbook Apple");
@@ -80,7 +85,7 @@ public class ProductServiceTest {
 
     @Test
     void testFindAll() {
-        when(productRepository.findAll()).thenReturn(Data.createListOfProducts());
+        when(productRepository.findAll()).thenReturn(createListOfProducts());
 
         List<Product> productsList = (List<Product>) productService.findAll();
 
@@ -102,33 +107,44 @@ public class ProductServiceTest {
 
     @Test
     void testSave() {
-        when(categoryRepository.findById(4L)).thenReturn(Data.createCategory001());
-        when(brandRepository.findById(3L)).thenReturn(Data.createBrand001());
-        when(productRepository.save(any())).thenReturn(Data.createProduct001().orElseThrow());
+        Product productCreationResponse = new Product();
+        productCreationResponse.setId(6L);
+        productCreationResponse.setName("Samsung Galaxy S23");
+        productCreationResponse.setDescription("Celular de ultima generacion Samsung");
+        productCreationResponse.setCategory(createSubCategory002().orElseThrow());
+        productCreationResponse.setBrand(createBrand002().orElseThrow());
+        productCreationResponse.setCover("image3.png");
+        productCreationResponse.setCreatedAt(Timestamp.from(Instant.now()));
+        productCreationResponse.setUpdatedAt(Timestamp.from(Instant.now()));
+
+        when(categoryRepository.findById(5L)).thenReturn(createSubCategory002());
+        when(brandRepository.findById(2L)).thenReturn(createBrand002());
+        when(productRepository.save(any())).thenReturn(productCreationResponse);
 
         ProductCreationDto productCreationRequest = new ProductCreationDto();
-        productCreationRequest.setName("Notebook Samsung");
-        productCreationRequest.setDescription("Computador de ultima generacion Samsung");
-        productCreationRequest.setCategoryId(4L);
-        productCreationRequest.setBrandId(3L);
-        productCreationRequest.setCover("image.png");
+        productCreationRequest.setName("Samsung Galaxy S23");
+        productCreationRequest.setDescription("Celular de ultima generacion Samsung");
+        productCreationRequest.setCategoryId(5L);
+        productCreationRequest.setBrandId(2L);
+        productCreationRequest.setCover("image3.png");
 
-        Product createdProduct = productService.save(productCreationRequest).orElseThrow();
+        Optional<Product> createdProduct = productService.save(productCreationRequest);
 
         assertAll(
-            () -> assertNotNull(createdProduct),
-            () -> assertEquals(1L, createdProduct.getId()),
-            () -> assertEquals("Notebook Samsung", createdProduct.getName()),
-            () -> assertEquals("Computadoras", createdProduct.getCategory().getName()),
-            () -> assertEquals("Samsung", createdProduct.getBrand().getName())
+            () -> assertTrue(createdProduct.isPresent()),
+            () -> assertEquals(6L, createdProduct.orElseThrow().getId()),
+            () -> assertEquals("Samsung Galaxy S23", createdProduct.orElseThrow().getName()),
+            () -> assertEquals("Celulares", createdProduct.orElseThrow().getCategory().getName()),
+            () -> assertEquals("Samsung", createdProduct.orElseThrow().getBrand().getName())
         );
     }
 
     @Test
     void testUpdate() {
-        Product updatedProduct = Data.createProduct001().orElseThrow();
+        Product updatedProduct = createProduct001().orElseThrow();
         updatedProduct.setName("Notebook Samsung i9");
-        when(productRepository.findById(1L)).thenReturn(Data.createProduct001());
+
+        when(productRepository.findById(1L)).thenReturn(createProduct001());
         when(productRepository.save(any())).thenReturn(updatedProduct);
 
         Optional<Product> productOptionalResponse = productService.update(updatedProduct, 1L);
