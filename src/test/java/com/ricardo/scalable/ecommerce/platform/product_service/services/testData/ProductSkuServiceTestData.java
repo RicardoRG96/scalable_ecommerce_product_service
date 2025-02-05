@@ -38,12 +38,12 @@ public class ProductSkuServiceTestData {
     public static Optional<ProductSku> createProductSku001() {
         ProductSku productSku = new ProductSku();
         Product product = createProduct001().orElseThrow();
-        ProductAttribute sizAttribute = createProductAttribute007().orElseThrow();
+        ProductAttribute sizeAttribute = createProductAttribute007().orElseThrow();
         ProductAttribute colorAttribute = createProductAttribute003().orElseThrow();
 
         productSku.setId(1L);
         productSku.setProduct(product);
-        productSku.setSizeAttribute(sizAttribute);
+        productSku.setSizeAttribute(sizeAttribute);
         productSku.setColorAttribute(colorAttribute);
         productSku.setSku("SKU001");
         productSku.setPrice(40.00);
@@ -60,12 +60,12 @@ public class ProductSkuServiceTestData {
     public static Optional<ProductSku> createProductSku002() {
         ProductSku productSku = new ProductSku();
         Product product = createProduct002().orElseThrow();
-        ProductAttribute sizAttribute = createProductAttribute007().orElseThrow();
+        ProductAttribute sizeAttribute = createProductAttribute007().orElseThrow();
         ProductAttribute colorAttribute = createProductAttribute002().orElseThrow();
 
         productSku.setId(2L);
         productSku.setProduct(product);
-        productSku.setSizeAttribute(sizAttribute);
+        productSku.setSizeAttribute(sizeAttribute);
         productSku.setColorAttribute(colorAttribute);
         productSku.setSku("SKU002");
         productSku.setPrice(40.00);
@@ -82,12 +82,12 @@ public class ProductSkuServiceTestData {
     public static Optional<ProductSku> createProductSku003() {
         ProductSku productSku = new ProductSku();
         Product product = createProduct003().orElseThrow();
-        ProductAttribute sizAttribute = createProductAttribute007().orElseThrow();
+        ProductAttribute sizeAttribute = createProductAttribute007().orElseThrow();
         ProductAttribute colorAttribute = createProductAttribute001().orElseThrow();
 
         productSku.setId(3L);
         productSku.setProduct(product);
-        productSku.setSizeAttribute(sizAttribute);
+        productSku.setSizeAttribute(sizeAttribute);
         productSku.setColorAttribute(colorAttribute);
         productSku.setSku("SKU003");
         productSku.setPrice(40.00);
@@ -104,12 +104,12 @@ public class ProductSkuServiceTestData {
     public static Optional<ProductSku> createProductSku004() {
         ProductSku productSku = new ProductSku();
         Product product = createProduct004().orElseThrow();
-        ProductAttribute sizAttribute = createProductAttribute004().orElseThrow();
+        ProductAttribute sizeAttribute = createProductAttribute004().orElseThrow();
         ProductAttribute colorAttribute = createProductAttribute003().orElseThrow();
 
         productSku.setId(4L);
         productSku.setProduct(product);
-        productSku.setSizeAttribute(sizAttribute);
+        productSku.setSizeAttribute(sizeAttribute);
         productSku.setColorAttribute(colorAttribute);
         productSku.setSku("SKU004");
         productSku.setPrice(35.00);
@@ -126,12 +126,12 @@ public class ProductSkuServiceTestData {
     public static Optional<ProductSku> createProductSku005() {
         ProductSku productSku = new ProductSku();
         Product product = createProduct005().orElseThrow();
-        ProductAttribute sizAttribute = createProductAttribute005().orElseThrow();
+        ProductAttribute sizeAttribute = createProductAttribute005().orElseThrow();
         ProductAttribute colorAttribute = createProductAttribute002().orElseThrow();
 
         productSku.setId(5L);
         productSku.setProduct(product);
-        productSku.setSizeAttribute(sizAttribute);
+        productSku.setSizeAttribute(sizeAttribute);
         productSku.setColorAttribute(colorAttribute);
         productSku.setSku("SKU005");
         productSku.setPrice(25.00);
@@ -148,12 +148,12 @@ public class ProductSkuServiceTestData {
     public static Optional<ProductSku> createProductSku006() {
         ProductSku productSku = new ProductSku();
         Product product = createProduct004().orElseThrow();
-        ProductAttribute sizAttribute = createProductAttribute006().orElseThrow();
+        ProductAttribute sizeAttribute = createProductAttribute006().orElseThrow();
         ProductAttribute colorAttribute = createProductAttribute001().orElseThrow();
 
         productSku.setId(6L);
         productSku.setProduct(product);
-        productSku.setSizeAttribute(sizAttribute);
+        productSku.setSizeAttribute(sizeAttribute);
         productSku.setColorAttribute(colorAttribute);
         productSku.setSku("SKU006");
         productSku.setPrice(50.00);
@@ -170,12 +170,12 @@ public class ProductSkuServiceTestData {
     public static Optional<ProductSku> createProductSku007() {
         ProductSku productSku = new ProductSku();
         Product product = createProduct005().orElseThrow();
-        ProductAttribute sizAttribute = createProductAttribute006().orElseThrow();
+        ProductAttribute sizeAttribute = createProductAttribute006().orElseThrow();
         ProductAttribute colorAttribute = createProductAttribute003().orElseThrow();
 
         productSku.setId(7L);
         productSku.setProduct(product);
-        productSku.setSizeAttribute(sizAttribute);
+        productSku.setSizeAttribute(sizeAttribute);
         productSku.setColorAttribute(colorAttribute);
         productSku.setSku("SKU007");
         productSku.setPrice(40.00);
