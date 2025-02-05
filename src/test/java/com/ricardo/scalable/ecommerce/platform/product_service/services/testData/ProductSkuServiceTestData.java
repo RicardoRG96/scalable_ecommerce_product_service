@@ -189,4 +189,36 @@ public class ProductSkuServiceTestData {
         return Optional.of(productSku);
     }
 
+    public static Iterable<ProductSku> createListOfProductSkuByProductId1() {
+        ProductSku productSku1 = createProductSku001().orElseThrow();
+
+        return List.of(productSku1);
+    }
+
+    public static Iterable<ProductSku> createListOfProductSkuByProductId2() {
+        ProductSku productSku2 = createProductSku002().orElseThrow();
+
+        return List.of(productSku2);
+    }
+
+    public static Iterable<ProductSku> createListOfProductSkuByProductId3() {
+        ProductSku productSku3 = createProductSku003().orElseThrow();
+
+        return List.of(productSku3);
+    }
+
+    public static Iterable<ProductSku> createListOfProductSkuByProductId4() {
+        ProductSku productSku4 = createProductSku004().orElseThrow();
+        ProductSku productSku6 = createProductSku006().orElseThrow();
+
+        return List.of(productSku4, productSku6);
+    }
+
+    public static Iterable<ProductSku> createListOfProductSkuByProductId5() {
+        ProductSku productSku5 = createProductSku005().orElseThrow();
+        ProductSku productSku7 = createProductSku007().orElseThrow();
+
+        return List.of(productSku5, productSku7);
+    }
+
 }
