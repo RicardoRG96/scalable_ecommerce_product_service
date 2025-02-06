@@ -162,4 +162,22 @@ public class ProductSkuServiceTest {
         );
     }
 
+    @Test
+    void testFindByProductIdAndSizeAttributeIdAndColorAttributeId() {
+        when(productSkuRepository.findByProductIdAndSizeAttributeIdAndColorAttributeId(1L, 7L, 3L))
+            .thenReturn(createProductSku001());
+
+        Optional<ProductSku> searchedProductsSku = 
+            productSkuService.findByProductIdAndSizeAttributeIdAndColorAttributeId(1L, 7L, 3L);
+
+        assertAll(
+            () -> assertTrue(searchedProductsSku.isPresent()),
+            () -> assertEquals(1L, searchedProductsSku.orElseThrow().getId()),
+            () -> assertEquals(1L, searchedProductsSku.orElseThrow().getProduct().getId()),
+            () -> assertEquals("SKU001", searchedProductsSku.orElseThrow().getSku()),
+            () -> assertEquals("none", searchedProductsSku.orElseThrow().getSizeAttribute().getValue()),
+            () -> assertEquals("negro", searchedProductsSku.orElseThrow().getColorAttribute().getValue())
+        );
+    }
+
 }
