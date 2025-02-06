@@ -148,7 +148,7 @@ public class ProductSkuServiceTestData {
     public static Optional<ProductSku> createProductSku006() {
         ProductSku productSku = new ProductSku();
         Product product = createProduct004().orElseThrow();
-        ProductAttribute sizeAttribute = createProductAttribute006().orElseThrow();
+        ProductAttribute sizeAttribute = createProductAttribute004().orElseThrow();
         ProductAttribute colorAttribute = createProductAttribute001().orElseThrow();
 
         productSku.setId(6L);
@@ -171,7 +171,7 @@ public class ProductSkuServiceTestData {
         ProductSku productSku = new ProductSku();
         Product product = createProduct005().orElseThrow();
         ProductAttribute sizeAttribute = createProductAttribute006().orElseThrow();
-        ProductAttribute colorAttribute = createProductAttribute003().orElseThrow();
+        ProductAttribute colorAttribute = createProductAttribute002().orElseThrow();
 
         productSku.setId(7L);
         productSku.setProduct(product);
@@ -218,6 +218,18 @@ public class ProductSkuServiceTestData {
         ProductSku productSku5 = createProductSku005().orElseThrow();
         ProductSku productSku7 = createProductSku007().orElseThrow();
 
+        return List.of(productSku5, productSku7);
+    }
+
+    public static Iterable<ProductSku> createListOfProductSkuByProductIdAndSizeAttributeId() {
+        ProductSku productSku4 = createProductSku004().orElseThrow();
+        ProductSku productSku6 = createProductSku006().orElseThrow();
+        return List.of(productSku4, productSku6);
+    }
+
+    public static Iterable<ProductSku> createListOfProductSkuByProductIdAndColorAttributeId() {
+        ProductSku productSku5 = createProductSku005().orElseThrow();
+        ProductSku productSku7 = createProductSku007().orElseThrow();
         return List.of(productSku5, productSku7);
     }
 
