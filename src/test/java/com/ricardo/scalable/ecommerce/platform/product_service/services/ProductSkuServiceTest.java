@@ -180,4 +180,31 @@ public class ProductSkuServiceTest {
         );
     }
 
+    @Test
+    void testFindAll() {
+        when(productSkuRepository.findAll()).thenReturn(createListOfProductSku());
+
+        List<ProductSku> productsSku = (List<ProductSku>) productSkuService.findAll();
+
+        assertAll(
+            () -> assertNotNull(productsSku),
+            () -> assertEquals(7, productsSku.size()),
+            () -> assertEquals(1L, productsSku.get(0).getId()),
+            () -> assertEquals(2L, productsSku.get(1).getId()),
+            () -> assertEquals(3L, productsSku.get(2).getId()),
+            () -> assertEquals(4L, productsSku.get(3).getProduct().getId()),
+            () -> assertEquals(5L, productsSku.get(4).getProduct().getId()),
+            () -> assertEquals(4L, productsSku.get(5).getProduct().getId()),
+            () -> assertEquals("SKU001", productsSku.get(0).getSku()),
+            () -> assertEquals("SKU002", productsSku.get(1).getSku()),
+            () -> assertEquals("SKU003", productsSku.get(2).getSku()),
+            () -> assertEquals("none", productsSku.get(0).getSizeAttribute().getValue()),
+            () -> assertEquals("none", productsSku.get(1).getSizeAttribute().getValue()),
+            () -> assertEquals("none", productsSku.get(2).getSizeAttribute().getValue()),
+            () -> assertEquals("negro", productsSku.get(0).getColorAttribute().getValue()),
+            () -> assertEquals("azul", productsSku.get(1).getColorAttribute().getValue()),
+            () -> assertEquals("rojo", productsSku.get(2).getColorAttribute().getValue())
+        );
+    }
+
 }
