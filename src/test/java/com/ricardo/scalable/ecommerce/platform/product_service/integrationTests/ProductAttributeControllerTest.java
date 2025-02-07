@@ -124,6 +124,41 @@ public class ProductAttributeControllerTest {
     }
 
     @Test
+    @Order(6)
+    void testGetByValue() {
+        client.get()
+                .uri("/product-attribute/value/black")
+                .exchange()
+                .expectStatus().isOk()
+                .expectHeader().contentType(MediaType.APPLICATION_JSON)
+                .expectBody()
+                .consumeWith(res -> {
+                    try {
+                        JsonNode json = objectMapper.readTree(res.getResponseBody());
+                        assertAll(
+                            () -> assertNotNull(json),
+                            () -> assertEquals(3L, json.path("id").asLong()),
+                            () -> assertEquals("color", json.path("type").asText()),
+                            () -> assertEquals("black", json.path("value").asText())
+                        );
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                });
+    }
+
+    @Test
+    @Order(7)
+    void testGetByValueNotFound() {
+        String notExistingValue = "not-existing-value";
+
+        client.get()
+                .uri("/product-attribute/value/" + notExistingValue)
+                .exchange()
+                .expectStatus().isNotFound();
+    }
+
+    @Test
     void testProfile() {
         assertArrayEquals(new String[]{"test"}, env.getActiveProfiles());
     }
