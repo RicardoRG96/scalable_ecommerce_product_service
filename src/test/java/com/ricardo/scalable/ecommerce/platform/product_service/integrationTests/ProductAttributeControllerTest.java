@@ -83,6 +83,47 @@ public class ProductAttributeControllerTest {
     }
 
     @Test
+    @Order(4)
+    void testGetByType() {
+        client.get()
+                .uri("/product-attribute/type/color")
+                .exchange()
+                .expectStatus().isOk()
+                .expectHeader().contentType(MediaType.APPLICATION_JSON)
+                .expectBody()
+                .consumeWith(res -> {
+                    try {
+                        JsonNode json = objectMapper.readTree(res.getResponseBody());
+                        assertAll(
+                            () -> assertNotNull(json),
+                            () -> assertEquals(1L, json.get(0).path("id").asLong()),
+                            () -> assertEquals(2L, json.get(1).path("id").asLong()),
+                            () -> assertEquals(3L, json.get(2).path("id").asLong()),
+                            () -> assertEquals("color", json.get(0).path("type").asText()),
+                            () -> assertEquals("color", json.get(1).path("type").asText()),
+                            () -> assertEquals("color", json.get(2).path("type").asText()),
+                            () -> assertEquals("red", json.get(0).path("value").asText()),
+                            () -> assertEquals("blue", json.get(1).path("value").asText()),
+                            () -> assertEquals("black", json.get(2).path("value").asText())
+                        );
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                });
+    }
+
+    @Test
+    @Order(5)
+    void testGetByTypeNotFound() {
+        String notExistingType = "not-existing-type";
+
+        client.get()
+                .uri("/product-attribute/type/" + notExistingType)
+                .exchange()
+                .expectStatus().isNotFound();
+    }
+
+    @Test
     void testProfile() {
         assertArrayEquals(new String[]{"test"}, env.getActiveProfiles());
     }
