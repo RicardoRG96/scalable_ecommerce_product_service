@@ -285,4 +285,13 @@ public class ProductSkuServiceTest {
 
     }
 
+    @Test
+    void testDelete() {
+        doNothing().when(productSkuRepository).deleteById(1L);
+
+        productSkuService.delete(1L);
+
+        verify(productSkuRepository, times(1)).deleteById(1L);
+    }
+
 }
