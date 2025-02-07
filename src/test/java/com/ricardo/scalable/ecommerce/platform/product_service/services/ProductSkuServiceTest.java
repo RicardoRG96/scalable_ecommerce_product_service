@@ -10,9 +10,8 @@ import com.ricardo.scalable.ecommerce.platform.product_service.repositories.Prod
 import com.ricardo.scalable.ecommerce.platform.product_service.repositories.ProductSkuRepository;
 import com.ricardo.scalable.ecommerce.platform.product_service.repositories.dto.ProductSkuCreationDto;
 
-import static com.ricardo.scalable.ecommerce.platform.product_service.services.testData.ProductAttributeServiceTestData.createProductAttribute003;
-import static com.ricardo.scalable.ecommerce.platform.product_service.services.testData.ProductAttributeServiceTestData.createProductAttribute005;
-import static com.ricardo.scalable.ecommerce.platform.product_service.services.testData.ProductServiceTestData.createProduct004;
+import static com.ricardo.scalable.ecommerce.platform.product_service.services.testData.ProductAttributeServiceTestData.*;
+import static com.ricardo.scalable.ecommerce.platform.product_service.services.testData.ProductServiceTestData.*;
 import static com.ricardo.scalable.ecommerce.platform.product_service.services.testData.ProductSkuServiceTestData.*;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -249,6 +248,41 @@ public class ProductSkuServiceTest {
             () -> assertTrue(productSku.orElseThrow().getIsFeatured()),
             () -> assertFalse(productSku.orElseThrow().getIsOnSale())
         );
+    }
+
+    @Test
+    void testUpdate() {
+        ProductSku updatedProductSku = new ProductSku();
+        updatedProductSku.setId(1L);
+        updatedProductSku.setProduct(createProduct001().orElseThrow());
+        updatedProductSku.setSizeAttribute(createProductAttribute007().orElseThrow());
+        updatedProductSku.setColorAttribute(createProductAttribute003().orElseThrow());
+        updatedProductSku.setSku("SKU001");
+        updatedProductSku.setPrice(50.00);
+        updatedProductSku.setStock(10);
+        updatedProductSku.setIsActive(true);
+        updatedProductSku.setIsFeatured(true);
+        updatedProductSku.setIsOnSale(true);
+
+        when(productSkuRepository.findById(1L)).thenReturn(createProductSku001());
+        when(productSkuRepository.save(any())).thenReturn(updatedProductSku);
+
+        Optional<ProductSku> productSkuOptionalResponse = productSkuService.update(updatedProductSku, 1L);
+
+        assertAll(
+            () -> assertTrue(productSkuOptionalResponse.isPresent()),
+            () -> assertEquals(1L, productSkuOptionalResponse.orElseThrow().getId()),
+            () -> assertEquals(1L, productSkuOptionalResponse.orElseThrow().getProduct().getId()),
+            () -> assertEquals(7L, productSkuOptionalResponse.orElseThrow().getSizeAttribute().getId()),
+            () -> assertEquals(3L, productSkuOptionalResponse.orElseThrow().getColorAttribute().getId()),
+            () -> assertEquals("SKU001", productSkuOptionalResponse.orElseThrow().getSku()),
+            () -> assertEquals(50.00, productSkuOptionalResponse.orElseThrow().getPrice()),
+            () -> assertEquals(10, productSkuOptionalResponse.orElseThrow().getStock()),
+            () -> assertTrue(productSkuOptionalResponse.orElseThrow().getIsActive()),
+            () -> assertTrue(productSkuOptionalResponse.orElseThrow().getIsFeatured()),
+            () -> assertTrue(productSkuOptionalResponse.orElseThrow().getIsOnSale())
+        );
+
     }
 
 }
