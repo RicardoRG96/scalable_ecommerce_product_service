@@ -17,6 +17,7 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ricardo.scalable.ecommerce.platform.product_service.repositories.dto.ProductAttributeCreationDto;
 
 @ActiveProfiles("test")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
@@ -189,6 +190,34 @@ public class ProductAttributeControllerTest {
                             () -> assertEquals("S", json.get(3).path("value").asText()),
                             () -> assertEquals("M", json.get(4).path("value").asText()),
                             () -> assertEquals("L", json.get(5).path("value").asText())
+                        );
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                });
+    }
+
+    @Test
+    @Order(9)
+    void testCreateProductAttribute() {
+        ProductAttributeCreationDto requestBody = new ProductAttributeCreationDto("color", "green");
+
+        client.post()
+                .uri("/product-attribute")
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(requestBody)
+                .exchange()
+                .expectStatus().isCreated()
+                .expectHeader().contentType(MediaType.APPLICATION_JSON)
+                .expectBody()
+                .consumeWith(res -> {
+                    try {
+                        JsonNode json = objectMapper.readTree(res.getResponseBody());
+                        assertAll(
+                            () -> assertNotNull(json),
+                            () -> assertEquals(8L, json.path("id").asLong()),
+                            () -> assertEquals("color", json.path("type").asText()),
+                            () -> assertEquals("green", json.path("value").asText())
                         );
                     } catch (Exception e) {
                         e.printStackTrace();
