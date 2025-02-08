@@ -3,6 +3,9 @@ package com.ricardo.scalable.ecommerce.platform.product_service.integrationTests
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 
+import java.sql.Timestamp;
+import java.time.Instant;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
@@ -17,6 +20,7 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ricardo.scalable.ecommerce.platform.product_service.entities.ProductAttribute;
 import com.ricardo.scalable.ecommerce.platform.product_service.repositories.dto.ProductAttributeCreationDto;
 
 @ActiveProfiles("test")
@@ -223,6 +227,86 @@ public class ProductAttributeControllerTest {
                         e.printStackTrace();
                     }
                 });
+    }
+
+    @Test
+    @Order(10)
+    void testCreateProductAttributeBadRequest() {
+        ProductAttributeCreationDto requestBody = new ProductAttributeCreationDto();
+
+        client.post()
+                .uri("/product-attribute")
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(requestBody)
+                .exchange()
+                .expectStatus().isBadRequest();
+    }
+
+    @Test
+    @Order(11)
+    void testUpdateProductAttribute() {
+        ProductAttribute requestBody = createProductAttribute002();
+        requestBody.setValue("sky blue");
+
+        client.put()
+                .uri("/product-attribute/2")
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(requestBody)
+                .exchange()
+                .expectStatus().isOk()
+                .expectHeader().contentType(MediaType.APPLICATION_JSON)
+                .expectBody()
+                .consumeWith(res -> {
+                    try {
+                        JsonNode json = objectMapper.readTree(res.getResponseBody());
+                        assertAll(
+                            () -> assertNotNull(json),
+                            () -> assertEquals(2L, json.path("id").asLong()),
+                            () -> assertEquals("color", json.path("type").asText()),
+                            () -> assertEquals("sky blue", json.path("value").asText())
+                        );
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                });
+    }
+
+    @Test
+    @Order(12)
+    void testUpdateProductAttributeNotFound() {
+        ProductAttribute requestBody = createProductAttribute002();
+        String notExistingId = "100";
+        requestBody.setValue("sky blue");
+
+        client.put()
+                .uri("/product-attribute/" + notExistingId)
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(requestBody)
+                .exchange()
+                .expectStatus().isNotFound();
+    }
+
+    @Test
+    @Order(13)
+    void testUpdateProductAttributeBadRequest() {
+        ProductAttribute requestBody = new ProductAttribute();
+
+        client.put()
+                .uri("/product-attribute/2")
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(requestBody)
+                .exchange()
+                .expectStatus().isBadRequest();
+    }
+
+    private ProductAttribute createProductAttribute002() {
+        ProductAttribute productAttribute = new ProductAttribute();
+        productAttribute.setId(2L);
+        productAttribute.setType("color");
+        productAttribute.setValue("blue");
+        productAttribute.setCreatedAt(Timestamp.from(Instant.now()));
+        productAttribute.setUpdatedAt(Timestamp.from(Instant.now()));
+        return productAttribute;
     }
 
     @Test

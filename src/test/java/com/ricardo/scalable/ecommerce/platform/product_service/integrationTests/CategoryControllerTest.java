@@ -78,18 +78,6 @@ public class CategoryControllerTest {
                 .expectStatus().isNotFound();
     }
 
-    private Category createCategory002() {
-        Category category = new Category();
-        category.setId(2L);
-        category.setName("Tecnologia");
-        category.setDescription("Computadores portatiles");
-        category.setParent(null);
-        category.setCreatedAt(Timestamp.from(Instant.now()));
-        category.setUpdatedAt(Timestamp.from(Instant.now()));
-
-        return category;
-    }
-
     @Test
     @Order(3)
     void testGetByName() {
@@ -231,6 +219,18 @@ public class CategoryControllerTest {
                         ex.printStackTrace();
                     }
                 });
+    }
+
+    private Category createCategory002() {
+        Category category = new Category();
+        category.setId(2L);
+        category.setName("Tecnologia");
+        category.setDescription("Computadores portatiles");
+        category.setParent(null);
+        category.setCreatedAt(Timestamp.from(Instant.now()));
+        category.setUpdatedAt(Timestamp.from(Instant.now()));
+
+        return category;
     }
 
     @Test
