@@ -75,6 +75,7 @@ public class ProductAttributeServiceImpl implements ProductAttributeService {
     public void delete(Long id) {
         ProductAttribute productAttributeToDelete = productAttributeRepository.findById(id).orElseThrow();
         boolean isColorType = productAttributeToDelete.getType().equals("color");
+        boolean isSizeType = productAttributeToDelete.getType().equals("size");
 
         if (isColorType) {
             ProductAttribute noneColor = productAttributeRepository.findByValue("none-color").orElseThrow();
@@ -84,14 +85,16 @@ public class ProductAttributeServiceImpl implements ProductAttributeService {
                 productSku.setColorAttribute(noneColor);
                 productSkuRepository.save(productSku);
             });
-        } else {
+        } 
+
+        if (isSizeType) {
             ProductAttribute noneSize = productAttributeRepository.findByValue("none-size").orElseThrow();
             List<ProductSku> productSkusWithSizeToDelete = 
                 (List<ProductSku>) productSkuRepository.findBySizeAttributeId(id).orElseThrow();
             productSkusWithSizeToDelete.forEach(productSku -> {
                 productSku.setSizeAttribute(noneSize);
                 productSkuRepository.save(productSku);
-            });
+            });   
         }
 
         productAttributeRepository.deleteById(id);

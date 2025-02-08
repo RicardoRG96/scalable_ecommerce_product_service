@@ -357,6 +357,33 @@ public class ProductAttributeControllerTest {
     }
 
     @Test
+    @Order(17)
+    void testProductSkuWithDeletedAttributes() {
+        client.get()
+                .uri("/product-sku")
+                .exchange()
+                .expectStatus().isOk()
+                .expectHeader().contentType(MediaType.APPLICATION_JSON)
+                .expectBody()
+                .consumeWith(res -> {
+                    try {
+                        JsonNode json = objectMapper.readTree(res.getResponseBody());
+                        assertAll(
+                            () -> assertNotNull(json),
+                            () -> assertEquals(6L, json.get(5).path("id").asLong()),
+                            () -> assertEquals("SKU8564", json.get(5).path("sku").asText()),
+                            () -> assertEquals("none-size", json.get(5).path("sizeAttribute").path("value").asText()),
+                            () -> assertEquals(9L, json.get(8).path("id").asLong()),
+                            () -> assertEquals("SKU1256", json.get(8).path("sku").asText()),
+                            () -> assertEquals("none-size", json.get(8).path("sizeAttribute").path("value").asText())
+                        );
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                });
+    }
+
+    @Test
     void testProfile() {
         assertArrayEquals(new String[]{"test"}, env.getActiveProfiles());
     }

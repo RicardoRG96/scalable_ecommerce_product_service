@@ -21,8 +21,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static com.ricardo.scalable.ecommerce.platform.product_service.services.testData.ProductAttributeServiceTestData.*;
-import static com.ricardo.scalable.ecommerce.platform.product_service.services.testData.ProductSkuServiceTestData.createListOfProductSkuByColorAttributeId;
-import static com.ricardo.scalable.ecommerce.platform.product_service.services.testData.ProductSkuServiceTestData.createListOfProductSkuBySizeAttributeId;
+import static com.ricardo.scalable.ecommerce.platform.product_service.services.testData.ProductSkuServiceTestData.*;
 
 @SpringBootTest
 public class ProductAttributeServiceTest {
@@ -128,7 +127,7 @@ public class ProductAttributeServiceTest {
 
         assertAll(
             () -> assertNotNull(productAttributeList),
-            () -> assertEquals(7, productAttributeList.size()),
+            () -> assertEquals(8, productAttributeList.size()),
             () -> assertEquals(1L, productAttributeList.get(0).getId()),
             () -> assertEquals(2L, productAttributeList.get(1).getId()),
             () -> assertEquals(3L, productAttributeList.get(2).getId()),
@@ -193,7 +192,7 @@ public class ProductAttributeServiceTest {
     @Test
     void testDeleteColorAttribute() {
         when(productAttributeRepository.findById(3L)).thenReturn(createProductAttribute003());
-        when(productAttributeRepository.findByValue("none")).thenReturn(createProductAttribute008());
+        when(productAttributeRepository.findByValue("none-color")).thenReturn(createProductAttribute008());
         when(productSkuRepository.findByColorAttributeId(3L)).thenReturn(createListOfProductSkuByColorAttributeId());
 
         doNothing().when(productAttributeRepository).deleteById(3L);
@@ -206,7 +205,7 @@ public class ProductAttributeServiceTest {
     @Test
     void testDeleteSizeAttribute() {
         when(productAttributeRepository.findById(4L)).thenReturn(createProductAttribute004());
-        when(productAttributeRepository.findByValue("none")).thenReturn(createProductAttribute007());
+        when(productAttributeRepository.findByValue("none-size")).thenReturn(createProductAttribute007());
         when(productSkuRepository.findBySizeAttributeId(4L)).thenReturn(createListOfProductSkuBySizeAttributeId());
         
         doNothing().when(productAttributeRepository).deleteById(4L);
