@@ -34,7 +34,7 @@ public class ProductSkuServiceImpl implements ProductSkuService {
 
     @Override
     @Transactional(readOnly = true)
-    public Iterable<ProductSku> findByProductId(Long id) {
+    public Optional<Iterable<ProductSku>> findByProductId(Long id) {
         return productSkuRepository.findByProductId(id);
     }
 
@@ -51,8 +51,18 @@ public class ProductSkuServiceImpl implements ProductSkuService {
     }
 
     @Override
+    public Optional<Iterable<ProductSku>> findBySizeAttributeId(Long sizeAttributeId) {
+        return productSkuRepository.findBySizeAttributeId(sizeAttributeId);
+    }
+
+    @Override
+    public Optional<Iterable<ProductSku>> findByColorAttributeId(Long colorAttributeId) {
+        return productSkuRepository.findByColorAttributeId(colorAttributeId);
+    }
+
+    @Override
     @Transactional(readOnly = true)
-    public Iterable<ProductSku> findByProductIdAndSizeAttributeId(
+    public Optional<Iterable<ProductSku>> findByProductIdAndSizeAttributeId(
             Long productId, 
             Long sizeAttributeId
         ) {
@@ -61,7 +71,7 @@ public class ProductSkuServiceImpl implements ProductSkuService {
 
     @Override
     @Transactional(readOnly = true)
-    public Iterable<ProductSku> findByProductIdAndColorAttributeId(
+    public Optional<Iterable<ProductSku>> findByProductIdAndColorAttributeId(
             Long productId, 
             Long colorAttributeId
         ) {

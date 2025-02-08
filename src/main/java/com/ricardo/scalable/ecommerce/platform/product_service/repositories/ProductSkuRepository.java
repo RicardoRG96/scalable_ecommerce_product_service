@@ -8,15 +8,19 @@ import com.ricardo.scalable.ecommerce.platform.product_service.entities.ProductS
 
 public interface ProductSkuRepository extends CrudRepository<ProductSku, Long> {
 
-    Iterable<ProductSku> findByProductId(Long id);
+    Optional<Iterable<ProductSku>> findByProductId(Long id);
 
     Optional<ProductSku> findBySku(String sku);
 
     Optional<ProductSku> findBySkuAndIsActive(String sku, Boolean isActive);
 
-    Iterable<ProductSku> findByProductIdAndSizeAttributeId(Long productId, Long sizeAttributeId);
+    Optional<Iterable<ProductSku>> findBySizeAttributeId(Long sizeAttributeId);
 
-    Iterable<ProductSku> findByProductIdAndColorAttributeId(Long productId, Long colorAttributeId);
+    Optional<Iterable<ProductSku>> findByColorAttributeId(Long colorAttributeId);
+
+    Optional<Iterable<ProductSku>> findByProductIdAndSizeAttributeId(Long productId, Long sizeAttributeId);
+
+    Optional<Iterable<ProductSku>> findByProductIdAndColorAttributeId(Long productId, Long colorAttributeId);
 
     Optional<ProductSku> 
         findByProductIdAndSizeAttributeIdAndColorAttributeId(

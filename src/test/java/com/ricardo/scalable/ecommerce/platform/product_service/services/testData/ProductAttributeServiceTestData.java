@@ -17,6 +17,7 @@ public class ProductAttributeServiceTestData {
         ProductAttribute productAttribute5 = createProductAttribute005().orElseThrow();
         ProductAttribute productAttribute6 = createProductAttribute006().orElseThrow();
         ProductAttribute productAttribute7 = createProductAttribute007().orElseThrow();
+        ProductAttribute productAttribute8 = createProductAttribute008().orElseThrow();
 
         return List.of(
             productAttribute1, 
@@ -25,7 +26,8 @@ public class ProductAttributeServiceTestData {
             productAttribute4, 
             productAttribute5,
             productAttribute6,
-            productAttribute7
+            productAttribute7,
+            productAttribute8
         );
     }
 
@@ -74,7 +76,14 @@ public class ProductAttributeServiceTestData {
     public static Optional<ProductAttribute> createProductAttribute007() {
         return Optional.of(
             new ProductAttribute(
-            7L, "size", "none", Timestamp.from(Instant.now()), Timestamp.from(Instant.now()))
+            7L, "size", "none-size", Timestamp.from(Instant.now()), Timestamp.from(Instant.now()))
+        );
+    }
+
+    public static Optional<ProductAttribute> createProductAttribute008() {
+        return Optional.of(
+            new ProductAttribute(
+            8L, "color", "none-color", Timestamp.from(Instant.now()), Timestamp.from(Instant.now()))
         );
     }
 
@@ -83,7 +92,8 @@ public class ProductAttributeServiceTestData {
             List.of(
                 createProductAttribute001().orElseThrow(),
                 createProductAttribute002().orElseThrow(),
-                createProductAttribute003().orElseThrow()
+                createProductAttribute003().orElseThrow(),
+                createProductAttribute008().orElseThrow()
             )
         );
     }

@@ -177,7 +177,7 @@ public class ProductAttributeControllerTest {
                         JsonNode json = objectMapper.readTree(res.getResponseBody());
                         assertAll(
                             () -> assertNotNull(json),
-                            () -> assertEquals(7, json.size()),
+                            () -> assertEquals(8, json.size()),
                             () -> assertTrue(json.isArray()),
                             () -> assertEquals(1L, json.get(0).path("id").asLong()),
                             () -> assertEquals(2L, json.get(1).path("id").asLong()),
@@ -219,7 +219,7 @@ public class ProductAttributeControllerTest {
                         JsonNode json = objectMapper.readTree(res.getResponseBody());
                         assertAll(
                             () -> assertNotNull(json),
-                            () -> assertEquals(8L, json.path("id").asLong()),
+                            () -> assertEquals(9L, json.path("id").asLong()),
                             () -> assertEquals("color", json.path("type").asText()),
                             () -> assertEquals("green", json.path("value").asText())
                         );
@@ -297,6 +297,53 @@ public class ProductAttributeControllerTest {
                 .bodyValue(requestBody)
                 .exchange()
                 .expectStatus().isBadRequest();
+    }
+
+    @Test
+    @Order(14)
+    void testDeleteProductAttribute() {
+        client.delete()
+                .uri("/product-attribute/6")
+                .exchange()
+                .expectStatus().isNoContent();
+
+        client.get()
+                .uri("/product-attribute")
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody()
+                .consumeWith(res -> {
+                    try {
+                        JsonNode json = objectMapper.readTree(res.getResponseBody());
+                        assertAll(
+                            () -> assertNotNull(json),
+                            () -> assertEquals(8, json.size()),
+                            () -> assertTrue(json.isArray())
+                        );
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                });
+    }
+
+    @Test
+    @Order(15)
+    void testGetDeletedProductAttribute() {
+        client.get()
+                .uri("/product-attribute/6")
+                .exchange()
+                .expectStatus().isNotFound();
+    }
+
+    @Test
+    @Order(16)
+    void testDeleteProductAttributeNotFound() {
+        String notExistingId = "100";
+
+        client.delete()
+                .uri("/product-attribute/" + notExistingId)
+                .exchange()
+                .expectStatus().isNotFound();
     }
 
     private ProductAttribute createProductAttribute002() {

@@ -8,7 +8,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ricardo.scalable.ecommerce.platform.product_service.entities.ProductAttribute;
+import com.ricardo.scalable.ecommerce.platform.product_service.entities.ProductSku;
 import com.ricardo.scalable.ecommerce.platform.product_service.repositories.ProductAttributeRepository;
+import com.ricardo.scalable.ecommerce.platform.product_service.repositories.ProductSkuRepository;
 import com.ricardo.scalable.ecommerce.platform.product_service.repositories.dto.ProductAttributeCreationDto;
 
 @Service
@@ -16,6 +18,9 @@ public class ProductAttributeServiceImpl implements ProductAttributeService {
 
     @Autowired
     private ProductAttributeRepository productAttributeRepository;
+
+    @Autowired
+    private ProductSkuRepository productSkuRepository;
 
     @Override
     @Transactional(readOnly = true)
@@ -68,6 +73,27 @@ public class ProductAttributeServiceImpl implements ProductAttributeService {
     @Override
     @Transactional
     public void delete(Long id) {
+        ProductAttribute productAttributeToDelete = productAttributeRepository.findById(id).orElseThrow();
+        boolean isColorType = productAttributeToDelete.getType().equals("color");
+
+        if (isColorType) {
+            ProductAttribute noneColor = productAttributeRepository.findByValue("none-color").orElseThrow();
+            List<ProductSku> productSkusWithColorToDelete = 
+                (List<ProductSku>) productSkuRepository.findByColorAttributeId(id).orElseThrow();
+            productSkusWithColorToDelete.forEach(productSku -> {
+                productSku.setColorAttribute(noneColor);
+                productSkuRepository.save(productSku);
+            });
+        } else {
+            ProductAttribute noneSize = productAttributeRepository.findByValue("none-size").orElseThrow();
+            List<ProductSku> productSkusWithSizeToDelete = 
+                (List<ProductSku>) productSkuRepository.findBySizeAttributeId(id).orElseThrow();
+            productSkusWithSizeToDelete.forEach(productSku -> {
+                productSku.setSizeAttribute(noneSize);
+                productSkuRepository.save(productSku);
+            });
+        }
+
         productAttributeRepository.deleteById(id);
     }
 

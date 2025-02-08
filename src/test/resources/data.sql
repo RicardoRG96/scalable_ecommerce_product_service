@@ -108,7 +108,10 @@ INSERT INTO product_attributes (type, value)
     VALUES ('size', 'L');
 
 INSERT INTO product_attributes (type, value)
-    VALUES ('size', 'none');
+    VALUES ('color', 'none-color');
+
+INSERT INTO product_attributes (type, value)
+    VALUES ('size', 'none-size');
 
 
 -- PRODUCTS_SKU

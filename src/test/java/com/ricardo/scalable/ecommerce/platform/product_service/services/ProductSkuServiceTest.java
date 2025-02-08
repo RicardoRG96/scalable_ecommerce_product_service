@@ -65,8 +65,8 @@ public class ProductSkuServiceTest {
         when(productSkuRepository.findByProductId(1L)).thenReturn(createListOfProductSkuByProductId1());
         when(productSkuRepository.findByProductId(4L)).thenReturn(createListOfProductSkuByProductId4());
 
-        List<ProductSku> productsSkuWithProductId1 = (List<ProductSku>) productSkuService.findByProductId(1L);
-        List<ProductSku> productsSkuWithProductId4 = (List<ProductSku>) productSkuService.findByProductId(4L);
+        List<ProductSku> productsSkuWithProductId1 = (List<ProductSku>) productSkuService.findByProductId(1L).orElseThrow();
+        List<ProductSku> productsSkuWithProductId4 = (List<ProductSku>) productSkuService.findByProductId(4L).orElseThrow();
 
         assertAll(
             () -> assertEquals(2, productsSkuWithProductId4.size()),
@@ -129,7 +129,7 @@ public class ProductSkuServiceTest {
             .thenReturn(createListOfProductSkuByProductIdAndSizeAttributeId());
 
         List<ProductSku> searchedProductsSku = 
-            (List<ProductSku>) productSkuService.findByProductIdAndSizeAttributeId(4L, 4L);
+            (List<ProductSku>) productSkuService.findByProductIdAndSizeAttributeId(4L, 4L).orElseThrow();
         
         assertAll(
             () -> assertNotNull(searchedProductsSku),
@@ -150,7 +150,7 @@ public class ProductSkuServiceTest {
             .thenReturn(createListOfProductSkuByProductIdAndColorAttributeId());
 
         List<ProductSku> searchedProductsSku = 
-            (List<ProductSku>) productSkuService.findByProductIdAndColorAttributeId(5L, 2L);
+            (List<ProductSku>) productSkuService.findByProductIdAndColorAttributeId(5L, 2L).orElseThrow();
 
         assertAll(
             () -> assertNotNull(searchedProductsSku),
