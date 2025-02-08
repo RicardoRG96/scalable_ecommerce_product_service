@@ -189,57 +189,57 @@ public class ProductSkuServiceTestData {
         return Optional.of(productSku);
     }
 
-    public static Optional<Iterable<ProductSku>> createListOfProductSkuByProductId1() {
+    public static Optional<List<ProductSku>> createListOfProductSkuByProductId1() {
         ProductSku productSku1 = createProductSku001().orElseThrow();
 
         return Optional.of(List.of(productSku1));
     }
 
-    public static Optional<Iterable<ProductSku>> createListOfProductSkuByProductId2() {
+    public static Optional<List<ProductSku>> createListOfProductSkuByProductId2() {
         ProductSku productSku2 = createProductSku002().orElseThrow();
 
         return Optional.of(List.of(productSku2));
     }
 
-    public static Optional<Iterable<ProductSku>> createListOfProductSkuByProductId3() {
+    public static Optional<List<ProductSku>> createListOfProductSkuByProductId3() {
         ProductSku productSku3 = createProductSku003().orElseThrow();
 
         return Optional.of(List.of(productSku3));
     }
 
-    public static Optional<Iterable<ProductSku>> createListOfProductSkuByProductId4() {
+    public static Optional<List<ProductSku>> createListOfProductSkuByProductId4() {
         ProductSku productSku4 = createProductSku004().orElseThrow();
         ProductSku productSku6 = createProductSku006().orElseThrow();
 
         return Optional.of(List.of(productSku4, productSku6));
     }
 
-    public static Optional<Iterable<ProductSku>> createListOfProductSkuByProductId5() {
+    public static Optional<List<ProductSku>> createListOfProductSkuByProductId5() {
         ProductSku productSku5 = createProductSku005().orElseThrow();
         ProductSku productSku7 = createProductSku007().orElseThrow();
 
         return Optional.of(List.of(productSku5, productSku7));
     }
 
-    public static Optional<Iterable<ProductSku>> createListOfProductSkuByProductIdAndSizeAttributeId() {
+    public static Optional<List<ProductSku>> createListOfProductSkuByProductIdAndSizeAttributeId() {
         ProductSku productSku4 = createProductSku004().orElseThrow();
         ProductSku productSku6 = createProductSku006().orElseThrow();
         return Optional.of(List.of(productSku4, productSku6));
     }
 
-    public static Optional<Iterable<ProductSku>> createListOfProductSkuByProductIdAndColorAttributeId() {
+    public static Optional<List<ProductSku>> createListOfProductSkuByProductIdAndColorAttributeId() {
         ProductSku productSku5 = createProductSku005().orElseThrow();
         ProductSku productSku7 = createProductSku007().orElseThrow();
         return Optional.of(List.of(productSku5, productSku7));
     }
 
-    public static Optional<Iterable<ProductSku>> createListOfProductSkuBySizeAttributeId() {
+    public static Optional<List<ProductSku>> createListOfProductSkuBySizeAttributeId() {
         ProductSku productSku4 = createProductSku004().orElseThrow();
         ProductSku productSku6 = createProductSku006().orElseThrow();
         return Optional.of(List.of(productSku4, productSku6));
     }
 
-    public static Optional<Iterable<ProductSku>> createListOfProductSkuByColorAttributeId() {
+    public static Optional<List<ProductSku>> createListOfProductSkuByColorAttributeId() {
         ProductSku productSku1 = createProductSku001().orElseThrow();
         ProductSku productSku4 = createProductSku004().orElseThrow();
         return Optional.of(List.of(productSku1, productSku4));

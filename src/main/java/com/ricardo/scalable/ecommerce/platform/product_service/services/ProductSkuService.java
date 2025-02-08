@@ -1,5 +1,6 @@
 package com.ricardo.scalable.ecommerce.platform.product_service.services;
 
+import java.util.List;
 import java.util.Optional;
 
 import com.ricardo.scalable.ecommerce.platform.product_service.entities.ProductSku;
@@ -9,19 +10,19 @@ public interface ProductSkuService {
 
     Optional<ProductSku> findById(Long id);
 
-    Optional<Iterable<ProductSku>> findByProductId(Long id);
+    Optional<List<ProductSku>> findByProductId(Long id);
 
     Optional<ProductSku> findBySku(String sku);
 
     Optional<ProductSku> findBySkuAndIsActive(String sku, Boolean isActive);
 
-    Optional<Iterable<ProductSku>> findBySizeAttributeId(Long sizeAttributeId);
+    Optional<List<ProductSku>> findBySizeAttributeId(Long sizeAttributeId);
 
-    Optional<Iterable<ProductSku>> findByColorAttributeId(Long colorAttributeId);
+    Optional<List<ProductSku>> findByColorAttributeId(Long colorAttributeId);
 
-    Optional<Iterable<ProductSku>> findByProductIdAndSizeAttributeId(Long productId, Long sizeAttributeId);
+    Optional<List<ProductSku>> findByProductIdAndSizeAttributeId(Long productId, Long sizeAttributeId);
 
-    Optional<Iterable<ProductSku>> findByProductIdAndColorAttributeId(Long productId, Long colorAttributeId);
+    Optional<List<ProductSku>> findByProductIdAndColorAttributeId(Long productId, Long colorAttributeId);
 
     Optional<ProductSku> findByProductIdAndSizeAttributeIdAndColorAttributeId(
         Long productId, Long sizeAttributeId, Long colorAttributeId);

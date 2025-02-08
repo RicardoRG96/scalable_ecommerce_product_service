@@ -1,5 +1,6 @@
 package com.ricardo.scalable.ecommerce.platform.product_service.services;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +35,7 @@ public class ProductSkuServiceImpl implements ProductSkuService {
 
     @Override
     @Transactional(readOnly = true)
-    public Optional<Iterable<ProductSku>> findByProductId(Long id) {
+    public Optional<List<ProductSku>> findByProductId(Long id) {
         return productSkuRepository.findByProductId(id);
     }
 
@@ -51,18 +52,18 @@ public class ProductSkuServiceImpl implements ProductSkuService {
     }
 
     @Override
-    public Optional<Iterable<ProductSku>> findBySizeAttributeId(Long sizeAttributeId) {
+    public Optional<List<ProductSku>> findBySizeAttributeId(Long sizeAttributeId) {
         return productSkuRepository.findBySizeAttributeId(sizeAttributeId);
     }
 
     @Override
-    public Optional<Iterable<ProductSku>> findByColorAttributeId(Long colorAttributeId) {
+    public Optional<List<ProductSku>> findByColorAttributeId(Long colorAttributeId) {
         return productSkuRepository.findByColorAttributeId(colorAttributeId);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public Optional<Iterable<ProductSku>> findByProductIdAndSizeAttributeId(
+    public Optional<List<ProductSku>> findByProductIdAndSizeAttributeId(
             Long productId, 
             Long sizeAttributeId
         ) {
@@ -71,7 +72,7 @@ public class ProductSkuServiceImpl implements ProductSkuService {
 
     @Override
     @Transactional(readOnly = true)
-    public Optional<Iterable<ProductSku>> findByProductIdAndColorAttributeId(
+    public Optional<List<ProductSku>> findByProductIdAndColorAttributeId(
             Long productId, 
             Long colorAttributeId
         ) {

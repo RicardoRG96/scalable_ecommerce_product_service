@@ -1,6 +1,7 @@
 package com.ricardo.scalable.ecommerce.platform.product_service.controllers;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -38,13 +39,13 @@ public class ProductSkuController {
     }
 
     @GetMapping("/product-sku/product/{productId}")
-    public ResponseEntity<Iterable<ProductSku>> getByProductId(@PathVariable Long productId) {
-        Optional<Iterable<ProductSku>>productsSku = productSkuService.findByProductId(productId);
-        boolean isPresent = productsSku.isPresent();
-        boolean isEmpty = productsSku.orElseThrow().iterator().hasNext();
+    public ResponseEntity<List<ProductSku>> getByProductId(@PathVariable Long productId) {
+        Optional<List<ProductSku>> productSkus =  productSkuService.findByProductId(productId);
+        boolean isPresent = productSkus.isPresent();
+        boolean isEmpty = productSkus.orElseThrow().isEmpty();
 
         if (isPresent && !isEmpty) {
-            return ResponseEntity.ok(productsSku.orElseThrow());
+            return ResponseEntity.ok(productSkus.orElseThrow());
         }
 
         return ResponseEntity.notFound().build();
@@ -69,60 +70,60 @@ public class ProductSkuController {
     }
 
     @GetMapping("/product-sku/sizeAttributeId/{sizeAttributeId}")
-    public ResponseEntity<Iterable<ProductSku>> getBySizeAttributeId(@PathVariable Long sizeAttributeId) {
-        Optional<Iterable<ProductSku>> productsSkuOptional = productSkuService.findBySizeAttributeId(sizeAttributeId);
-        boolean isPresent = productsSkuOptional.isPresent();
-        boolean isEmpty = productsSkuOptional.orElseThrow().iterator().hasNext();
+    public ResponseEntity<List<ProductSku>> getBySizeAttributeId(@PathVariable Long sizeAttributeId) {
+        Optional<List<ProductSku>> productSkus = productSkuService.findBySizeAttributeId(sizeAttributeId);
+        boolean isPresent = productSkus.isPresent();
+        boolean isEmpty = productSkus.orElseThrow().isEmpty();
 
         if (isPresent && !isEmpty) {
-            return ResponseEntity.ok(productsSkuOptional.orElseThrow());
+            return ResponseEntity.ok(productSkus.orElseThrow());
         }
         return ResponseEntity.notFound().build();
     }
 
     @GetMapping("/product-sku/colorAttributeId/{colorAttributeId}")
-    public ResponseEntity<Iterable<ProductSku>> getByColorAttributeId(@PathVariable Long colorAttributeId) {
-        Optional<Iterable<ProductSku>> productsSku = productSkuService.findByColorAttributeId(colorAttributeId);
-        boolean isPresent = productsSku.isPresent();
-        boolean isEmpty = productsSku.orElseThrow().iterator().hasNext();
+    public ResponseEntity<List<ProductSku>> getByColorAttributeId(@PathVariable Long colorAttributeId) {
+        Optional<List<ProductSku>> productSkus = productSkuService.findByColorAttributeId(colorAttributeId);
+        boolean isPresent = productSkus.isPresent();
+        boolean isEmpty = productSkus.orElseThrow().isEmpty();
 
         if (isPresent && !isEmpty) {
-            return ResponseEntity.ok(productsSku.orElseThrow());
+            return ResponseEntity.ok(productSkus.orElseThrow());
         }
         return ResponseEntity.notFound().build();
     }
 
     @GetMapping("/product-sku/productId/{productId}/sizeAttributeId/{sizeAttributeId}")
-    public ResponseEntity<Iterable<ProductSku>> getByProductIdAndSizeAttributeId(
+    public ResponseEntity<List<ProductSku>> getByProductIdAndSizeAttributeId(
             @PathVariable Long productId, 
             @PathVariable Long sizeAttributeId
         ) {
-        Optional<Iterable<ProductSku>> productsSku = 
+        Optional<List<ProductSku>> productSkus = 
             productSkuService.findByProductIdAndSizeAttributeId(productId, sizeAttributeId);
 
-        boolean isPresent = productsSku.isPresent();
-        boolean isEmpty = productsSku.orElseThrow().iterator().hasNext();
+        boolean isPresent = productSkus.isPresent();
+        boolean isEmpty = productSkus.orElseThrow().isEmpty();
 
         if (isPresent && !isEmpty) {
-            return ResponseEntity.ok(productsSku.orElseThrow());
+            return ResponseEntity.ok(productSkus.orElseThrow());
         }
 
         return ResponseEntity.notFound().build();
     }
 
     @GetMapping("/product-sku/productId/{productId}/colorAttributeId/{colorAttributeId}")
-    public ResponseEntity<Iterable<ProductSku>> getByProductIdAndColorAttributeId(
+    public ResponseEntity<List<ProductSku>> getByProductIdAndColorAttributeId(
             @PathVariable Long productId, 
             @PathVariable Long colorAttributeId
         ) {
-        Optional<Iterable<ProductSku>> productsSku = 
+        Optional<List<ProductSku>> productSkus = 
             productSkuService.findByProductIdAndColorAttributeId(productId, colorAttributeId);
 
-        boolean isPresent = productsSku.isPresent();
-        boolean isEmpty = productsSku.orElseThrow().iterator().hasNext();
+        boolean isPresent = productSkus.isPresent();
+        boolean isEmpty = productSkus.orElseThrow().isEmpty();
 
         if (isPresent && !isEmpty) {
-            return ResponseEntity.ok(productsSku.orElseThrow());
+            return ResponseEntity.ok(productSkus.orElseThrow());
         }
 
         return ResponseEntity.notFound().build();

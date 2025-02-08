@@ -66,6 +66,57 @@ public class ProductSkuControllerTest {
     }
 
     @Test
+    @Order(2)
+    void testGetByProductSkuIdNotFound() {
+        String notExistingId = "100";
+
+        client.get()
+                .uri("/product-sku/" + notExistingId)
+                .exchange()
+                .expectStatus().isNotFound();
+    }
+
+    @Test
+    @Order(3)
+    void testGetByProductId() {
+        client.get()
+                .uri("/product-sku/product/5")
+                .exchange()
+                .expectStatus().isOk()
+                .expectHeader().contentType(MediaType.APPLICATION_JSON)
+                .expectBody()
+                .consumeWith(res -> {
+                    try {
+                        JsonNode json = objectMapper.readTree(res.getResponseBody());
+                        assertAll(
+                            () -> assertNotNull(json),
+                            () -> assertTrue(json.isArray()),
+                            () -> assertEquals(3, json.size()),
+                            () -> assertEquals(5L, json.get(0).get("product").path("id").asLong()),
+                            () -> assertEquals("Polera Puma", json.get(0).get("product").path("name").asText()),
+                            () -> assertEquals("S", json.get(0).get("sizeAttribute").path("value").asText()),
+                            () -> assertEquals("red", json.get(0).get("colorAttribute").path("value").asText()),
+                            () -> assertEquals("M", json.get(1).get("sizeAttribute").path("value").asText()),
+                            () -> assertEquals("blue", json.get(1).get("colorAttribute").path("value").asText())
+                        );
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                });
+    }
+
+    @Test
+    @Order(4)
+    void testGetByProductIdNotFound() {
+        String notExistingId = "100";
+
+        client.get()
+                .uri("/product-sku/product/" + notExistingId)
+                .exchange()
+                .expectStatus().isNotFound();
+    }
+
+    @Test
     void testProfile() {
         String[] activeProfiles = env.getActiveProfiles();
         assertArrayEquals(new String[] { "test" }, activeProfiles);
