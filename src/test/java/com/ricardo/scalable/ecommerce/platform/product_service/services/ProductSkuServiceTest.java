@@ -55,8 +55,8 @@ public class ProductSkuServiceTest {
             () -> assertEquals("SKU002", productSku2.orElseThrow().getSku()),
             () -> assertEquals("negro", productSku1.orElseThrow().getColorAttribute().getValue()),
             () -> assertEquals("azul", productSku2.orElseThrow().getColorAttribute().getValue()),
-            () -> assertEquals("none", productSku1.orElseThrow().getSizeAttribute().getValue()),
-            () -> assertEquals("none", productSku2.orElseThrow().getSizeAttribute().getValue())
+            () -> assertEquals("none-size", productSku1.orElseThrow().getSizeAttribute().getValue()),
+            () -> assertEquals("none-size", productSku2.orElseThrow().getSizeAttribute().getValue())
         );
     }
 
@@ -82,7 +82,7 @@ public class ProductSkuServiceTest {
             () -> assertEquals(1, productsSkuWithProductId1.size()),
             () -> assertEquals("SKU001", productsSkuWithProductId1.get(0).getSku()),
             () -> assertEquals("negro", productsSkuWithProductId1.get(0).getColorAttribute().getValue()),
-            () -> assertEquals("none", productsSkuWithProductId1.get(0).getSizeAttribute().getValue())
+            () -> assertEquals("none-size", productsSkuWithProductId1.get(0).getSizeAttribute().getValue())
         );
     }
 
@@ -120,6 +120,46 @@ public class ProductSkuServiceTest {
         assertAll(
             () -> assertFalse(searchedProductSkuInactive.isPresent()),
             () -> assertEquals(Optional.empty(), searchedProductSkuInactive)
+        );
+    }
+
+    @Test
+    void testFindBySizeAttributeId() {
+        when(productSkuRepository.findBySizeAttributeId(4L)).thenReturn(createListOfProductSkuBySizeAttributeId());
+
+        List<ProductSku> searchedProductsSku = 
+            (List<ProductSku>) productSkuService.findBySizeAttributeId(4L).orElseThrow();
+
+        assertAll(
+            () -> assertNotNull(searchedProductsSku),
+            () -> assertEquals(4L, searchedProductsSku.get(0).getId()),
+            () -> assertEquals(6L, searchedProductsSku.get(1).getId()),
+            () -> assertEquals("SKU004", searchedProductsSku.get(0).getSku()),
+            () -> assertEquals("SKU006", searchedProductsSku.get(1).getSku()),
+            () -> assertEquals("negro", searchedProductsSku.get(0).getColorAttribute().getValue()),
+            () -> assertEquals("rojo", searchedProductsSku.get(1).getColorAttribute().getValue()),
+            () -> assertEquals("S", searchedProductsSku.get(0).getSizeAttribute().getValue()),
+            () -> assertEquals("S", searchedProductsSku.get(1).getSizeAttribute().getValue())
+        );
+    }
+
+    @Test
+    void testFindByColorAttributeId() {
+        when(productSkuRepository.findByColorAttributeId(3L)).thenReturn(createListOfProductSkuByColorAttributeId());
+
+        List<ProductSku> searchedProductsSku = 
+            (List<ProductSku>) productSkuService.findByColorAttributeId(3L).orElseThrow();
+
+        assertAll(
+            () -> assertNotNull(searchedProductsSku),
+            () -> assertEquals(1L, searchedProductsSku.get(0).getId()),
+            () -> assertEquals(4L, searchedProductsSku.get(1).getId()),
+            () -> assertEquals("SKU001", searchedProductsSku.get(0).getSku()),
+            () -> assertEquals("SKU004", searchedProductsSku.get(1).getSku()),
+            () -> assertEquals("negro", searchedProductsSku.get(0).getColorAttribute().getValue()),
+            () -> assertEquals("negro", searchedProductsSku.get(1).getColorAttribute().getValue()),
+            () -> assertEquals("none-size", searchedProductsSku.get(0).getSizeAttribute().getValue()),
+            () -> assertEquals("S", searchedProductsSku.get(1).getSizeAttribute().getValue())
         );
     }
 
@@ -178,7 +218,7 @@ public class ProductSkuServiceTest {
             () -> assertEquals(1L, searchedProductsSku.orElseThrow().getId()),
             () -> assertEquals(1L, searchedProductsSku.orElseThrow().getProduct().getId()),
             () -> assertEquals("SKU001", searchedProductsSku.orElseThrow().getSku()),
-            () -> assertEquals("none", searchedProductsSku.orElseThrow().getSizeAttribute().getValue()),
+            () -> assertEquals("none-size", searchedProductsSku.orElseThrow().getSizeAttribute().getValue()),
             () -> assertEquals("negro", searchedProductsSku.orElseThrow().getColorAttribute().getValue())
         );
     }
@@ -201,9 +241,9 @@ public class ProductSkuServiceTest {
             () -> assertEquals("SKU001", productsSku.get(0).getSku()),
             () -> assertEquals("SKU002", productsSku.get(1).getSku()),
             () -> assertEquals("SKU003", productsSku.get(2).getSku()),
-            () -> assertEquals("none", productsSku.get(0).getSizeAttribute().getValue()),
-            () -> assertEquals("none", productsSku.get(1).getSizeAttribute().getValue()),
-            () -> assertEquals("none", productsSku.get(2).getSizeAttribute().getValue()),
+            () -> assertEquals("none-size", productsSku.get(0).getSizeAttribute().getValue()),
+            () -> assertEquals("none-size", productsSku.get(1).getSizeAttribute().getValue()),
+            () -> assertEquals("none-size", productsSku.get(2).getSizeAttribute().getValue()),
             () -> assertEquals("negro", productsSku.get(0).getColorAttribute().getValue()),
             () -> assertEquals("azul", productsSku.get(1).getColorAttribute().getValue()),
             () -> assertEquals("rojo", productsSku.get(2).getColorAttribute().getValue())

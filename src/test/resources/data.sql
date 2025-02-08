@@ -117,13 +117,13 @@ INSERT INTO product_attributes (type, value)
 -- PRODUCTS_SKU
 
 INSERT INTO product_skus (product_id, size_attribute_id, color_attribute_id, sku, price, stock, is_active, is_featured, is_on_sale)
-    VALUES (1, 7, 3, 'SKU2210', 1500.99, 540, TRUE, TRUE, TRUE);
+    VALUES (1, 8, 3, 'SKU2210', 1500.99, 540, TRUE, TRUE, TRUE);
 
 INSERT INTO product_skus (product_id, size_attribute_id, color_attribute_id, sku, price, stock, is_active, is_featured, is_on_sale)
-    VALUES (2, 7, 3, 'SKU2501', 999.99, 200, TRUE, FALSE, TRUE);
+    VALUES (2, 8, 3, 'SKU2501', 999.99, 200, TRUE, FALSE, TRUE);
 
 INSERT INTO product_skus (product_id, size_attribute_id, color_attribute_id, sku, price, stock, is_active, is_featured, is_on_sale)
-    VALUES (3, 7, 2, 'SKU9820', 29.99, 958, TRUE, TRUE, TRUE);
+    VALUES (3, 8, 2, 'SKU9820', 29.99, 958, TRUE, TRUE, TRUE);
 
 INSERT INTO product_skus (product_id, size_attribute_id, color_attribute_id, sku, price, stock, is_active, is_featured, is_on_sale)
     VALUES (4, 4, 1, 'SKU8562', 29.99, 100, TRUE, FALSE, FALSE);
