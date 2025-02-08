@@ -159,6 +159,44 @@ public class ProductAttributeControllerTest {
     }
 
     @Test
+    @Order(8)
+    void testGetAllProductAttributes() {
+        client.get()
+                .uri("/product-attribute")
+                .exchange()
+                .expectStatus().isOk()
+                .expectHeader().contentType(MediaType.APPLICATION_JSON)
+                .expectBody()
+                .consumeWith(res -> {
+                    try {
+                        JsonNode json = objectMapper.readTree(res.getResponseBody());
+                        assertAll(
+                            () -> assertNotNull(json),
+                            () -> assertEquals(7, json.size()),
+                            () -> assertTrue(json.isArray()),
+                            () -> assertEquals(1L, json.get(0).path("id").asLong()),
+                            () -> assertEquals(2L, json.get(1).path("id").asLong()),
+                            () -> assertEquals(3L, json.get(2).path("id").asLong()),
+                            () -> assertEquals("color", json.get(0).path("type").asText()),
+                            () -> assertEquals("color", json.get(1).path("type").asText()),
+                            () -> assertEquals("color", json.get(2).path("type").asText()),
+                            () -> assertEquals("red", json.get(0).path("value").asText()),
+                            () -> assertEquals("blue", json.get(1).path("value").asText()),
+                            () -> assertEquals("black", json.get(2).path("value").asText()),
+                            () -> assertEquals("size", json.get(3).path("type").asText()),
+                            () -> assertEquals("size", json.get(4).path("type").asText()),
+                            () -> assertEquals("size", json.get(5).path("type").asText()),
+                            () -> assertEquals("S", json.get(3).path("value").asText()),
+                            () -> assertEquals("M", json.get(4).path("value").asText()),
+                            () -> assertEquals("L", json.get(5).path("value").asText())
+                        );
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                });
+    }
+
+    @Test
     void testProfile() {
         assertArrayEquals(new String[]{"test"}, env.getActiveProfiles());
     }
