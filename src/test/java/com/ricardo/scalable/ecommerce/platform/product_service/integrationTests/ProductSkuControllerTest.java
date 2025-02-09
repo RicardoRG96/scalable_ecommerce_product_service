@@ -91,7 +91,7 @@ public class ProductSkuControllerTest {
                         assertAll(
                             () -> assertNotNull(json),
                             () -> assertTrue(json.isArray()),
-                            () -> assertEquals(3, json.size()),
+                            () -> assertEquals(5, json.size()),
                             () -> assertEquals(5L, json.get(0).get("product").path("id").asLong()),
                             () -> assertEquals("Polera Puma", json.get(0).get("product").path("name").asText()),
                             () -> assertEquals("S", json.get(0).get("sizeAttribute").path("value").asText()),
@@ -258,7 +258,7 @@ public class ProductSkuControllerTest {
                         assertAll(
                             () -> assertNotNull(json),
                             () -> assertTrue(json.isArray()),
-                            () -> assertEquals(4, json.size()),
+                            () -> assertEquals(5, json.size()),
                             () -> assertEquals(1L, json.get(0).get("product").path("id").asLong()),
                             () -> assertEquals("iPhone 15", json.get(0).get("product").path("name").asText()),
                             () -> assertEquals("none-size", json.get(0).get("sizeAttribute").path("value").asText()),
@@ -295,6 +295,62 @@ public class ProductSkuControllerTest {
                 .uri("/product-sku/colorAttributeId/" + notExistingId)
                 .exchange()
                 .expectStatus().isNotFound();
+    }
+
+    @Test
+    @Order(13)
+    void testGetByProductIdAndSizeAttributeId() {
+        client.get()
+                .uri("/product-sku/productId/5/sizeAttributeId/6")
+                .exchange()
+                .expectStatus().isOk()
+                .expectHeader().contentType(MediaType.APPLICATION_JSON)
+                .expectBody()
+                .consumeWith(res -> {
+                    try {
+                        JsonNode json = objectMapper.readTree(res.getResponseBody());
+                        assertAll(
+                            () -> assertNotNull(json),
+                            () -> assertTrue(json.isArray()),
+                            () -> assertEquals(2, json.size()),
+                            () -> assertEquals(5L, json.get(0).get("product").path("id").asLong()),
+                            () -> assertEquals("Polera Puma", json.get(0).get("product").path("name").asText()),
+                            () -> assertEquals("L", json.get(0).get("sizeAttribute").path("value").asText()),
+                            () -> assertEquals("black", json.get(0).get("colorAttribute").path("value").asText()),
+                            () -> assertEquals(19.99, json.get(0).get("price").asDouble()),
+                            () -> assertEquals(5L, json.get(1).get("product").path("id").asLong()),
+                            () -> assertEquals("Polera Puma", json.get(1).get("product").path("name").asText()),
+                            () -> assertEquals("L", json.get(1).get("sizeAttribute").path("value").asText()),
+                            () -> assertEquals("red", json.get(1).get("colorAttribute").path("value").asText()),
+                            () -> assertEquals(19.99, json.get(1).get("price").asDouble())
+                        );
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                });
+    }
+
+    @Test
+    @Order(14)
+    void testGetByProductIdAndSizeAttributeIdNotFound() {
+        String notExistingSizeId = "100";
+
+        client.get()
+                .uri("/product-sku/productId/5/sizeAttributeId/" + notExistingSizeId)
+                .exchange()
+                .expectStatus().isNotFound();
+
+        String notExistingProductId = "100";
+
+        client.get()
+                .uri("/product-sku/productId/" + notExistingProductId + "/sizeAttributeId/6")
+                .exchange()
+                .expectStatus().isNotFound();
+
+        client.get()
+                .uri("/product-sku/productId/" + notExistingProductId + "/sizeAttributeId/" + notExistingSizeId)
+                .exchange()
+                .expectStatus().isNotFound(); 
     }
 
     @Test
