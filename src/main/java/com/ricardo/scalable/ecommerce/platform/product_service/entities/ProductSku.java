@@ -12,6 +12,10 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "product_skus")
@@ -23,20 +27,28 @@ public class ProductSku {
 
     @JoinColumn(name = "product_id", unique = false)
     @ManyToOne
+    @NotNull
     private Product product;
 
     @JoinColumn(name = "size_attribute_id", unique = false)
     @ManyToOne
+    @NotNull
     private ProductAttribute sizeAttribute;
 
     @JoinColumn(name = "color_attribute_id", unique = false)
     @ManyToOne
+    @NotNull
     private ProductAttribute colorAttribute;
 
+    @NotBlank
     private String sku;
 
+    @DecimalMin("0.00")
+    @NotNull
     private Double price;
 
+    @Min(0)
+    @NotNull
     private Integer stock;
 
     @Column(name = "is_active")
