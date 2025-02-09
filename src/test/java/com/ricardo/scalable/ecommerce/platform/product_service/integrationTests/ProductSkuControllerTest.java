@@ -17,10 +17,6 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ricardo.scalable.ecommerce.platform.product_service.entities.Brand;
-import com.ricardo.scalable.ecommerce.platform.product_service.entities.Category;
-import com.ricardo.scalable.ecommerce.platform.product_service.entities.Product;
-import com.ricardo.scalable.ecommerce.platform.product_service.entities.ProductAttribute;
 import com.ricardo.scalable.ecommerce.platform.product_service.entities.ProductSku;
 import com.ricardo.scalable.ecommerce.platform.product_service.repositories.dto.ProductSkuCreationDto;
 
@@ -650,6 +646,42 @@ public class ProductSkuControllerTest {
                 .uri("/product-sku/" + notExistingId)
                 .contentType(MediaType.APPLICATION_JSON)
                 .bodyValue(requestBody)
+                .exchange()
+                .expectStatus().isNotFound();
+    }
+
+    @Test
+    @Order(26)
+    void testDeleteProductSku() {
+        client.delete()
+                .uri("/product-sku/11")
+                .exchange()
+                .expectStatus().isNoContent();
+
+        client.get()
+                .uri("/product-sku")
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody()
+                .consumeWith(res -> {
+                    try {
+                        JsonNode json = objectMapper.readTree(res.getResponseBody());
+                        assertAll(
+                            () -> assertNotNull(json),
+                            () -> assertTrue(json.isArray()),
+                            () -> assertEquals(11, json.size())
+                        );
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                });
+    }
+
+    @Test
+    @Order(27)
+    void testGetDeletedProductSkus() {
+        client.get()
+                .uri("/product-sku/11")
                 .exchange()
                 .expectStatus().isNotFound();
     }
