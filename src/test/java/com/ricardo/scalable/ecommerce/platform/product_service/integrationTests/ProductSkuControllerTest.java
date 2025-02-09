@@ -354,6 +354,62 @@ public class ProductSkuControllerTest {
     }
 
     @Test
+    @Order(15)
+    void testGetByProductIdAndColorAttributeId() {
+        client.get()
+                .uri("/product-sku/productId/5/colorAttributeId/3")
+                .exchange()
+                .expectStatus().isOk()
+                .expectHeader().contentType(MediaType.APPLICATION_JSON)
+                .expectBody()
+                .consumeWith(res -> {
+                    try {
+                        JsonNode json = objectMapper.readTree(res.getResponseBody());
+                        assertAll(
+                            () -> assertNotNull(json),
+                            () -> assertTrue(json.isArray()),
+                            () -> assertEquals(2, json.size()),
+                            () -> assertEquals(5L, json.get(0).get("product").path("id").asLong()),
+                            () -> assertEquals("Polera Puma", json.get(0).get("product").path("name").asText()),
+                            () -> assertEquals("L", json.get(0).get("sizeAttribute").path("value").asText()),
+                            () -> assertEquals("black", json.get(0).get("colorAttribute").path("value").asText()),
+                            () -> assertEquals(19.99, json.get(0).get("price").asDouble()),
+                            () -> assertEquals(5L, json.get(1).get("product").path("id").asLong()),
+                            () -> assertEquals("Polera Puma", json.get(1).get("product").path("name").asText()),
+                            () -> assertEquals("M", json.get(1).get("sizeAttribute").path("value").asText()),
+                            () -> assertEquals("black", json.get(1).get("colorAttribute").path("value").asText()),
+                            () -> assertEquals(19.99, json.get(1).get("price").asDouble())
+                        );
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                });
+    }
+
+    @Test
+    @Order(16)
+    void testGetByProductIdAndColorAttributeIdNotFound() {
+        String notExistingColorId = "100";
+
+        client.get()
+                .uri("/product-sku/productId/5/colorAttributeId/" + notExistingColorId)
+                .exchange()
+                .expectStatus().isNotFound();
+
+        String notExistingProductId = "100";
+
+        client.get()
+                .uri("/product-sku/productId/" + notExistingProductId + "/colorAttributeId/3")
+                .exchange()
+                .expectStatus().isNotFound();
+
+        client.get()
+                .uri("/product-sku/productId/" + notExistingProductId + "/colorAttributeId/" + notExistingColorId)
+                .exchange()
+                .expectStatus().isNotFound();
+    }
+
+    @Test
     void testProfile() {
         String[] activeProfiles = env.getActiveProfiles();
         assertArrayEquals(new String[] { "test" }, activeProfiles);
