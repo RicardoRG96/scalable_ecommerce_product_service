@@ -11,8 +11,8 @@ import com.algolia.api.SearchClient;
 import com.algolia.model.search.Hit;
 import com.algolia.model.search.SearchParamsObject;
 import com.algolia.model.search.SearchResponse;
-import com.ricardo.scalable.ecommerce.platform.product_service.entities.Product;
-import com.ricardo.scalable.ecommerce.platform.product_service.services.ProductService;
+import com.ricardo.scalable.ecommerce.platform.product_service.entities.ProductSku;
+import com.ricardo.scalable.ecommerce.platform.product_service.services.ProductSkuService;
 
 @Service
 public class AlgoliaSearchServiceImpl implements SearchService {
@@ -21,7 +21,7 @@ public class AlgoliaSearchServiceImpl implements SearchService {
     private final SearchClient searchClient;
 
     @Autowired
-    private ProductService productService;
+    private ProductSkuService productSkuService;
 
     @Value("${algolia.indexName}")
     private String indexName;
@@ -31,28 +31,28 @@ public class AlgoliaSearchServiceImpl implements SearchService {
     }
 
     @Override
-    public List<Product> searchProducts(String query) {
+    public List<ProductSku> searchProducts(String query) {
         SearchResponse<Hit> searchResults = searchClient.searchSingleIndex(
             indexName,
             new SearchParamsObject().setQuery(query),
             Hit.class
         );
         
-        List<Product> searchedProductMatches = getProductsFromSearchResults(searchResults);
+        List<ProductSku> searchedProductMatches = getProductsFromSearchResults(searchResults);
 
         return searchedProductMatches;
     }
 
-    private List<Product> getProductsFromSearchResults(SearchResponse<Hit> searchResults) {
+    private List<ProductSku> getProductsFromSearchResults(SearchResponse<Hit> searchResults) {
         return searchResults
                 .getHits()
                 .stream()
-                .map(hit -> productService.findById(Long.parseLong(hit.getObjectID())).orElseThrow())
+                .map(hit -> productSkuService.findById(Long.parseLong(hit.getObjectID())).orElseThrow())
                 .collect(Collectors.toList());
     }
 
     @Override
-    public List<Product> filterByBrand(List<String> brand) {
+    public List<ProductSku> filterByBrand(List<String> brand) {
         List<SearchResponse<Hit>> searchResponses = brand
                 .stream()
                 .map(b -> {
@@ -65,7 +65,7 @@ public class AlgoliaSearchServiceImpl implements SearchService {
                 })
                 .collect(Collectors.toList());
 
-        List<Product> searchedProductMatches = searchResponses
+        List<ProductSku> searchedProductMatches = searchResponses
                 .stream()
                 .map(this::getProductsFromSearchResults)
                 .flatMap(List::stream)
@@ -75,7 +75,7 @@ public class AlgoliaSearchServiceImpl implements SearchService {
     }
 
     @Override
-    public List<Product> filterByCategory(List<String> category) {
+    public List<ProductSku> filterByCategory(List<String> category) {
         List<SearchResponse<Hit>> searchResponses = category
                 .stream()
                 .map(c -> {
@@ -88,7 +88,7 @@ public class AlgoliaSearchServiceImpl implements SearchService {
                 })
                 .collect(Collectors.toList());
 
-        List<Product> searchedProductMatches = searchResponses
+        List<ProductSku> searchedProductMatches = searchResponses
                 .stream()
                 .map(this::getProductsFromSearchResults)
                 .flatMap(List::stream)
@@ -98,14 +98,14 @@ public class AlgoliaSearchServiceImpl implements SearchService {
     }
 
     @Override
-    public List<Product> filterByPriceRange(Double minPrice, Double maxPrice) {
+    public List<ProductSku> filterByPriceRange(Double minPrice, Double maxPrice) {
         SearchResponse<Hit> searchResponses = searchClient.searchSingleIndex(
             indexName,
             new SearchParamsObject().setFilters("price: " + minPrice + " TO " + maxPrice), 
             Hit.class
         );
 
-        List<Product> searchedProductMatches = getProductsFromSearchResults(searchResponses);
+        List<ProductSku> searchedProductMatches = getProductsFromSearchResults(searchResponses);
 
         return searchedProductMatches;
     }

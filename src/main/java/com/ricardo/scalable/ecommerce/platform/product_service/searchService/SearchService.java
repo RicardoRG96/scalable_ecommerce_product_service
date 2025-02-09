@@ -2,16 +2,16 @@ package com.ricardo.scalable.ecommerce.platform.product_service.searchService;
 
 import java.util.List;
 
-import com.ricardo.scalable.ecommerce.platform.product_service.entities.Product;
+import com.ricardo.scalable.ecommerce.platform.product_service.entities.ProductSku;
 
 public interface SearchService {
     
-    List<Product> searchProducts(String query);
+    List<ProductSku> searchProducts(String query);
 
-    List<Product> filterByBrand(List<String> brand);
+    List<ProductSku> filterByBrand(List<String> brand);
 
-    List<Product> filterByCategory(List<String> category);
+    List<ProductSku> filterByCategory(List<String> category);
 
-    List<Product> filterByPriceRange(Double minPrice, Double maxPrice);
+    List<ProductSku> filterByPriceRange(Double minPrice, Double maxPrice);
 
 }

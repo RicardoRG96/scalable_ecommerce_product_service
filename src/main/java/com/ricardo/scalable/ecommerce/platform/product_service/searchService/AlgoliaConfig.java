@@ -110,32 +110,6 @@ public class AlgoliaConfig {
         );
     }
 
-    // private Iterable<Map<String, Object>> preparedData() {
-    //     List<Product> products = (List<Product>) getProducts();
- 
-    //     List<Map<String, Object>> preparedJson =  products.stream().map(product -> {
-    //         Map<String, Object> productData = new HashMap<>();
-    //         List<ProductSku> productSkus = (List<ProductSku>) productSkuRepository.findByProductId(product.getId());
-    //         productSkus.stream().forEach(prodSku -> {
-    //             productData.put("objectID", prodSku.getId());
-    //             productData.put("size", prodSku.getSizeAttribute().getValue());
-    //             productData.put("color", prodSku.getColorAttribute().getValue());
-    //             productData.put("price", prodSku.getPrice());
-    //             productData.put("sku", prodSku.getSku());
-    //         });
-    //         productData.put("name", product.getName());
-    //         productData.put("description", product.getDescription());
-    //         productData.put("brand", product.getBrand().getName());
-    //         productData.put("brandId", product.getBrand().getId());
-    //         productData.put("category", product.getCategory().getName());
-    //         productData.put("categoryId", product.getCategory().getId());
-    //         productData.put("cover", product.getCover());
-    //         return productData;
-    //     }).collect(Collectors.toList());
-
-    //     return (Iterable<Map<String, Object>>) preparedJson;
-    // }
-
     private Iterable<Map<String, Object>> preparedData() {
         List<ProductSku> productsSku = (List<ProductSku>) getProductsSku();
  
@@ -167,10 +141,6 @@ public class AlgoliaConfig {
 
         return (Iterable<Map<String, Object>>) preparedJson;
     }
-
-    // private Iterable<Product> getProducts() {
-    //     return productRepository.findAll();
-    // }
 
     private Iterable<ProductSku> getProductsSku() {
         return productSkuRepository.findAll();

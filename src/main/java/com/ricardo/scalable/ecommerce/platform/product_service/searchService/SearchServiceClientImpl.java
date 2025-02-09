@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.ricardo.scalable.ecommerce.platform.product_service.entities.Product;
+import com.ricardo.scalable.ecommerce.platform.product_service.entities.ProductSku;
 
 @Service
 public class SearchServiceClientImpl implements SearchServiceClient {
@@ -18,22 +18,22 @@ public class SearchServiceClientImpl implements SearchServiceClient {
     }
 
     @Override
-    public List<Product> searchProducts(String query) {
+    public List<ProductSku> searchProducts(String query) {
         return searchService.searchProducts(query);
     }
 
     @Override
-    public List<Product> filterByBrand(List<String> brand) {
+    public List<ProductSku> filterByBrand(List<String> brand) {
         return searchService.filterByBrand(brand);
     }
 
     @Override
-    public List<Product> filterByCategory(List<String> category) {
+    public List<ProductSku> filterByCategory(List<String> category) {
         return searchService.filterByCategory(category);
     }
 
     @Override
-    public List<Product> filterByPriceRange(Double minPrice, Double maxPrice) {
+    public List<ProductSku> filterByPriceRange(Double minPrice, Double maxPrice) {
         return searchService.filterByPriceRange(minPrice, maxPrice);
     }
 

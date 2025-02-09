@@ -144,7 +144,7 @@ INSERT INTO product_skus (product_id, size_attribute_id, color_attribute_id, sku
     VALUES (5, 6, 3, 'SKU1256', 19.99, 70, TRUE, FALSE, FALSE);
 
 INSERT INTO product_skus (product_id, size_attribute_id, color_attribute_id, sku, price, stock, is_active, is_featured, is_on_sale)
-    VALUES (5, 6, 1, 'SKU1256', 19.99, 70, TRUE, FALSE, FALSE);
+    VALUES (5, 6, 1, 'SKU1257', 19.99, 70, TRUE, FALSE, FALSE);
 
 INSERT INTO product_skus (product_id, size_attribute_id, color_attribute_id, sku, price, stock, is_active, is_featured, is_on_sale)
-    VALUES (5, 5, 3, 'SKU1256', 19.99, 70, TRUE, FALSE, FALSE);
+    VALUES (5, 5, 3, 'SKU1258', 19.99, 70, TRUE, FALSE, FALSE);

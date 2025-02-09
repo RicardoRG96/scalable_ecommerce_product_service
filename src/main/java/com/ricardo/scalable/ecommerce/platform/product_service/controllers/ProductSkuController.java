@@ -15,10 +15,13 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ricardo.scalable.ecommerce.platform.product_service.entities.Product;
 import com.ricardo.scalable.ecommerce.platform.product_service.entities.ProductSku;
 import com.ricardo.scalable.ecommerce.platform.product_service.repositories.dto.ProductSkuCreationDto;
+import com.ricardo.scalable.ecommerce.platform.product_service.searchService.SearchServiceClient;
 import com.ricardo.scalable.ecommerce.platform.product_service.services.ProductSkuService;
 
 import jakarta.validation.Valid;
@@ -28,6 +31,9 @@ public class ProductSkuController {
 
     @Autowired
     private ProductSkuService productSkuService;
+    
+    @Autowired
+    private SearchServiceClient searchServiceClient;
 
     @GetMapping("/product-sku/{id}")
     public ResponseEntity<ProductSku> getByProductSkuId(@PathVariable Long id) {
@@ -150,6 +156,41 @@ public class ProductSkuController {
     public ResponseEntity<Iterable<ProductSku>> getAllProductSkus() {
         return ResponseEntity.ok(productSkuService.findAll());
     }
+
+    /*
+     * BEGIN OF ALGOLIA SERVICE ENDPOINTS
+     */
+    
+    @GetMapping("/search")
+    public ResponseEntity<List<ProductSku>> searchProducts(@RequestParam String query) {
+        List<ProductSku> searchResults = searchServiceClient.searchProducts(query);
+        return ResponseEntity.ok(searchResults);
+    }
+
+    @GetMapping("/brand")
+    public ResponseEntity<List<ProductSku>> filterByBrand(@RequestParam List<String> brand) {
+        List<ProductSku> searchResults = searchServiceClient.filterByBrand(brand);
+        return ResponseEntity.ok(searchResults);
+    }
+
+    @GetMapping("/category")
+    public ResponseEntity<List<ProductSku>> filterByCategory(@RequestParam List<String> category) {
+        List<ProductSku> searchResults = searchServiceClient.filterByCategory(category);
+        return ResponseEntity.ok(searchResults);
+    }
+
+    @GetMapping("/price")
+    public ResponseEntity<List<ProductSku>> filterByPriceRange(
+        @RequestParam Double minPrice, 
+        @RequestParam Double maxPrice
+    ) {
+        List<ProductSku> searchResults = searchServiceClient.filterByPriceRange(minPrice, maxPrice);
+        return ResponseEntity.ok(searchResults);
+    } 
+
+    /*
+     * END OF ALGOLIA SERVICE ENDPOINTS
+     */
 
     @PostMapping("/product-sku")
     public ResponseEntity<?> createProductSku(

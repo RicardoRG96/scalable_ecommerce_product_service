@@ -6,6 +6,7 @@
 // import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
 // import com.ricardo.scalable.ecommerce.platform.product_service.entities.Product;
+// import com.ricardo.scalable.ecommerce.platform.product_service.entities.ProductSku;
 // import com.ricardo.scalable.ecommerce.platform.product_service.unitTestData.Data;
 
 // import static org.junit.jupiter.api.Assertions.*;
@@ -26,7 +27,7 @@
 //     void testSearchProducts() {
 //         when(searchService.searchProducts("Notebook")).thenReturn(Data.createListOfProductsForSearch());
 
-//         List<Product> productSearchResponse = searchServiceClient.searchProducts("Notebook");
+//         List<ProductSku> productSearchResponse = searchServiceClient.searchProducts("Notebook");
 
 //         assertAll(
 //             () -> assertNotNull(productSearchResponse),
@@ -40,7 +41,7 @@
 //     void testFilterByBrand() {
 //         when(searchService.filterByBrand(List.of("Samsung"))).thenReturn(Data.createListOfFilterByBrand());
 
-//         List<Product> productSearchResponse = searchServiceClient.filterByBrand(List.of("Samsung"));
+//         List<ProductSku> productSearchResponse = searchServiceClient.filterByBrand(List.of("Samsung"));
 
 //         assertAll(
 //             () -> assertNotNull(productSearchResponse),
@@ -54,7 +55,7 @@
 //     void testFilterByCategory() {
 //         when(searchService.filterByCategory(List.of("Deportes"))).thenReturn(Data.createListOfFilterByCategory());
 
-//         List<Product> productSearchResponse = searchServiceClient.filterByCategory(List.of("Deportes"));
+//         List<ProductSku> productSearchResponse = searchServiceClient.filterByCategory(List.of("Deportes"));
 
 //         assertAll(
 //             () -> assertNotNull(productSearchResponse),
@@ -68,7 +69,7 @@
 //     void testFilterByPriceRange() {
 //         when(searchService.filterByPriceRange(1000.0, 1300.0)).thenReturn(Data.createListOfFilterByPriceRange());
 
-//         List<Product> productSearchResponse = searchServiceClient.filterByPriceRange(1000.0, 1300.0);
+//         List<ProductSku> productSearchResponse = searchServiceClient.filterByPriceRange(1000.0, 1300.0);
 
 //         assertAll(
 //             () -> assertNotNull(productSearchResponse),
