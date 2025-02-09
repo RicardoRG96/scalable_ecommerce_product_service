@@ -195,6 +195,55 @@ public class ProductSkuControllerTest {
     }
 
     @Test
+    @Order(9)
+    void testGetBySizeAttributeId() {
+        client.get()
+                .uri("/product-sku/sizeAttributeId/8")
+                .exchange()
+                .expectStatus().isOk()
+                .expectHeader().contentType(MediaType.APPLICATION_JSON)
+                .expectBody()
+                .consumeWith(res -> {
+                    try {
+                        JsonNode json = objectMapper.readTree(res.getResponseBody());
+                        assertAll(
+                            () -> assertNotNull(json),
+                            () -> assertTrue(json.isArray()),
+                            () -> assertEquals(3, json.size()),
+                            () -> assertEquals(1L, json.get(0).get("product").path("id").asLong()),
+                            () -> assertEquals("iPhone 15", json.get(0).get("product").path("name").asText()),
+                            () -> assertEquals("none-size", json.get(0).get("sizeAttribute").path("value").asText()),
+                            () -> assertEquals("black", json.get(0).get("colorAttribute").path("value").asText()),
+                            () -> assertEquals(1500.99, json.get(0).get("price").asDouble()),
+                            () -> assertEquals(2L, json.get(1).get("product").path("id").asLong()),
+                            () -> assertEquals("Asus Zenbook", json.get(1).get("product").path("name").asText()),
+                            () -> assertEquals("none-size", json.get(1).get("sizeAttribute").path("value").asText()),
+                            () -> assertEquals("black", json.get(1).get("colorAttribute").path("value").asText()),
+                            () -> assertEquals(999.99, json.get(1).get("price").asDouble()),
+                            () -> assertEquals(3L, json.get(2).get("product").path("id").asLong()),
+                            () -> assertEquals("Balon premier league 2025", json.get(2).get("product").path("name").asText()),
+                            () -> assertEquals("none-size", json.get(2).get("sizeAttribute").path("value").asText()),
+                            () -> assertEquals("blue", json.get(2).get("colorAttribute").path("value").asText()),
+                            () -> assertEquals(29.99, json.get(2).get("price").asDouble())
+                        );
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                });
+    }
+
+    @Test
+    @Order(10)
+    void testGetBySizeAttributeIdNotFound() {
+        String notExistingId = "100";
+
+        client.get()
+                .uri("/product-sku/sizeAttributeId/" + notExistingId)
+                .exchange()
+                .expectStatus().isNotFound();
+    }
+
+    @Test
     void testProfile() {
         String[] activeProfiles = env.getActiveProfiles();
         assertArrayEquals(new String[] { "test" }, activeProfiles);
