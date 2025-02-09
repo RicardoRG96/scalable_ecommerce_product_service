@@ -3,9 +3,6 @@ package com.ricardo.scalable.ecommerce.platform.product_service.integrationTests
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 
-import java.sql.Timestamp;
-import java.time.Instant;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
@@ -22,6 +19,8 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ricardo.scalable.ecommerce.platform.product_service.entities.ProductAttribute;
 import com.ricardo.scalable.ecommerce.platform.product_service.repositories.dto.ProductAttributeCreationDto;
+
+import static com.ricardo.scalable.ecommerce.platform.product_service.services.testData.ProductAttributeControllerTestData.*;
 
 @ActiveProfiles("test")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
@@ -284,16 +283,6 @@ public class ProductAttributeControllerTest {
                 .bodyValue(requestBody)
                 .exchange()
                 .expectStatus().isNotFound();
-    }
-
-    private ProductAttribute createProductAttribute002() {
-        ProductAttribute productAttribute = new ProductAttribute();
-        productAttribute.setId(2L);
-        productAttribute.setType("color");
-        productAttribute.setValue("blue");
-        productAttribute.setCreatedAt(Timestamp.from(Instant.now()));
-        productAttribute.setUpdatedAt(Timestamp.from(Instant.now()));
-        return productAttribute;
     }
 
     @Test

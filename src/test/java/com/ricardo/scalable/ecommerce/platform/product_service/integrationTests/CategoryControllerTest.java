@@ -4,8 +4,6 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 
 import java.io.IOException;
-import java.sql.Timestamp;
-import java.time.Instant;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.MethodOrderer;
@@ -23,6 +21,8 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ricardo.scalable.ecommerce.platform.product_service.entities.Category;
 import com.ricardo.scalable.ecommerce.platform.product_service.repositories.dto.CategoryCreationDto;
+
+import static com.ricardo.scalable.ecommerce.platform.product_service.services.testData.CategoryControllerTestData.*;
 
 @ActiveProfiles("test")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
@@ -219,18 +219,6 @@ public class CategoryControllerTest {
                         ex.printStackTrace();
                     }
                 });
-    }
-
-    private Category createCategory002() {
-        Category category = new Category();
-        category.setId(2L);
-        category.setName("Tecnologia");
-        category.setDescription("Computadores portatiles");
-        category.setParent(null);
-        category.setCreatedAt(Timestamp.from(Instant.now()));
-        category.setUpdatedAt(Timestamp.from(Instant.now()));
-
-        return category;
     }
 
     @Test

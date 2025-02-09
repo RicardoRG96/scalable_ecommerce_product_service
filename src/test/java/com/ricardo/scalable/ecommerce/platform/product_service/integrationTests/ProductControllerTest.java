@@ -4,8 +4,6 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 
 import java.io.IOException;
-import java.sql.Timestamp;
-import java.time.Instant;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.MethodOrderer;
@@ -21,10 +19,10 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ricardo.scalable.ecommerce.platform.product_service.entities.Brand;
-import com.ricardo.scalable.ecommerce.platform.product_service.entities.Category;
 import com.ricardo.scalable.ecommerce.platform.product_service.entities.Product;
 import com.ricardo.scalable.ecommerce.platform.product_service.repositories.dto.ProductCreationDto;
+
+import static com.ricardo.scalable.ecommerce.platform.product_service.services.testData.ProductControllerTestData.*;
 
 @ActiveProfiles("test")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
@@ -151,12 +149,7 @@ public class ProductControllerTest {
     @Test
     @Order(6)
     void testCreateProduct() {
-        ProductCreationDto productCreationRequest = new ProductCreationDto();
-        productCreationRequest.setName("Camiseta FC Barcelona");
-        productCreationRequest.setDescription("Descripcion camiseta FC Barcelona");
-        productCreationRequest.setCategoryId(8L);
-        productCreationRequest.setBrandId(4L);
-        productCreationRequest.setCover("https://example.com/camiseta_barcelona.png");
+        ProductCreationDto productCreationRequest = createProductCreationDto();
 
         client.post()
                 .uri("/")
@@ -185,6 +178,43 @@ public class ProductControllerTest {
 
     @Test
     @Order(7)
+    void testCreateProductBadRequest() {
+        ProductCreationDto requestBody = new ProductCreationDto();
+
+        client.post()
+                .uri("/")
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(requestBody)
+                .exchange()
+                .expectStatus().isBadRequest();
+    }
+
+    @Test
+    @Order(8)
+    void testCreateProductNotFound() {
+        ProductCreationDto requestBodyWithNotExistingCategoryId = createProductCreationDto();
+        requestBodyWithNotExistingCategoryId.setCategoryId(100L);
+
+        client.post()
+                .uri("/")
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(requestBodyWithNotExistingCategoryId)
+                .exchange()
+                .expectStatus().isNotFound();
+
+        ProductCreationDto requestBodyWithNotExistingBrandId = createProductCreationDto();
+        requestBodyWithNotExistingBrandId.setBrandId(100L);
+
+        client.post()
+                .uri("/")
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(requestBodyWithNotExistingBrandId)
+                .exchange()
+                .expectStatus().isNotFound();
+    }
+
+    @Test
+    @Order(9)
     void testUpdateProduct() {
         Product productUpdateRequest = createProduct001();
         productUpdateRequest.setName("iPhone 15 Pro");
@@ -214,47 +244,34 @@ public class ProductControllerTest {
                 });
     }
 
-    private Product createProduct001() {
-        Product product = new Product();
-        Category category = new Category(
-            2L, 
-            "Tecnologia", 
-            "Descripcion tecnologia",
-            null,
-            Timestamp.from(Instant.now()), 
-            Timestamp.from(Instant.now())
-        );
-        Category subCategory = new Category(
-            6L, 
-            "Smartphone", 
-            "Telefonos celulares",
-            category,
-            Timestamp.from(Instant.now()), 
-            Timestamp.from(Instant.now())
-        );
-        Brand brand = new Brand(
-            2L, 
-            "Apple", 
-            "Marca líder en tecnologia", 
-            "https://example.com/apple_logo.png", 
-            Timestamp.from(Instant.now()), 
-            Timestamp.from(Instant.now())
-        );
+    @Test
+    @Order(10)
+    void testUpdateProductBadRequest() {
+        Product productUpdateRequest = new Product();
 
-        product.setId(1L);
-        product.setName("iPhone 15");
-        product.setDescription("Smartphone Apple");
-        product.setCategory(subCategory);
-        product.setBrand(brand);
-        product.setCover("https://example.com/images/iphone15.jpg");
-        product.setCreatedAt(Timestamp.from(Instant.now()));
-        product.setUpdatedAt(Timestamp.from(Instant.now()));
-
-        return product;
+        client.put()
+                .uri("/1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(productUpdateRequest)
+                .exchange()
+                .expectStatus().isBadRequest();
     }
 
     @Test
-    @Order(8)
+    @Order(11)
+    void testUpdateProductNotFound() {
+        Product productUpdateRequest = createProduct001();
+
+        client.put()
+                .uri("/100")
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(productUpdateRequest)
+                .exchange()
+                .expectStatus().isNotFound();
+    }
+
+    @Test
+    @Order(12)
     void testDeleteProduct() {
         client.delete()
                 .uri("/6")
@@ -279,7 +296,11 @@ public class ProductControllerTest {
                         ex.printStackTrace();
                     }
                 });
+    }
 
+    @Test
+    @Order(13)
+    void testGetDeletedProduct() {
         client.get()
                 .uri("/6")
                 .exchange()
