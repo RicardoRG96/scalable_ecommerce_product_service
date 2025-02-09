@@ -156,6 +156,45 @@ public class ProductSkuControllerTest {
     }
 
     @Test
+    @Order(7)
+    void testGetBySkuAndIsActive() {
+        client.get()
+                .uri("/product-sku/sku/SKU2210/isActive/true")
+                .exchange()
+                .expectStatus().isOk()
+                .expectHeader().contentType(MediaType.APPLICATION_JSON)
+                .expectBody()
+                .consumeWith(res -> {
+                    try {
+                        JsonNode json = objectMapper.readTree(res.getResponseBody());
+                        assertAll(
+                            () -> assertNotNull(json),
+                            () -> assertEquals(1, json.get("id").asLong()),
+                            () -> assertEquals("SKU2210", json.get("sku").asText()),
+                            () -> assertEquals(1L, json.get("product").path("id").asLong()),
+                            () -> assertEquals("iPhone 15", json.get("product").path("name").asText()),
+                            () -> assertEquals("none-size", json.get("sizeAttribute").path("value").asText()),
+                            () -> assertEquals("black", json.get("colorAttribute").path("value").asText()),
+                            () -> assertEquals(1500.99, json.get("price").asDouble())
+                        );
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                });
+    }
+
+    @Test
+    @Order(8)
+    void testGetBySkuAndIsActiveNotFound() {
+        String notExistingSku = "SKU100";
+
+        client.get()
+                .uri("/product-sku/sku/" + notExistingSku + "/isActive/true")
+                .exchange()
+                .expectStatus().isNotFound();
+    }
+
+    @Test
     void testProfile() {
         String[] activeProfiles = env.getActiveProfiles();
         assertArrayEquals(new String[] { "test" }, activeProfiles);
