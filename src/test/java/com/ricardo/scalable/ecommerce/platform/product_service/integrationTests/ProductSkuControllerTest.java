@@ -410,6 +410,71 @@ public class ProductSkuControllerTest {
     }
 
     @Test
+    @Order(17)
+    void testGetByProductIdAndSizeAttributeIdAndColorAttributeId() {
+        client.get()
+                .uri("/product-sku/productId/5/sizeAttributeId/6/colorAttributeId/3")
+                .exchange()
+                .expectStatus().isOk()
+                .expectHeader().contentType(MediaType.APPLICATION_JSON)
+                .expectBody()
+                .consumeWith(res -> {
+                    try {
+                        JsonNode json = objectMapper.readTree(res.getResponseBody());
+                        assertAll(
+                            () -> assertNotNull(json),
+                            () -> assertFalse(json.isArray()),
+                            () -> assertEquals(5L, json.path("product").path("id").asLong()),
+                            () -> assertEquals("Polera Puma", json.path("product").path("name").asText()),
+                            () -> assertEquals("L", json.path("sizeAttribute").path("value").asText()),
+                            () -> assertEquals("black", json.path("colorAttribute").path("value").asText()),
+                            () -> assertEquals(19.99, json.path("price").asDouble())
+                        );
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                });
+    }
+
+    @Test
+    @Order(18)
+    void testGetByProductIdAndSizeAttributeIdAndColorAttributeIdNotFound() {
+        String notExistingProductId = "100";
+        String notExistingSizeId = "100";
+        String notExistingColorId = "100";
+
+        client.get()
+                .uri("/product-sku/productId/" + notExistingProductId + "/sizeAttributeId/6/colorAttributeId/3")
+                .exchange()
+                .expectStatus().isNotFound();
+
+        client.get()
+                .uri("/product-sku/productId/5/sizeAttributeId/" + notExistingSizeId + "/colorAttributeId/3")
+                .exchange()
+                .expectStatus().isNotFound();
+
+        client.get()
+                .uri("/product-sku/productId/5/sizeAttributeId/6/colorAttributeId/" + notExistingColorId)
+                .exchange()
+                .expectStatus().isNotFound();
+
+        client.get()
+                .uri("/product-sku/productId/" + notExistingProductId + "/sizeAttributeId/" + notExistingSizeId + "/colorAttributeId/3")
+                .exchange()
+                .expectStatus().isNotFound();
+
+        client.get()
+                .uri("/product-sku/productId/" + notExistingProductId + "/sizeAttributeId/6/colorAttributeId/" + notExistingColorId)
+                .exchange()
+                .expectStatus().isNotFound();
+
+        client.get()
+                .uri("/product-sku/productId/" + notExistingProductId + "/sizeAttributeId/" + notExistingSizeId + "/colorAttributeId/" + notExistingColorId)
+                .exchange()
+                .expectStatus().isNotFound();
+    }
+
+    @Test
     void testProfile() {
         String[] activeProfiles = env.getActiveProfiles();
         assertArrayEquals(new String[] { "test" }, activeProfiles);
