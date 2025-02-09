@@ -17,6 +17,10 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ricardo.scalable.ecommerce.platform.product_service.entities.Product;
+import com.ricardo.scalable.ecommerce.platform.product_service.entities.ProductAttribute;
+import com.ricardo.scalable.ecommerce.platform.product_service.entities.ProductSku;
+import com.ricardo.scalable.ecommerce.platform.product_service.repositories.dto.ProductSkuCreationDto;
 
 @ActiveProfiles("test")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
@@ -470,6 +474,126 @@ public class ProductSkuControllerTest {
 
         client.get()
                 .uri("/product-sku/productId/" + notExistingProductId + "/sizeAttributeId/" + notExistingSizeId + "/colorAttributeId/" + notExistingColorId)
+                .exchange()
+                .expectStatus().isNotFound();
+    }
+
+    @Test
+    @Order(19)
+    void testGetAllProductSkus() {
+        client.get()
+                .uri("/product-sku")
+                .exchange()
+                .expectStatus().isOk()
+                .expectHeader().contentType(MediaType.APPLICATION_JSON)
+                .expectBody()
+                .consumeWith(res -> {
+                    try {
+                        JsonNode json = objectMapper.readTree(res.getResponseBody());
+                        assertAll(
+                            () -> assertNotNull(json),
+                            () -> assertTrue(json.isArray()),
+                            () -> assertEquals(11, json.size())
+                        );
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                });
+    }
+
+    @Test
+    @Order(20)
+    void testCreateProductSku() {
+        ProductSkuCreationDto requestBody = createProductSkuCreationDto();
+        client.post()
+                .uri("/product-sku")
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(requestBody)
+                .exchange()
+                .expectStatus().isCreated()
+                .expectHeader().contentType(MediaType.APPLICATION_JSON)
+                .expectBody()
+                .consumeWith(res -> {
+                    try {
+                        JsonNode json = objectMapper.readTree(res.getResponseBody());
+                        assertAll(
+                            () -> assertNotNull(json),
+                            () -> assertEquals(12, json.get("id").asLong()),
+                            () -> assertEquals("SKU100496", json.get("sku").asText()),
+                            () -> assertEquals(4L, json.get("product").path("id").asLong()),
+                            () -> assertEquals("Jeans Lee", json.get("product").path("name").asText()),
+                            () -> assertEquals("M", json.get("sizeAttribute").path("value").asText()),
+                            () -> assertEquals("blue", json.get("colorAttribute").path("value").asText()),
+                            () -> assertEquals(9.99, json.get("price").asDouble()),
+                            () -> assertEquals(100, json.get("stock").asInt()),
+                            () -> assertTrue(json.get("isActive").asBoolean()),
+                            () -> assertFalse(json.get("isFeatured").asBoolean()),
+                            () -> assertTrue(json.get("isOnSale").asBoolean())
+                        );
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                });
+    }
+
+    private ProductSkuCreationDto createProductSkuCreationDto() {
+        ProductSkuCreationDto productSku = new ProductSkuCreationDto();
+        productSku.setProductId(4L);
+        productSku.setSizeAttributeId(5L);
+        productSku.setColorAttributeId(2L);
+        productSku.setSku("SKU100496");
+        productSku.setPrice(9.99);
+        productSku.setStock(100);
+        productSku.setIsActive(true);
+        productSku.setIsFeatured(false);
+        productSku.setIsOnSale(true);
+
+        return productSku;
+    }
+
+    @Test
+    @Order(21)
+    void testCreateProductSkuBadRequest() {
+        ProductSkuCreationDto requestBody = new ProductSkuCreationDto();
+
+        client.post()
+                .uri("/product-sku")
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(requestBody)
+                .exchange()
+                .expectStatus().isBadRequest();
+    }
+
+    @Test
+    @Order(22)
+    void testCreateProductSkuNotFound() {
+        ProductSkuCreationDto requestBodyWithNotExistingProductId = createProductSkuCreationDto();
+        requestBodyWithNotExistingProductId.setProductId(100L);
+
+        client.post()
+                .uri("/product-sku")
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(requestBodyWithNotExistingProductId)
+                .exchange()
+                .expectStatus().isNotFound();
+
+        ProductSkuCreationDto requestBodyWithNotExistingSizeAttributeId = createProductSkuCreationDto();
+        requestBodyWithNotExistingSizeAttributeId.setSizeAttributeId(100L);
+
+        client.post()
+                .uri("/product-sku")
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(requestBodyWithNotExistingSizeAttributeId)
+                .exchange()
+                .expectStatus().isNotFound();
+
+        ProductSkuCreationDto requestBodyWithNotExistingColorAttributeId = createProductSkuCreationDto();
+        requestBodyWithNotExistingColorAttributeId.setColorAttributeId(100L);
+
+        client.post()
+                .uri("/product-sku")
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(requestBodyWithNotExistingColorAttributeId)
                 .exchange()
                 .expectStatus().isNotFound();
     }

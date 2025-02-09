@@ -286,6 +286,16 @@ public class ProductAttributeControllerTest {
                 .expectStatus().isNotFound();
     }
 
+    private ProductAttribute createProductAttribute002() {
+        ProductAttribute productAttribute = new ProductAttribute();
+        productAttribute.setId(2L);
+        productAttribute.setType("color");
+        productAttribute.setValue("blue");
+        productAttribute.setCreatedAt(Timestamp.from(Instant.now()));
+        productAttribute.setUpdatedAt(Timestamp.from(Instant.now()));
+        return productAttribute;
+    }
+
     @Test
     @Order(13)
     void testUpdateProductAttributeBadRequest() {
@@ -344,16 +354,6 @@ public class ProductAttributeControllerTest {
                 .uri("/product-attribute/" + notExistingId)
                 .exchange()
                 .expectStatus().isNotFound();
-    }
-
-    private ProductAttribute createProductAttribute002() {
-        ProductAttribute productAttribute = new ProductAttribute();
-        productAttribute.setId(2L);
-        productAttribute.setType("color");
-        productAttribute.setValue("blue");
-        productAttribute.setCreatedAt(Timestamp.from(Instant.now()));
-        productAttribute.setUpdatedAt(Timestamp.from(Instant.now()));
-        return productAttribute;
     }
 
     @Test
