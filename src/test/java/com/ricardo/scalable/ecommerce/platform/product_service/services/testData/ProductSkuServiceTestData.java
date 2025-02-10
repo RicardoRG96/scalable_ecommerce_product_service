@@ -46,7 +46,7 @@ public class ProductSkuServiceTestData {
         productSku.setSizeAttribute(sizeAttribute);
         productSku.setColorAttribute(colorAttribute);
         productSku.setSku("SKU001");
-        productSku.setPrice(40.00);
+        productSku.setPrice(1000.00);
         productSku.setStock(20);
         productSku.setIsActive(true);
         productSku.setIsFeatured(false);
@@ -68,7 +68,7 @@ public class ProductSkuServiceTestData {
         productSku.setSizeAttribute(sizeAttribute);
         productSku.setColorAttribute(colorAttribute);
         productSku.setSku("SKU002");
-        productSku.setPrice(40.00);
+        productSku.setPrice(899.99);
         productSku.setStock(20);
         productSku.setIsActive(true);
         productSku.setIsFeatured(false);
@@ -90,7 +90,7 @@ public class ProductSkuServiceTestData {
         productSku.setSizeAttribute(sizeAttribute);
         productSku.setColorAttribute(colorAttribute);
         productSku.setSku("SKU003");
-        productSku.setPrice(40.00);
+        productSku.setPrice(1299.99);
         productSku.setStock(20);
         productSku.setIsActive(true);
         productSku.setIsFeatured(false);

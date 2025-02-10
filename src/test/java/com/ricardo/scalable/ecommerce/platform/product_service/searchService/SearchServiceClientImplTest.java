@@ -1,82 +1,106 @@
-// package com.ricardo.scalable.ecommerce.platform.product_service.searchService;
+package com.ricardo.scalable.ecommerce.platform.product_service.searchService;
 
-// import org.junit.jupiter.api.Test;
-// import org.springframework.beans.factory.annotation.Autowired;
-// import org.springframework.boot.test.context.SpringBootTest;
-// import org.springframework.test.context.bean.override.mockito.MockitoBean;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
-// import com.ricardo.scalable.ecommerce.platform.product_service.entities.Product;
-// import com.ricardo.scalable.ecommerce.platform.product_service.entities.ProductSku;
-// import com.ricardo.scalable.ecommerce.platform.product_service.unitTestData.Data;
+import com.ricardo.scalable.ecommerce.platform.product_service.entities.ProductSku;
 
-// import static org.junit.jupiter.api.Assertions.*;
-// import static org.mockito.Mockito.*;
+import static com.ricardo.scalable.ecommerce.platform.product_service.services.testData.SearchServiceClientTestData.*;
 
-// import java.util.List;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
-// @SpringBootTest
-// public class SearchServiceClientImplTest {
+import java.util.List;
 
-//     @MockitoBean
-//     private SearchService searchService;
+@SpringBootTest
+public class SearchServiceClientImplTest {
 
-//     @Autowired
-//     private SearchServiceClient searchServiceClient;
+    @MockitoBean
+    private SearchService searchService;
 
-//     @Test
-//     void testSearchProducts() {
-//         when(searchService.searchProducts("Notebook")).thenReturn(Data.createListOfProductsForSearch());
+    @Autowired
+    private SearchServiceClient searchServiceClient;
 
-//         List<ProductSku> productSearchResponse = searchServiceClient.searchProducts("Notebook");
+    @Test
+    void testSearchProducts() {
+        when(searchService.searchProducts("Notebook")).thenReturn(createListOfProductsForSearch());
 
-//         assertAll(
-//             () -> assertNotNull(productSearchResponse),
-//             () -> assertEquals(2, productSearchResponse.size()),
-//             () -> assertEquals("Notebook ASUS", productSearchResponse.get(0).getName()),
-//             () -> assertEquals("Notebook Lenovo", productSearchResponse.get(1).getName())
-//         );
-//     }
+        List<ProductSku> productSearchResponse = searchServiceClient.searchProducts("Notebook");
 
-//     @Test
-//     void testFilterByBrand() {
-//         when(searchService.filterByBrand(List.of("Samsung"))).thenReturn(Data.createListOfFilterByBrand());
+        assertAll(
+            () -> assertNotNull(productSearchResponse),
+            () -> assertEquals(2, productSearchResponse.size()),
+            () -> assertEquals("Notebook Samsung", productSearchResponse.get(0).getProduct().getName()),
+            () -> assertEquals("MacBook Apple", productSearchResponse.get(1).getProduct().getName()),
+            () -> assertEquals("Computadoras", productSearchResponse.get(0).getProduct().getCategory().getName()),
+            () -> assertEquals("Computadoras", productSearchResponse.get(1).getProduct().getCategory().getName()),
+            () -> assertEquals("none-size", productSearchResponse.get(0).getSizeAttribute().getValue()),
+            () -> assertEquals("none-size", productSearchResponse.get(1).getSizeAttribute().getValue()),
+            () -> assertEquals("negro", productSearchResponse.get(0).getColorAttribute().getValue()),
+            () -> assertEquals("rojo", productSearchResponse.get(1).getColorAttribute().getValue())
+        );
+    }
 
-//         List<ProductSku> productSearchResponse = searchServiceClient.filterByBrand(List.of("Samsung"));
+    @Test
+    void testFilterByBrand() {
+        when(searchService.filterByBrand(List.of("Apple"))).thenReturn(createListOfFilterByBrand());
 
-//         assertAll(
-//             () -> assertNotNull(productSearchResponse),
-//             () -> assertEquals(2, productSearchResponse.size()),
-//             () -> assertEquals("Notebook ASUS", productSearchResponse.get(0).getName()),
-//             () -> assertEquals("Macbook Apple", productSearchResponse.get(1).getName())
-//         );   
-//     }
+        List<ProductSku> productSearchResponse = searchServiceClient.filterByBrand(List.of("Apple"));
 
-//     @Test
-//     void testFilterByCategory() {
-//         when(searchService.filterByCategory(List.of("Deportes"))).thenReturn(Data.createListOfFilterByCategory());
+        assertAll(
+            () -> assertNotNull(productSearchResponse),
+            () -> assertEquals(2, productSearchResponse.size()),
+            () -> assertEquals("iPhone Apple", productSearchResponse.get(0).getProduct().getName()),
+            () -> assertEquals("MacBook Apple", productSearchResponse.get(1).getProduct().getName()),
+            () -> assertEquals("Celulares", productSearchResponse.get(0).getProduct().getCategory().getName()),
+            () -> assertEquals("Computadoras", productSearchResponse.get(1).getProduct().getCategory().getName()),
+            () -> assertEquals("none-size", productSearchResponse.get(0).getSizeAttribute().getValue()),
+            () -> assertEquals("none-size", productSearchResponse.get(1).getSizeAttribute().getValue()),
+            () -> assertEquals("azul", productSearchResponse.get(0).getColorAttribute().getValue()),
+            () -> assertEquals("rojo", productSearchResponse.get(1).getColorAttribute().getValue())
+        );   
+    }
 
-//         List<ProductSku> productSearchResponse = searchServiceClient.filterByCategory(List.of("Deportes"));
+    @Test
+    void testFilterByCategory() {
+        when(searchService.filterByCategory(List.of("Computadoras"))).thenReturn(createListOfFilterByCategory());
 
-//         assertAll(
-//             () -> assertNotNull(productSearchResponse),
-//             () -> assertEquals(2, productSearchResponse.size()),
-//             () -> assertEquals("Macbook Apple", productSearchResponse.get(0).getName()),
-//             () -> assertEquals("Notebook Lenovo", productSearchResponse.get(1).getName())
-//         );
-//     }
+        List<ProductSku> productSearchResponse = searchServiceClient.filterByCategory(List.of("Computadoras"));
 
-//     @Test
-//     void testFilterByPriceRange() {
-//         when(searchService.filterByPriceRange(1000.0, 1300.0)).thenReturn(Data.createListOfFilterByPriceRange());
+        assertAll(
+            () -> assertNotNull(productSearchResponse),
+            () -> assertEquals(2, productSearchResponse.size()),
+            () -> assertEquals("Notebook Samsung", productSearchResponse.get(0).getProduct().getName()),
+            () -> assertEquals("MacBook Apple", productSearchResponse.get(1).getProduct().getName()),
+            () -> assertEquals("Computadoras", productSearchResponse.get(0).getProduct().getCategory().getName()),
+            () -> assertEquals("Computadoras", productSearchResponse.get(1).getProduct().getCategory().getName()),
+            () -> assertEquals("none-size", productSearchResponse.get(0).getSizeAttribute().getValue()),
+            () -> assertEquals("none-size", productSearchResponse.get(1).getSizeAttribute().getValue()),
+            () -> assertEquals("negro", productSearchResponse.get(0).getColorAttribute().getValue()),
+            () -> assertEquals("rojo", productSearchResponse.get(1).getColorAttribute().getValue())
+        );
+    }
 
-//         List<ProductSku> productSearchResponse = searchServiceClient.filterByPriceRange(1000.0, 1300.0);
+    @Test
+    void testFilterByPriceRange() {
+        when(searchService.filterByPriceRange(1000.0, 1300.0)).thenReturn(createListOfFilterByPriceRange());
 
-//         assertAll(
-//             () -> assertNotNull(productSearchResponse),
-//             () -> assertEquals(2, productSearchResponse.size()),
-//             () -> assertEquals("Notebook ASUS", productSearchResponse.get(0).getName()),
-//             () -> assertEquals("Macbook Apple", productSearchResponse.get(1).getName())
-//         );
-//     }
+        List<ProductSku> productSearchResponse = searchServiceClient.filterByPriceRange(1000.0, 1300.0);
 
-// }
+        assertAll(
+            () -> assertNotNull(productSearchResponse),
+            () -> assertEquals(2, productSearchResponse.size()),
+            () -> assertEquals("Notebook Samsung", productSearchResponse.get(0).getProduct().getName()),
+            () -> assertEquals("MacBook Apple", productSearchResponse.get(1).getProduct().getName()),
+            () -> assertEquals("Computadoras", productSearchResponse.get(0).getProduct().getCategory().getName()),
+            () -> assertEquals("Computadoras", productSearchResponse.get(1).getProduct().getCategory().getName()),
+            () -> assertEquals("none-size", productSearchResponse.get(0).getSizeAttribute().getValue()),
+            () -> assertEquals("none-size", productSearchResponse.get(1).getSizeAttribute().getValue()),
+            () -> assertEquals("negro", productSearchResponse.get(0).getColorAttribute().getValue()),
+            () -> assertEquals("rojo", productSearchResponse.get(1).getColorAttribute().getValue())
+        );
+    }
+
+}
