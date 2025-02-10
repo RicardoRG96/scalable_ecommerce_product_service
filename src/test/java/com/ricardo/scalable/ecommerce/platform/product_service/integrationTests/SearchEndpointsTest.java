@@ -323,38 +323,35 @@ public class SearchEndpointsTest {
                 });
     }
 
-    // @Test
-    // void testSearchWithStopWords() {
-    //     Product product3 = Data.createProduct003();
+    @Test
+    void testSearchWithStopWords() {
+        client.get()
+                .uri("/search?query=el balon")
+                .exchange()
+                .expectStatus().isOk()
+                .expectHeader().contentType(MediaType.APPLICATION_JSON)
+                .expectBody()
+                .consumeWith(res -> {
+                    try {
+                        JsonNode json = objectMapper.readTree(res.getResponseBody());
+                        assertAll(
+                            () -> assertNotNull(json),
+                            () -> assertTrue(json.isArray()),
+                            () -> assertEquals(1, json.size()),
+                            () -> assertEquals(3L, json.get(0).path("id").asLong()),
+                            () -> assertEquals("Balon premier league 2025", json.get(0).path("product").path("name").asText()),
+                            () -> assertEquals("Balon oficial Premier League", json.get(0).path("product").path("description").asText()),
+                            () -> assertEquals("Nike", json.get(0).path("product").path("brand").path("name").asText()),
+                            () -> assertEquals("SKU9820", json.get(0).path("sku").asText()),
+                            () -> assertEquals("Futbol", json.get(0).path("product").path("category").path("name").asText()),
+                            () -> assertEquals(29.99, json.get(0).path("price").asDouble())
 
-    //     client.get()
-    //             .uri("/search?query=el balon")
-    //             .exchange()
-    //             .expectStatus().isOk()
-    //             .expectHeader().contentType(MediaType.APPLICATION_JSON)
-    //             .expectBody()
-    //             .consumeWith(res -> {
-    //                 try {
-    //                     JsonNode json = objectMapper.readTree(res.getResponseBody());
-    //                     assertAll(
-    //                         () -> assertNotNull(json),
-    //                         () -> assertTrue(json.isArray()),
-    //                         () -> assertEquals(1, json.size()),
-    //                         () -> assertEquals(product3.getId(), json.get(0).path("id").asLong()),
-    //                         () -> assertEquals(product3.getName(), json.get(0).path("name").asText()),
-    //                         () -> assertEquals(product3.getDescription(), json.get(0).path("description").asText()),
-    //                         () -> assertEquals(product3.getBrand().getName(), json.get(0).path("brand").path("name").asText()),
-    //                         () -> assertEquals(product3.getSku(), json.get(0).path("sku").asText()),
-    //                         () -> assertEquals(product3.getUpc(), json.get(0).path("upc").asText()),
-    //                         () -> assertEquals(product3.getCategory().getName(), json.get(0).path("category").path("name").asText()),
-    //                         () -> assertEquals(product3.getPrice(), json.get(0).path("price").asDouble())
-
-    //                     );
-    //                 } catch (Exception ex) {
-    //                     ex.printStackTrace();
-    //                 }
-    //             });
-    // }
+                        );
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                });
+    }
 
     // @Test
     // void testSearchWithSynonyms() {
