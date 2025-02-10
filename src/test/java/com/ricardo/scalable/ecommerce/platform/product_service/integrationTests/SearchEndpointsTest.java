@@ -287,46 +287,41 @@ public class SearchEndpointsTest {
                 });
     }
 
-    // @Test
-    // void testFilterByPriceRange() {
-    //     Product product1 = Data.createProduct001();
-    //     Product product2 = Data.createProduct002();
-
-    //     client.get()
-    //             .uri("/price?minPrice=900&maxPrice=1600")
-    //             .exchange()
-    //             .expectStatus().isOk()
-    //             .expectHeader().contentType(MediaType.APPLICATION_JSON)
-    //             .expectBody()
-    //             .consumeWith(res -> {
-    //                 try {
-    //                     JsonNode json = objectMapper.readTree(res.getResponseBody());
-    //                     assertAll(
-    //                         () -> assertNotNull(json),
-    //                         () -> assertTrue(json.isArray()),
-    //                         () -> assertEquals(2, json.size()),
-    //                         () -> assertEquals(product2.getId(), json.get(0).path("id").asLong()),
-    //                         () -> assertEquals(product1.getId(), json.get(1).path("id").asLong()),
-    //                         () -> assertEquals(product2.getName(), json.get(0).path("name").asText()),
-    //                         () -> assertEquals(product1.getName(), json.get(1).path("name").asText()),
-    //                         () -> assertEquals(product2.getDescription(), json.get(0).path("description").asText()),
-    //                         () -> assertEquals(product1.getDescription(), json.get(1).path("description").asText()),
-    //                         () -> assertEquals(product2.getBrand().getName(), json.get(0).path("brand").path("name").asText()),
-    //                         () -> assertEquals(product1.getBrand().getName(), json.get(1).path("brand").path("name").asText()),
-    //                         () -> assertEquals(product2.getSku(), json.get(0).path("sku").asText()),
-    //                         () -> assertEquals(product1.getSku(), json.get(1).path("sku").asText()),
-    //                         () -> assertEquals(product2.getUpc(), json.get(0).path("upc").asText()),
-    //                         () -> assertEquals(product1.getUpc(), json.get(1).path("upc").asText()),
-    //                         () -> assertEquals(product2.getCategory().getName(), json.get(0).path("category").path("name").asText()),
-    //                         () -> assertEquals(product1.getCategory().getName(), json.get(1).path("category").path("name").asText()),
-    //                         () -> assertEquals(product2.getPrice(), json.get(0).path("price").asDouble()),
-    //                         () -> assertEquals(product1.getPrice(), json.get(1).path("price").asDouble())
-    //                     );
-    //                 } catch (Exception ex) {
-    //                     ex.printStackTrace();
-    //                 }
-    //             });
-    // }
+    @Test
+    void testFilterByPriceRange() {
+        client.get()
+                .uri("/price?minPrice=900&maxPrice=1600")
+                .exchange()
+                .expectStatus().isOk()
+                .expectHeader().contentType(MediaType.APPLICATION_JSON)
+                .expectBody()
+                .consumeWith(res -> {
+                    try {
+                        JsonNode json = objectMapper.readTree(res.getResponseBody());
+                        assertAll(
+                            () -> assertNotNull(json),
+                            () -> assertTrue(json.isArray()),
+                            () -> assertEquals(2, json.size()),
+                            () -> assertEquals(2L, json.get(0).path("id").asLong()),
+                            () -> assertEquals(1L, json.get(1).path("id").asLong()),
+                            () -> assertEquals("Asus Zenbook", json.get(0).path("product").path("name").asText()),
+                            () -> assertEquals("iPhone 15", json.get(1).path("product").path("name").asText()),
+                            () -> assertEquals("Notebook de ultima generacion", json.get(0).path("product").path("description").asText()),
+                            () -> assertEquals("Smartphone Apple", json.get(1).path("product").path("description").asText()),
+                            () -> assertEquals("ASUS", json.get(0).path("product").path("brand").path("name").asText()),
+                            () -> assertEquals("Apple", json.get(1).path("product").path("brand").path("name").asText()),
+                            () -> assertEquals("SKU2501", json.get(0).path("sku").asText()),
+                            () -> assertEquals("SKU2210", json.get(1).path("sku").asText()),
+                            () -> assertEquals("Notebooks", json.get(0).path("product").path("category").path("name").asText()),
+                            () -> assertEquals("Smartphone", json.get(1).path("product").path("category").path("name").asText()),
+                            () -> assertEquals(999.99, json.get(0).path("price").asDouble()),
+                            () -> assertEquals(1500.99, json.get(1).path("price").asDouble())
+                        );
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                });
+    }
 
     // @Test
     // void testSearchWithStopWords() {
