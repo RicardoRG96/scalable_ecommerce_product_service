@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ricardo.scalable.ecommerce.platform.product_service.entities.Product;
 import com.ricardo.scalable.ecommerce.platform.product_service.entities.ProductSku;
 import com.ricardo.scalable.ecommerce.platform.product_service.repositories.dto.ProductSkuCreationDto;
 import com.ricardo.scalable.ecommerce.platform.product_service.searchService.SearchServiceClient;
