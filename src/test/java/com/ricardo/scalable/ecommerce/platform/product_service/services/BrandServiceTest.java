@@ -17,8 +17,6 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
-import java.sql.Timestamp;
-import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 
@@ -85,19 +83,8 @@ public class BrandServiceTest {
 
     @Test
     void testSave() {
-        BrandCreationDto brandCreationRequest = new BrandCreationDto();
-        brandCreationRequest.setName("Nike");
-        brandCreationRequest.setDescription("Marca nike");
-        brandCreationRequest.setLogoUrl("logo2.png");
-
-        Brand brandCreationResponse = new Brand(
-            8L, 
-            "Nike", 
-            "Marca nike", 
-            "logo2.png", 
-            Timestamp.from(Instant.now()),
-            Timestamp.from(Instant.now())
-        );
+        BrandCreationDto brandCreationRequest = createBrandCreationDto();
+        Brand brandCreationResponse = createBrandCreationResponse();
 
         when(brandRepository.save(any())).thenReturn(brandCreationResponse);
 

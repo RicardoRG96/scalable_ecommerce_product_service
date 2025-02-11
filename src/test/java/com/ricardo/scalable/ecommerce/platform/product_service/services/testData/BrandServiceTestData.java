@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Optional;
 
 import com.ricardo.scalable.ecommerce.platform.product_service.entities.Brand;
+import com.ricardo.scalable.ecommerce.platform.product_service.repositories.dto.BrandCreationDto;
 
 public class BrandServiceTestData {
 
@@ -66,6 +67,28 @@ public class BrandServiceTestData {
         );
 
         return Optional.of(brand);
+    }
+
+    public static BrandCreationDto createBrandCreationDto() {
+        BrandCreationDto brandCreationDto = new BrandCreationDto();
+        brandCreationDto.setName("Nike");
+        brandCreationDto.setDescription("Marca nike");
+        brandCreationDto.setLogoUrl("logo2.png");
+
+        return brandCreationDto;
+    }
+
+    public static Brand createBrandCreationResponse() {
+        Brand brand = new Brand(
+            8L, 
+            "Nike", 
+            "Marca nike", 
+            "logo2.png", 
+            Timestamp.from(Instant.now()), 
+            Timestamp.from(Instant.now())
+        );
+
+        return brand;
     }
 
 }
