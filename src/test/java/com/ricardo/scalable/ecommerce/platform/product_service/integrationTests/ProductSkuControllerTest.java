@@ -42,7 +42,7 @@ public class ProductSkuControllerTest {
 
     @Test
     @Order(1)
-    void testGetByProductSkuId() {
+    void testGetById() {
         client.get()
                 .uri("/product-sku/1")
                 .exchange()
@@ -71,7 +71,7 @@ public class ProductSkuControllerTest {
 
     @Test
     @Order(2)
-    void testGetByProductSkuIdNotFound() {
+    void testGetByIdNotFound() {
         String notExistingId = "100";
 
         client.get()
