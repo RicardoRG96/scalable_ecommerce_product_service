@@ -9,6 +9,7 @@ import com.ricardo.scalable.ecommerce.platform.product_service.entities.Product;
 import com.ricardo.scalable.ecommerce.platform.product_service.entities.ProductAttribute;
 
 import com.ricardo.scalable.ecommerce.platform.product_service.entities.ProductSku;
+import com.ricardo.scalable.ecommerce.platform.product_service.repositories.dto.ProductSkuCreationDto;
 
 import static com.ricardo.scalable.ecommerce.platform.product_service.services.testData.ProductServiceTestData.*;
 import static com.ricardo.scalable.ecommerce.platform.product_service.services.testData.ProductAttributeServiceTestData.*;
@@ -243,6 +244,46 @@ public class ProductSkuServiceTestData {
         ProductSku productSku1 = createProductSku001().orElseThrow();
         ProductSku productSku4 = createProductSku004().orElseThrow();
         return Optional.of(List.of(productSku1, productSku4));
+    }
+
+    public static ProductSkuCreationDto createProductSkuCreationDto() {
+        ProductSkuCreationDto productSkuCreationDto = new ProductSkuCreationDto(
+            4L, 5L, 3L, "SKU008", 30.00, 100, true, true, false
+        );
+
+        return productSkuCreationDto;
+    }
+
+    public static ProductSku createProductSkuCreationResponse() {
+        ProductSku productSku = new ProductSku();
+        productSku.setId(8L);
+        productSku.setProduct(createProduct004().orElseThrow());
+        productSku.setSizeAttribute(createProductAttribute005().orElseThrow());
+        productSku.setColorAttribute(createProductAttribute003().orElseThrow());
+        productSku.setSku("SKU008");
+        productSku.setPrice(30.00);
+        productSku.setStock(100);
+        productSku.setIsActive(true);
+        productSku.setIsFeatured(true);
+        productSku.setIsOnSale(false);
+
+        return productSku;
+    }
+
+    public static ProductSku createUpdatedProductSku() {
+        ProductSku productSku = new ProductSku();
+        productSku.setId(1L);
+        productSku.setProduct(createProduct001().orElseThrow());
+        productSku.setSizeAttribute(createProductAttribute007().orElseThrow());
+        productSku.setColorAttribute(createProductAttribute003().orElseThrow());
+        productSku.setSku("SKU001");
+        productSku.setPrice(50.00);
+        productSku.setStock(10);
+        productSku.setIsActive(true);
+        productSku.setIsFeatured(true);
+        productSku.setIsOnSale(true);
+
+        return productSku;
     }
 
 }

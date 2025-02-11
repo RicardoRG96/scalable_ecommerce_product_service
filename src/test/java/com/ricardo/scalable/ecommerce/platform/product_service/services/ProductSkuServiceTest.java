@@ -252,26 +252,13 @@ public class ProductSkuServiceTest {
 
     @Test
     void testSave() {
-        ProductSku productSkuResponse = new ProductSku();
-        productSkuResponse.setId(8L);
-        productSkuResponse.setProduct(createProduct004().orElseThrow());
-        productSkuResponse.setSizeAttribute(createProductAttribute005().orElseThrow());
-        productSkuResponse.setColorAttribute(createProductAttribute003().orElseThrow());
-        productSkuResponse.setSku("SKU008");
-        productSkuResponse.setPrice(30.00);
-        productSkuResponse.setStock(100);
-        productSkuResponse.setIsActive(true);
-        productSkuResponse.setIsFeatured(true);
-        productSkuResponse.setIsOnSale(false);
+        ProductSkuCreationDto productSkuCreationRequest = createProductSkuCreationDto();
+        ProductSku productSkuResponse = createProductSkuCreationResponse();
 
         when(productSkuRepository.save(any())).thenReturn(productSkuResponse);
         when(productRepository.findById(4L)).thenReturn(createProduct004());
         when(productAttributeRepository.findById(5L)).thenReturn(createProductAttribute005());
         when(productAttributeRepository.findById(3L)).thenReturn(createProductAttribute003());
-
-        ProductSkuCreationDto productSkuCreationRequest = new ProductSkuCreationDto(
-            4L, 5L, 3L, "SKU008", 30.00, 100, true, true, false
-        );
 
         Optional<ProductSku> productSku = productSkuService.save(productSkuCreationRequest);
 
@@ -292,17 +279,7 @@ public class ProductSkuServiceTest {
 
     @Test
     void testUpdate() {
-        ProductSku updatedProductSku = new ProductSku();
-        updatedProductSku.setId(1L);
-        updatedProductSku.setProduct(createProduct001().orElseThrow());
-        updatedProductSku.setSizeAttribute(createProductAttribute007().orElseThrow());
-        updatedProductSku.setColorAttribute(createProductAttribute003().orElseThrow());
-        updatedProductSku.setSku("SKU001");
-        updatedProductSku.setPrice(50.00);
-        updatedProductSku.setStock(10);
-        updatedProductSku.setIsActive(true);
-        updatedProductSku.setIsFeatured(true);
-        updatedProductSku.setIsOnSale(true);
+        ProductSku updatedProductSku = createUpdatedProductSku();
 
         when(productSkuRepository.findById(1L)).thenReturn(createProductSku001());
         when(productSkuRepository.save(any())).thenReturn(updatedProductSku);
