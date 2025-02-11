@@ -68,7 +68,7 @@ public class BrandControllerTest {
 
     @Test
     @Order(2)
-    void testGetNonExistingBrandId() {
+    void testGetByIdNotFound() {
         String notExistingBrandId = "999";
 
         client.get()
@@ -104,7 +104,7 @@ public class BrandControllerTest {
 
     @Test
     @Order(4)
-    void testGetByNonExistingCategoryName() {
+    void testGetByByNameNotFound() {
         String notExistingBrandName = "NotExistingBrand";
 
         client.get()
@@ -175,7 +175,7 @@ public class BrandControllerTest {
 
     @Test
     @Order(7)
-    void testBadRequestCreateBrand() {
+    void testCreateBrandBadRequest() {
         BrandCreationDto brandCreationBadRequest = new BrandCreationDto();
 
         client.post()
@@ -214,42 +214,11 @@ public class BrandControllerTest {
                         e.printStackTrace();
                     }
                 });
-
-        Brand brandBadRequest = new Brand();
-
-        client.put()
-                .uri("/brands/1")
-                .contentType(MediaType.APPLICATION_JSON)
-                .bodyValue(brandBadRequest)
-                .exchange()
-                .expectStatus().isBadRequest();
-
-        String notExistingBrandId = "999";
-
-        client.put()
-                .uri("/brands/" + notExistingBrandId)
-                .contentType(MediaType.APPLICATION_JSON)
-                .bodyValue(brandRequest)
-                .exchange()
-                .expectStatus().isNotFound();
     }
 
     @Test
     @Order(9)
-    void testBadRequestUpdateBrand() {
-        Brand brandBadRequest = new Brand();
-
-        client.put()
-            .uri("/brands/1")
-            .contentType(MediaType.APPLICATION_JSON)
-            .bodyValue(brandBadRequest)
-            .exchange()
-            .expectStatus().isBadRequest();
-    }
-
-    @Test
-    @Order(10)
-    void testNotFoundUpdateBrand() {
+    void testUpdateBrandNotFound() {
         Brand brandRequest = createBrand001();
         String notExistingBrandId = "999";
 
@@ -259,6 +228,19 @@ public class BrandControllerTest {
             .bodyValue(brandRequest)
             .exchange()
             .expectStatus().isNotFound();
+    }
+
+    @Test
+    @Order(10)
+    void testUpdateBrandBadRequest() {
+        Brand brandBadRequest = new Brand();
+
+        client.put()
+            .uri("/brands/1")
+            .contentType(MediaType.APPLICATION_JSON)
+            .bodyValue(brandBadRequest)
+            .exchange()
+            .expectStatus().isBadRequest();
     }
 
     @Test
@@ -286,7 +268,11 @@ public class BrandControllerTest {
                     e.printStackTrace();
                 }
             });
+    }
 
+    @Test
+    @Order(12)
+    void testGetDeletedBrand() {
         client.get()
             .uri("/brands/7")
             .exchange()

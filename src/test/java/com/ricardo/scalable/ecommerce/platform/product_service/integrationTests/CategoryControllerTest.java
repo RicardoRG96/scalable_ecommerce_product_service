@@ -69,7 +69,7 @@ public class CategoryControllerTest {
 
     @Test
     @Order(2)
-    void testGetNonExistingCategoryId() {
+    void testGetByIdNotFound() {
         String notExistingCategoryId = "50";
 
         client.get()
@@ -106,7 +106,7 @@ public class CategoryControllerTest {
 
     @Test
     @Order(4)
-    void testGetNonExistingCategoryName() {
+    void testGetByNameNotFound() {
         String notExistingCategoryName = "PlayStation 5";
 
         client.get()
@@ -180,7 +180,7 @@ public class CategoryControllerTest {
 
     @Test
     @Order(7)
-    void testBadRequestCreateCategory() {
+    void testCreateCategoryBadRequest() {
         CategoryCreationDto categoryCreationBadRequest = new CategoryCreationDto();
 
         client.post()
@@ -235,7 +235,7 @@ public class CategoryControllerTest {
 
     @Test
     @Order(10)
-    void testUpdateNonExistingCategory() {
+    void testUpdateCategoryNotFound() {
         Category category = createCategory002();
 
         String notExistingCategoryId = "50";
@@ -273,13 +273,15 @@ public class CategoryControllerTest {
                         ex.printStackTrace();
                     }
                 });
-
+    }
+    
+    @Test
+    @Order(12)
+    void testGetDeletedCategory() {
         client.get()
                 .uri("/categories/10")
                 .exchange()
                 .expectStatus().isNotFound();
-
-        
     }
 
     @Test
