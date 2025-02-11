@@ -19,8 +19,6 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
-import java.sql.Timestamp;
-import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 
@@ -107,26 +105,12 @@ public class ProductServiceTest {
 
     @Test
     void testSave() {
-        Product productCreationResponse = new Product();
-        productCreationResponse.setId(6L);
-        productCreationResponse.setName("Samsung Galaxy S23");
-        productCreationResponse.setDescription("Celular de ultima generacion Samsung");
-        productCreationResponse.setCategory(createSubCategory002().orElseThrow());
-        productCreationResponse.setBrand(createBrand002().orElseThrow());
-        productCreationResponse.setCover("image3.png");
-        productCreationResponse.setCreatedAt(Timestamp.from(Instant.now()));
-        productCreationResponse.setUpdatedAt(Timestamp.from(Instant.now()));
+        ProductCreationDto productCreationRequest = createProductCreationDto();
+        Product productCreationResponse = createProductCreationResponse();
 
         when(categoryRepository.findById(5L)).thenReturn(createSubCategory002());
         when(brandRepository.findById(2L)).thenReturn(createBrand002());
         when(productRepository.save(any())).thenReturn(productCreationResponse);
-
-        ProductCreationDto productCreationRequest = new ProductCreationDto();
-        productCreationRequest.setName("Samsung Galaxy S23");
-        productCreationRequest.setDescription("Celular de ultima generacion Samsung");
-        productCreationRequest.setCategoryId(5L);
-        productCreationRequest.setBrandId(2L);
-        productCreationRequest.setCover("image3.png");
 
         Optional<Product> createdProduct = productService.save(productCreationRequest);
 

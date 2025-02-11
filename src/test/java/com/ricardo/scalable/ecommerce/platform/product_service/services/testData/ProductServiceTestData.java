@@ -8,6 +8,7 @@ import java.util.Optional;
 import com.ricardo.scalable.ecommerce.platform.product_service.entities.Brand;
 import com.ricardo.scalable.ecommerce.platform.product_service.entities.Category;
 import com.ricardo.scalable.ecommerce.platform.product_service.entities.Product;
+import com.ricardo.scalable.ecommerce.platform.product_service.repositories.dto.ProductCreationDto;
 
 import static com.ricardo.scalable.ecommerce.platform.product_service.services.testData.CategoryServiceTestData.*;
 import static com.ricardo.scalable.ecommerce.platform.product_service.services.testData.BrandServiceTestData.*;
@@ -114,6 +115,31 @@ public class ProductServiceTestData {
         product.setUpdatedAt(Timestamp.from(Instant.now()));
 
         return Optional.of(product);
+    }
+
+    public static ProductCreationDto createProductCreationDto() {
+        ProductCreationDto productCreationDto = new ProductCreationDto();
+        productCreationDto.setName("Samsung Galaxy S23");
+        productCreationDto.setDescription("Celular de ultima generacion Samsung");
+        productCreationDto.setCategoryId(5L);
+        productCreationDto.setBrandId(2L);
+        productCreationDto.setCover("image3.png");
+
+        return productCreationDto;
+    }
+
+    public static Product createProductCreationResponse() {
+        Product product = new Product();
+        product.setId(6L);
+        product.setName("Samsung Galaxy S23");
+        product.setDescription("Celular de ultima generacion Samsung");
+        product.setCategory(createSubCategory002().orElseThrow());
+        product.setBrand(createBrand002().orElseThrow());
+        product.setCover("image3.png");
+        product.setCreatedAt(Timestamp.from(Instant.now()));
+        product.setUpdatedAt(Timestamp.from(Instant.now()));
+
+        return product;
     }
 
 }
