@@ -42,7 +42,7 @@ public class ProductAttributeControllerTest {
 
     @Test
     @Order(1)
-    void testGetByProductAttributeId() {
+    void testGetById() {
         client.get()
                 .uri("/product-attribute/1")
                 .exchange()

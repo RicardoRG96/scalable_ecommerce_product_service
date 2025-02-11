@@ -44,7 +44,7 @@ public class ProductControllerTest {
 
     @Test
     @Order(1)
-    void testGetByProductId() {
+    void testGetById() {
         client.get()
                 .uri("/1")
                 .exchange()
@@ -70,7 +70,7 @@ public class ProductControllerTest {
 
     @Test
     @Order(2)
-    void testGetNotExistingProduct() {
+    void testGetByIdNotFound() {
         String notExistingProductId = "50";
 
         client.get()
@@ -106,7 +106,7 @@ public class ProductControllerTest {
 
     @Test
     @Order(4)
-    void testGetByNotExistingProductName() {
+    void testGetByNameNotFound() {
         String notExistingProductName = "Samsung Galaxy s22";
 
         client.get()

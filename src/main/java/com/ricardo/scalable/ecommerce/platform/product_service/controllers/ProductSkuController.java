@@ -35,7 +35,7 @@ public class ProductSkuController {
     private SearchServiceClient searchServiceClient;
 
     @GetMapping("/product-sku/{id}")
-    public ResponseEntity<ProductSku> getByProductSkuId(@PathVariable Long id) {
+    public ResponseEntity<ProductSku> getById(@PathVariable Long id) {
         Optional<ProductSku> productSkuOptional = productSkuService.findById(id);
         if (productSkuOptional.isPresent()) {
             return ResponseEntity.ok(productSkuOptional.orElseThrow());

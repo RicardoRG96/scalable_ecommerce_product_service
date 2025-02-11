@@ -30,7 +30,7 @@ public class ProductAttributeController {
     private ProductAttributeService productAttributeService;
 
     @GetMapping("/product-attribute/{id}")
-    public ResponseEntity<ProductAttribute> getByProductAttributeId(@PathVariable Long id) {
+    public ResponseEntity<ProductAttribute> getById(@PathVariable Long id) {
         Optional<ProductAttribute> productAttributeOptional = productAttributeService.findById(id);
         boolean isPresent = productAttributeOptional.isPresent();
 

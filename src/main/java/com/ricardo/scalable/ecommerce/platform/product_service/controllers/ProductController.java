@@ -29,7 +29,7 @@ public class ProductController {
     private ProductService productService;
 
     @GetMapping("/{id}")
-    public ResponseEntity<Product> getByProductId(@PathVariable Long id) {
+    public ResponseEntity<Product> getById(@PathVariable Long id) {
         Optional<Product> productOptional = productService.findById(id);
 
         if (productOptional.isPresent()) {
