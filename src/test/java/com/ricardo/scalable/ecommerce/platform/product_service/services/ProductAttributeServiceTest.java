@@ -151,12 +151,8 @@ public class ProductAttributeServiceTest {
 
     @Test
     void testSave() {
-        ProductAttributeCreationDto productAttributeCreationRequest = new ProductAttributeCreationDto();
-        productAttributeCreationRequest.setType("size");
-        productAttributeCreationRequest.setValue("XL");
-
-        ProductAttribute productAttributeCreationResponse = new ProductAttribute(
-            7L, "size", "XL", Timestamp.from(Instant.now()), Timestamp.from(Instant.now()));
+        ProductAttributeCreationDto productAttributeCreationRequest = createProductAttributeCreationDto();
+        ProductAttribute productAttributeCreationResponse = createProductAttributeCreationResponse();
 
         when(productAttributeRepository.save(any())).thenReturn(productAttributeCreationResponse);
 
@@ -164,7 +160,7 @@ public class ProductAttributeServiceTest {
 
         assertAll(
             () -> assertNotNull(productAttribute),
-            () -> assertEquals(7L, productAttribute.getId()),
+            () -> assertEquals(9L, productAttribute.getId()),
             () -> assertEquals("size", productAttribute.getType()),
             () -> assertEquals("XL", productAttribute.getValue())
         );

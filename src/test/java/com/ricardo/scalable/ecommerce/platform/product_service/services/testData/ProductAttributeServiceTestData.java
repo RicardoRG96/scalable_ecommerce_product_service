@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Optional;
 
 import com.ricardo.scalable.ecommerce.platform.product_service.entities.ProductAttribute;
+import com.ricardo.scalable.ecommerce.platform.product_service.repositories.dto.ProductAttributeCreationDto;
 
 public class ProductAttributeServiceTestData {
 
@@ -107,6 +108,15 @@ public class ProductAttributeServiceTestData {
                 createProductAttribute007().orElseThrow()
             )
         );
+    }
+
+    public static ProductAttributeCreationDto createProductAttributeCreationDto() {
+        return new ProductAttributeCreationDto("size", "XL");
+    }
+
+    public static ProductAttribute createProductAttributeCreationResponse() {
+        return new ProductAttribute(
+            9L, "size", "XL", Timestamp.from(Instant.now()), Timestamp.from(Instant.now()));
     }
 
 }
