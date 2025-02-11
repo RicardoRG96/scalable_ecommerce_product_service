@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Optional;
 
 import com.ricardo.scalable.ecommerce.platform.product_service.entities.Category;
+import com.ricardo.scalable.ecommerce.platform.product_service.repositories.dto.CategoryCreationDto;
 
 public class CategoryServiceTestData {
 
@@ -133,6 +134,26 @@ public class CategoryServiceTestData {
         );
 
         return Optional.of(category);
+    }
+
+    public static CategoryCreationDto createCategoryCreationDto() {
+        CategoryCreationDto categoryCreationDto = new CategoryCreationDto();
+        categoryCreationDto.setName("Electrohogar");
+        categoryCreationDto.setDescription("Descripcion electrohogar");
+        categoryCreationDto.setParentId(null);
+
+        return categoryCreationDto;
+    }
+
+    public static Category createCategoryCreationResponse() {
+        return new Category(
+            9L, 
+            "Electrohogar", 
+            "Descripcion electrohogar", 
+            null, 
+            Timestamp.from(Instant.now()), 
+            Timestamp.from(Instant.now())
+        );
     }
 
 }

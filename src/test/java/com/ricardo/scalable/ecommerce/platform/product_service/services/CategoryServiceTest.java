@@ -18,8 +18,6 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
-import java.sql.Timestamp;
-import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 
@@ -36,7 +34,7 @@ public class CategoryServiceTest {
     CategoryService categoryService;
 
     @Test
-    void testFindByCategoryId() {
+    void testFindById() {
         when(categoryRepository.findById(1L)).thenReturn(createParentCategory001());
         when(categoryRepository.findById(4L)).thenReturn(createSubCategory001());
 
@@ -103,19 +101,8 @@ public class CategoryServiceTest {
 
     @Test
     void testSave() {
-        CategoryCreationDto categoryCreationRequest = new CategoryCreationDto();
-        categoryCreationRequest.setName("Electrohogar");
-        categoryCreationRequest.setDescription("Descripcion electrohogar");
-        categoryCreationRequest.setParentId(null);
-
-        Category categoryCreationResponse = new Category(
-            9L, 
-            "Electrohogar", 
-            "Descripcion electrohogar", 
-            null, 
-            Timestamp.from(Instant.now()), 
-            Timestamp.from(Instant.now())
-        );
+        CategoryCreationDto categoryCreationRequest = createCategoryCreationDto();
+        Category categoryCreationResponse = createCategoryCreationResponse();
 
         when(categoryRepository.save(any())).thenReturn(categoryCreationResponse);
 
