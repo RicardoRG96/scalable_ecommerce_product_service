@@ -28,11 +28,6 @@ public class ProductGallery {
     @NotNull
     private Product product;
 
-    @JoinColumn(name = "size_attribute_id", unique = false)
-    @ManyToOne
-    @NotNull
-    private ProductAttribute sizeAttribute;
-
     @JoinColumn(name = "color_attribute_id", unique = false)
     @ManyToOne
     @NotNull
@@ -52,9 +47,8 @@ public class ProductGallery {
     public ProductGallery() {
     }
 
-    public ProductGallery(Product product, ProductAttribute sizeAttribute, ProductAttribute colorAttribute, String imageUrl) {
+    public ProductGallery(Product product, ProductAttribute colorAttribute, String imageUrl) {
         this.product = product;
-        this.sizeAttribute = sizeAttribute;
         this.colorAttribute = colorAttribute;
         this.imageUrl = imageUrl;
     }
@@ -73,14 +67,6 @@ public class ProductGallery {
 
     public void setProduct(Product product) {
         this.product = product;
-    }
-
-    public ProductAttribute getSizeAttribute() {
-        return sizeAttribute;
-    }
-
-    public void setSizeAttribute(ProductAttribute sizeAttribute) {
-        this.sizeAttribute = sizeAttribute;
     }
 
     public ProductAttribute getColorAttribute() {
