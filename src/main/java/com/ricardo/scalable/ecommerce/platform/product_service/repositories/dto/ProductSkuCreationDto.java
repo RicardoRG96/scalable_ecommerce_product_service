@@ -3,16 +3,20 @@ package com.ricardo.scalable.ecommerce.platform.product_service.repositories.dto
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 public class ProductSkuCreationDto {
 
     @Min(1)
+    @NotNull
     private Long productId;
 
     @Min(1)
+    @NotNull
     private Long sizeAttributeId;
 
     @Min(1)
+    @NotNull
     private Long colorAttributeId;
 
     @NotBlank
@@ -21,6 +25,8 @@ public class ProductSkuCreationDto {
     @DecimalMin("0.00")
     private Double price;
 
+    @Min(1)
+    @NotNull
     private Integer stock;
 
     private Boolean isActive;

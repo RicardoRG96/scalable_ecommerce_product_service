@@ -12,8 +12,10 @@ import com.ricardo.scalable.ecommerce.platform.product_service.repositories.Prod
 import com.ricardo.scalable.ecommerce.platform.product_service.repositories.dto.ProductGalleryCreationDto;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+@Service
 public class ProductGalleryServiceImpl implements ProductGalleryService {
 
     @Autowired
@@ -47,12 +49,6 @@ public class ProductGalleryServiceImpl implements ProductGalleryService {
     @Transactional(readOnly = true)
     public Optional<ProductGallery> findByProductIdAndColorAttributeId(Long productId, Long colorAttributeId) {
         return productGalleryRepository.findByProductIdAndColorAttributeId(productId, colorAttributeId);
-    }
-
-    @Override
-    @Transactional(readOnly = true)
-    public Optional<ProductGallery> findByImageUrl(String imageUrl) {
-        return productGalleryRepository.findByImageUrl(imageUrl);
     }
 
     @Override

@@ -3,6 +3,7 @@ package com.ricardo.scalable.ecommerce.platform.product_service.repositories.dto
 import jakarta.persistence.Column;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 public class ProductCreationDto {
 
@@ -13,9 +14,11 @@ public class ProductCreationDto {
     private String description;
 
     @Min(1)
+    @NotNull
     private Long categoryId;
 
     @Min(1)
+    @NotNull
     private Long brandId;
 
     @Column(name = "cover")

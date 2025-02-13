@@ -2,13 +2,16 @@ package com.ricardo.scalable.ecommerce.platform.product_service.repositories.dto
 
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 public class ProductGalleryCreationDto {
 
     @Min(1)
+    @NotNull
     private Long productId;
 
     @Min(1)
+    @NotNull
     private Long colorAttributeId;
 
     @NotBlank

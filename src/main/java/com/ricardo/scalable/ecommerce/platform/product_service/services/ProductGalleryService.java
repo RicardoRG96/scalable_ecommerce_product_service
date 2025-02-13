@@ -16,8 +16,6 @@ public interface ProductGalleryService {
 
     Optional<ProductGallery> findByProductIdAndColorAttributeId(Long productId, Long colorAttributeId);
 
-    Optional<ProductGallery> findByImageUrl(String imageUrl);
-
     Iterable<ProductGallery> findAll();
 
     Optional<ProductGallery> save(ProductGalleryCreationDto productGallery);

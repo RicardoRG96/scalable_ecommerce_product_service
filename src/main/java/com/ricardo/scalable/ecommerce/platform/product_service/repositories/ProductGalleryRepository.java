@@ -15,6 +15,4 @@ public interface ProductGalleryRepository extends CrudRepository<ProductGallery,
 
     Optional<ProductGallery> findByProductIdAndColorAttributeId(Long productId, Long colorAttributeId);
 
-    Optional<ProductGallery> findByImageUrl(String imageUrl);
-
 }

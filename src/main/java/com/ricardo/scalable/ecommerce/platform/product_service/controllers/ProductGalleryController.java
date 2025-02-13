@@ -78,23 +78,12 @@ public class ProductGalleryController {
         return ResponseEntity.notFound().build();
     }
 
-    @GetMapping("/product-gallery/image-url/{imageUrl}")
-    public ResponseEntity<ProductGallery> getByImageUrl(@PathVariable String imageUrl) {
-        Optional<ProductGallery> productGallery = productGalleryService.findByImageUrl(imageUrl);
-        boolean isPresent = productGallery.isPresent();
-
-        if (isPresent) {
-            return ResponseEntity.ok(productGallery.orElseThrow());
-        }
-        return ResponseEntity.notFound().build();
-    }
-
     @GetMapping("/product-gallery")
     public ResponseEntity<Iterable<ProductGallery>> getAll() {
         List<ProductGallery> productGallery = (List<ProductGallery>) productGalleryService.findAll();
         boolean isEmpty = productGallery.isEmpty();
 
-        if (isEmpty) {
+        if (!isEmpty) {
             return ResponseEntity.ok(productGallery);
         }
         return ResponseEntity.notFound().build();
