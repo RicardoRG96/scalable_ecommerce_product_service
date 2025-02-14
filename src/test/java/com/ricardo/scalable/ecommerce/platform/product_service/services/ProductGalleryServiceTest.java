@@ -96,4 +96,41 @@ public class ProductGalleryServiceTest {
         );
     }
 
+    @Test
+    void testFindByProductIdAndColorAttributeId() {
+        Optional<ProductGallery> productGallery = createProductGallery004();
+        when(productGalleryRepository.findByProductIdAndColorAttributeId(4L, 3L)).thenReturn(productGallery);
+
+        Optional<ProductGallery> result = productGalleryService.findByProductIdAndColorAttributeId(4L, 3L);
+
+        assertAll(
+            () -> assertTrue(result.isPresent()),
+            () -> assertEquals(4L, result.orElseThrow().getId()),
+            () -> assertEquals("Polera manga corta", result.orElseThrow().getProduct().getName()),
+            () -> assertEquals("https://example.com/image4.png", result.orElseThrow().getImageUrl())
+        );
+    }
+
+    @Test
+    void testFindAll() {
+        List<ProductGallery> productsGallery = (List<ProductGallery>) createListOfProductGallery();
+        when(productGalleryRepository.findAll()).thenReturn(productsGallery);
+
+        List<ProductGallery> result = (List<ProductGallery>) productGalleryService.findAll();
+
+        assertAll(
+            () -> assertNotNull(result),
+            () -> assertFalse(result.isEmpty()),
+            () -> assertEquals(1L, result.get(0).getId()),
+            () -> assertEquals(2L, result.get(1).getId()),
+            () -> assertEquals(3L, result.get(2).getId()),
+            () -> assertEquals("Notebook Samsung", result.get(0).getProduct().getName()),
+            () -> assertEquals("iPhone Apple", result.get(1).getProduct().getName()),
+            () -> assertEquals("MacBook Apple", result.get(2).getProduct().getName()),
+            () -> assertEquals("https://example.com/image1.png", result.get(0).getImageUrl()),
+            () -> assertEquals("https://example.com/image2.png", result.get(1).getImageUrl()),
+            () -> assertEquals("https://example.com/image3.png", result.get(2).getImageUrl())
+        );
+    }
+
 }
