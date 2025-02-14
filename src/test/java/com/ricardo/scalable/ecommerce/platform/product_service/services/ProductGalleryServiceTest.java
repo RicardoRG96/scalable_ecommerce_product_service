@@ -133,4 +133,24 @@ public class ProductGalleryServiceTest {
         );
     }
 
+    @Test
+    void testSave() {
+        ProductGalleryCreationDto productGalleryCreationDto = createProductGalleryCreationDto();
+        ProductGallery productGallery = createProductGalleryCreationResponse();
+
+        when(productRepository.findById(4L)).thenReturn(createProduct004());
+        when(productAttributeRepository.findById(3L)).thenReturn(createProductAttribute003());
+        when(productGalleryRepository.save(any())).thenReturn(productGallery);
+
+        Optional<ProductGallery> result = productGalleryService.save(productGalleryCreationDto);
+
+        assertAll(
+            () -> assertTrue(result.isPresent()),
+            () -> assertEquals(8L, result.orElseThrow().getId()),
+            () -> assertEquals("Polera manga corta", result.orElseThrow().getProduct().getName()),
+            () -> assertEquals("negro", result.orElseThrow().getColorAttribute().getValue()),
+            () -> assertEquals("https://example.com/image8.png", result.orElseThrow().getImageUrl())
+        );
+    }
+
 }

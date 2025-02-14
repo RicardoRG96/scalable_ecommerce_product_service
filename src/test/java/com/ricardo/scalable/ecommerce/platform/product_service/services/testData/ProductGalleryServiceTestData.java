@@ -1,11 +1,14 @@
 package com.ricardo.scalable.ecommerce.platform.product_service.services.testData;
 
+import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 
 import com.ricardo.scalable.ecommerce.platform.product_service.entities.Product;
 import com.ricardo.scalable.ecommerce.platform.product_service.entities.ProductAttribute;
 import com.ricardo.scalable.ecommerce.platform.product_service.entities.ProductGallery;
+import com.ricardo.scalable.ecommerce.platform.product_service.repositories.dto.ProductGalleryCreationDto;
 
 import static com.ricardo.scalable.ecommerce.platform.product_service.services.testData.ProductAttributeServiceTestData.*;
 import static com.ricardo.scalable.ecommerce.platform.product_service.services.testData.ProductServiceTestData.*;
@@ -186,6 +189,28 @@ public class ProductGalleryServiceTestData {
                 createProductGallery004().orElseThrow()
             )
         );
+    }
+
+    public static ProductGalleryCreationDto createProductGalleryCreationDto() {
+        ProductGalleryCreationDto productGalleryCreationDto = new ProductGalleryCreationDto();
+        productGalleryCreationDto.setProductId(4L);
+        productGalleryCreationDto.setColorAttributeId(3L);
+        productGalleryCreationDto.setImageUrl("https://example.com/image8.png");
+
+        return productGalleryCreationDto;
+    }
+
+    public static ProductGallery createProductGalleryCreationResponse() {
+        ProductGallery productGallery = new ProductGallery();
+
+        productGallery.setId(8L);
+        productGallery.setProduct(createProduct004().orElseThrow());
+        productGallery.setColorAttribute(createProductAttribute003().orElseThrow());
+        productGallery.setImageUrl("https://example.com/image8.png");
+        productGallery.setCreatedAt(Timestamp.from(Instant.now()));
+        productGallery.setUpdatedAt(Timestamp.from(Instant.now()));
+
+        return productGallery;
     }
     
 }
