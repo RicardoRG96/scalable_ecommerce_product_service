@@ -54,6 +54,25 @@ public class ProductGalleryServiceTest {
         );
     }
 
+    @Test
+    void testFindByProductId() {
+        Optional<List<ProductGallery>> productsGallery = createListOfProductGalleryByProductId4();
+        when(productGalleryRepository.findByProductId(4L)).thenReturn(productsGallery);
 
+        Optional<List<ProductGallery>> result = productGalleryService.findByProductId(4L);
+
+        assertAll(
+            () -> assertTrue(result.isPresent()),
+            () -> assertFalse(result.orElseThrow().isEmpty()),
+            () -> assertEquals(4L, result.orElseThrow().get(0).getId()),
+            () -> assertEquals(6L, result.orElseThrow().get(1).getId()),
+            () -> assertEquals("Polera manga corta", result.orElseThrow().get(0).getProduct().getName()),
+            () -> assertEquals("Polera manga corta", result.orElseThrow().get(1).getProduct().getName()),
+            () -> assertEquals("negro", result.orElseThrow().get(0).getColorAttribute().getValue()),
+            () -> assertEquals("rojo", result.orElseThrow().get(1).getColorAttribute().getValue()),
+            () -> assertEquals("https://example.com/image4.png", result.orElseThrow().get(0).getImageUrl()),
+            () -> assertEquals("https://example.com/image6.png", result.orElseThrow().get(1).getImageUrl())
+        );
+    }
 
 }
