@@ -117,4 +117,28 @@ public class ProductGalleryControllerTest {
                 });
     }
 
+    @Test
+    @Order(4)
+    void testGetByProductIdAndColorAttributeId() {
+        client.get()
+                .uri("/product-gallery/product/4/color-attribute/3")
+                .exchange()
+                .expectStatus().isOk()
+                .expectHeader().contentType(MediaType.APPLICATION_JSON)
+                .expectBody()
+                .consumeWith(res -> {
+                    try {
+                        JsonNode json = objectMapper.readTree(res.getResponseBody());
+                        assertAll(
+                            () -> assertNotNull(json),
+                            () -> assertEquals(4L, json.path("id").asLong()),
+                            () -> assertEquals("Jeans Lee", json.path("product").path("name").asText()),
+                            () -> assertEquals("https://example.com/images/jeans-lee-black.jpg", json.path("imageUrl").asText())
+                        );
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                });
+    }
+
 }
