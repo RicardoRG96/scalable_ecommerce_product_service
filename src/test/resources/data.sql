@@ -148,3 +148,24 @@ INSERT INTO product_skus (product_id, size_attribute_id, color_attribute_id, sku
 
 INSERT INTO product_skus (product_id, size_attribute_id, color_attribute_id, sku, price, stock, is_active, is_featured, is_on_sale)
     VALUES (5, 5, 3, 'SKU1258', 19.99, 70, TRUE, FALSE, FALSE);
+
+INSERT INTO product_gallery (product_id, color_attribute_id, image_url) 
+    VALUES (1, 3, 'https://example.com/images/iphone15-black.jpg');
+
+INSERT INTO product_gallery (product_id, color_attribute_id, image_url) 
+    VALUES (2, 2, 'https://example.com/images/asus-zenbook-blue.jpg');
+
+INSERT INTO product_gallery (product_id, color_attribute_id, image_url) 
+    VALUES (3, 1, 'https://example.com/images/balon-premier-league-red.jpg');
+
+INSERT INTO product_gallery (product_id, color_attribute_id, image_url) 
+    VALUES (4, 3, 'https://example.com/images/jeans-lee-black.jpg');
+
+INSERT INTO product_gallery (product_id, color_attribute_id, image_url) 
+    VALUES (4, 2, 'https://example.com/images/jeans-lee-blue.jpg');
+
+INSERT INTO product_gallery (product_id, color_attribute_id, image_url) 
+    VALUES (5, 3, 'https://example.com/images/polera-puma-black.jpg');
+
+INSERT INTO product_gallery (product_id, color_attribute_id, image_url) 
+    VALUES (5, 2, 'https://example.com/images/polera-puma-blue.jpg');

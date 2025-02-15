@@ -23,3 +23,14 @@ CREATE TABLE IF NOT EXISTS product_skus (
     FOREIGN KEY (size_attribue_id) REFERENCES product_attributes(id),
     FOREIGN KEY (color_attribute_id) REFERENCES product_attributes(id)
 );
+
+CREATE TABLE IF NOT EXISTS product_gallery (
+	id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    product_id BIGINT,
+    color_attribute_id BIGINT,
+    image_url TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (product_id) REFERENCES products(id),
+    FOREIGN KEY (color_attribute_id) REFERENCES product_attributes(id)
+);
