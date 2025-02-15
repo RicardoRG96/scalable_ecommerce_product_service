@@ -81,12 +81,7 @@ public class ProductGalleryController {
     @GetMapping("/product-gallery")
     public ResponseEntity<Iterable<ProductGallery>> getAll() {
         List<ProductGallery> productGallery = (List<ProductGallery>) productGalleryService.findAll();
-        boolean isEmpty = productGallery.isEmpty();
-
-        if (!isEmpty) {
-            return ResponseEntity.ok(productGallery);
-        }
-        return ResponseEntity.notFound().build();
+        return ResponseEntity.ok(productGallery);
     }
 
     @PostMapping("/product-gallery")

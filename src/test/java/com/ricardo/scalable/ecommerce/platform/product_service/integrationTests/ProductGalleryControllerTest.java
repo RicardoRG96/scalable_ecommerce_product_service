@@ -62,6 +62,17 @@ public class ProductGalleryControllerTest {
 
     @Test
     @Order(2)
+    void testGetByIdNotFound() {
+        String notExistingId = "999";
+
+        client.get()
+                .uri("/product-gallery/" + notExistingId)
+                .exchange()
+                .expectStatus().isNotFound();
+    }
+
+    @Test
+    @Order(3)
     void testGetByProductId() {
         client.get()
                 .uri("/product-gallery/product/4")
@@ -89,7 +100,18 @@ public class ProductGalleryControllerTest {
     }
 
     @Test
-    @Order(3)
+    @Order(4)
+    void testGetByProductIdNotFound() {
+        String notExistingProductId = "999";
+
+        client.get()
+                .uri("/product-gallery/product/" + notExistingProductId)
+                .exchange()
+                .expectStatus().isNotFound();
+    }
+
+    @Test
+    @Order(5)
     void testGetByColorAttributeId() {
         client.get()
                 .uri("/product-gallery/color-attribute/3")
@@ -118,7 +140,18 @@ public class ProductGalleryControllerTest {
     }
 
     @Test
-    @Order(4)
+    @Order(6)
+    void testGetByColorAttributeIdNotFound() {
+        String notExistingColorAttributeId = "999";
+
+        client.get()
+                .uri("/product-gallery/color-attribute/" + notExistingColorAttributeId)
+                .exchange()
+                .expectStatus().isNotFound();
+    }
+
+    @Test
+    @Order(7)
     void testGetByProductIdAndColorAttributeId() {
         client.get()
                 .uri("/product-gallery/product/4/color-attribute/3")
@@ -134,6 +167,41 @@ public class ProductGalleryControllerTest {
                             () -> assertEquals(4L, json.path("id").asLong()),
                             () -> assertEquals("Jeans Lee", json.path("product").path("name").asText()),
                             () -> assertEquals("https://example.com/images/jeans-lee-black.jpg", json.path("imageUrl").asText())
+                        );
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                });
+    }
+
+    @Test
+    @Order(8)
+    void testGetByProductIdAndColorAttributeIdNotFound() {
+        String notExistingProductId = "999";
+        String notExistingColorAttributeId = "999";
+
+        client.get()
+                .uri("/product-gallery/product/" + notExistingProductId + "/color-attribute/" + notExistingColorAttributeId)
+                .exchange()
+                .expectStatus().isNotFound();
+    }
+
+    @Test
+    @Order(9)
+    void testGetAll() {
+        client.get()
+                .uri("/product-gallery")
+                .exchange()
+                .expectStatus().isOk()
+                .expectHeader().contentType(MediaType.APPLICATION_JSON)
+                .expectBody()
+                .consumeWith(res -> {
+                    try {
+                        JsonNode json = objectMapper.readTree(res.getResponseBody());
+                        assertAll(
+                            () -> assertNotNull(json),
+                            () -> assertTrue(json.isArray()),
+                            () -> assertEquals(7, json.size())
                         );
                     } catch (Exception e) {
                         e.printStackTrace();
