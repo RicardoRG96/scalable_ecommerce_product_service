@@ -17,8 +17,8 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ricardo.scalable.ecommerce.platform.product_service.entities.ProductGallery;
 import com.ricardo.scalable.ecommerce.platform.product_service.repositories.dto.ProductGalleryCreationDto;
-import com.ricardo.scalable.ecommerce.platform.product_service.repositories.dto.ProductSkuCreationDto;
 
 import static com.ricardo.scalable.ecommerce.platform.product_service.services.testData.ProductGalleryControllerTestData.*;
 
@@ -275,6 +275,63 @@ public class ProductGalleryControllerTest {
                 .uri("/product-gallery")
                 .contentType(MediaType.APPLICATION_JSON)
                 .bodyValue(requestBodyWithNotExistingColorAttributeId)
+                .exchange()
+                .expectStatus().isNotFound();
+    }
+
+    @Test
+    @Order(13)
+    void testUpdateProductGallery() {
+        ProductGallery requestBody = createProductGallery();
+        requestBody.setImageUrl("https://example.com/images/polera-puma-blue-full-hd.png");
+
+        client.put()
+                .uri("/product-gallery/5")
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(requestBody)
+                .exchange()
+                .expectStatus().isOk()
+                .expectHeader().contentType(MediaType.APPLICATION_JSON)
+                .expectBody()
+                .consumeWith(res -> {
+                    try {
+                        JsonNode json = objectMapper.readTree(res.getResponseBody());
+                        assertAll(
+                            () -> assertNotNull(json),
+                            () -> assertEquals(5L, json.path("id").asLong()),
+                            () -> assertEquals(4L, json.path("product").path("id").asLong()),
+                            () -> assertEquals(2L, json.path("colorAttribute").path("id").asLong()),
+                            () -> assertEquals("https://example.com/images/polera-puma-blue-full-hd.png", json.path("imageUrl").asText())
+                        );
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                });
+    }
+
+    @Test
+    @Order(14)
+    void testUpdateProductGalleryBadRequest() {
+        ProductGallery requestBody = new ProductGallery();
+
+        client.put()
+                .uri("/product-gallery/5")
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(requestBody)
+                .exchange()
+                .expectStatus().isBadRequest();
+    }
+
+    @Test
+    @Order(15)
+    void testUpdateProductGalleryNotFound() {
+        ProductGallery requestBody = createProductGallery();
+        String notExistingId = "100";
+
+        client.put()
+                .uri("/product-gallery/" + notExistingId)
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(requestBody)
                 .exchange()
                 .expectStatus().isNotFound();
     }

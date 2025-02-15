@@ -44,7 +44,7 @@ public class ProductSkuControllerTestData {
         return productSku;
     }
 
-    public static ProductAttribute createSizeAttribute() {
+    private static ProductAttribute createSizeAttribute() {
         ProductAttribute sizeAttribute = new ProductAttribute();
 
         sizeAttribute.setId(8L);
@@ -54,7 +54,7 @@ public class ProductSkuControllerTestData {
         return sizeAttribute;
     }
 
-    public static ProductAttribute createColorAttribute() {
+    private static ProductAttribute createColorAttribute() {
         ProductAttribute colorAttribute = new ProductAttribute();
 
         colorAttribute.setId(3L);
@@ -64,7 +64,7 @@ public class ProductSkuControllerTestData {
         return colorAttribute;
     }
 
-    public static Product createProduct() {
+    private static Product createProduct() {
         Product product = new Product();
         Category category = createCategory();
         Brand brand = createBrand();
@@ -79,7 +79,7 @@ public class ProductSkuControllerTestData {
         return product;
     }
 
-    public static Category createCategory() {
+    private static Category createCategory() {
         Category category = new Category();
         Category parenCategory = createParentCategory();
 
@@ -91,7 +91,7 @@ public class ProductSkuControllerTestData {
         return category;
     }
 
-    public static Category createParentCategory() {
+    private static Category createParentCategory() {
         Category category = new Category();
 
         category.setId(2L);
@@ -102,7 +102,7 @@ public class ProductSkuControllerTestData {
         return category;
     }
 
-    public static Brand createBrand() {
+    private static Brand createBrand() {
         Brand brand = new Brand();
 
         brand.setId(2L);
