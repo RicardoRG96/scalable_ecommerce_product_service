@@ -17,6 +17,10 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ricardo.scalable.ecommerce.platform.product_service.repositories.dto.ProductGalleryCreationDto;
+import com.ricardo.scalable.ecommerce.platform.product_service.repositories.dto.ProductSkuCreationDto;
+
+import static com.ricardo.scalable.ecommerce.platform.product_service.services.testData.ProductGalleryControllerTestData.*;
 
 @ActiveProfiles("test")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
@@ -207,6 +211,83 @@ public class ProductGalleryControllerTest {
                         e.printStackTrace();
                     }
                 });
+    }
+
+    @Test
+    @Order(10)
+    void testCreateProductGallery() {
+        ProductGalleryCreationDto requestBody = createProductGalleryCreationDto();
+
+        client.post()
+                .uri("/product-gallery")
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(requestBody)
+                .exchange()
+                .expectStatus().isCreated()
+                .expectHeader().contentType(MediaType.APPLICATION_JSON)
+                .expectBody()
+                .consumeWith(res -> {
+                    try {
+                        JsonNode json = objectMapper.readTree(res.getResponseBody());
+                        assertAll(
+                            () -> assertNotNull(json),
+                            () -> assertEquals(8L, json.path("id").asLong()),
+                            () -> assertEquals(5L, json.path("product").path("id").asLong()),
+                            () -> assertEquals(1L, json.path("colorAttribute").path("id").asLong()),
+                            () -> assertEquals("https://example.com/images/polera-puma-red.jpg", json.path("imageUrl").asText())
+                        );
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                });
+    }
+
+    @Test
+    @Order(11)
+    void testCreateProductGalleryBadRequest() {
+        ProductGalleryCreationDto requestBody = new ProductGalleryCreationDto();
+
+        client.post()
+                .uri("/product-gallery")
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(requestBody)
+                .exchange()
+                .expectStatus().isBadRequest();
+    }
+
+    @Test
+    @Order(12)
+    void testCreateProductGalleryNotFound() {
+        ProductGalleryCreationDto requestBodyWithNotExistingProductId = createProductGalleryCreationDto();
+        requestBodyWithNotExistingProductId.setProductId(100L);
+
+        client.post()
+                .uri("/product-gallery")
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(requestBodyWithNotExistingProductId)
+                .exchange()
+                .expectStatus().isNotFound();
+
+        ProductGalleryCreationDto requestBodyWithNotExistingColorAttributeId = createProductGalleryCreationDto();
+        requestBodyWithNotExistingColorAttributeId.setColorAttributeId(100L);
+
+        client.post()
+                .uri("/product-gallery")
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(requestBodyWithNotExistingColorAttributeId)
+                .exchange()
+                .expectStatus().isNotFound();
+    }
+
+    @Test
+    void testProfile() {
+        String[] activeProfiles = env.getActiveProfiles();
+        assertArrayEquals(new String[] { "test" }, activeProfiles);
+    }
+
+    @Test
+    void testApplicationPropertyFile() {
+        assertEquals("jdbc:h2:mem:public;NON_KEYWORDS=value", env.getProperty("spring.datasource.url"));
     }
 
 }
