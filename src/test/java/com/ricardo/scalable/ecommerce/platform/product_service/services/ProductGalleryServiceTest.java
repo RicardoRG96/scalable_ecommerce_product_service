@@ -153,4 +153,22 @@ public class ProductGalleryServiceTest {
         );
     }
 
+    @Test
+    void testUpdate() {
+        ProductGallery updatedProductGallery = createUpdatedProductGallery();
+
+        when(productGalleryRepository.findById(7L)).thenReturn(createProductGallery007());
+        when(productGalleryRepository.save(any())).thenReturn(updatedProductGallery);
+
+        Optional<ProductGallery> result = productGalleryService.update(updatedProductGallery, 7L);
+
+        assertAll(
+            () -> assertTrue(result.isPresent()),
+            () -> assertEquals(7L, result.orElseThrow().getId()),
+            () -> assertEquals("Jeans Americanino", result.orElseThrow().getProduct().getName()),
+            () -> assertEquals("azul", result.orElseThrow().getColorAttribute().getValue()),
+            () -> assertEquals("https://example.com/image8-blue.png", result.orElseThrow().getImageUrl())
+        );
+    }
+
 }

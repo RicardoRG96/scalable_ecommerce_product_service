@@ -212,5 +212,18 @@ public class ProductGalleryServiceTestData {
 
         return productGallery;
     }
+
+    public static ProductGallery createUpdatedProductGallery() {
+        ProductGallery productGallery = new ProductGallery();
+
+        productGallery.setId(7L);
+        productGallery.setProduct(createProduct005().orElseThrow());
+        productGallery.setColorAttribute(createProductAttribute002().orElseThrow());
+        productGallery.setImageUrl("https://example.com/image8-blue.png");
+        productGallery.setCreatedAt(Timestamp.from(Instant.now()));
+        productGallery.setUpdatedAt(Timestamp.from(Instant.now()));
+
+        return productGallery;
+    }
     
 }
