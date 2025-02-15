@@ -149,6 +149,9 @@ INSERT INTO product_skus (product_id, size_attribute_id, color_attribute_id, sku
 INSERT INTO product_skus (product_id, size_attribute_id, color_attribute_id, sku, price, stock, is_active, is_featured, is_on_sale)
     VALUES (5, 5, 3, 'SKU1258', 19.99, 70, TRUE, FALSE, FALSE);
 
+
+-- PRODUCT_GALLERY
+
 INSERT INTO product_gallery (product_id, color_attribute_id, image_url) 
     VALUES (1, 3, 'https://example.com/images/iphone15-black.jpg');
 

@@ -88,4 +88,33 @@ public class ProductGalleryControllerTest {
                 });
     }
 
+    @Test
+    @Order(3)
+    void testGetByColorAttributeId() {
+        client.get()
+                .uri("/product-gallery/color-attribute/3")
+                .exchange()
+                .expectStatus().isOk()
+                .expectHeader().contentType(MediaType.APPLICATION_JSON)
+                .expectBody()
+                .consumeWith(res -> {
+                    try {
+                        JsonNode json = objectMapper.readTree(res.getResponseBody());
+                        assertAll(
+                            () -> assertNotNull(json),
+                            () -> assertTrue(json.isArray()),
+                            () -> assertEquals(3, json.size()),
+                            () -> assertEquals(1L, json.get(0).path("id").asLong()),
+                            () -> assertEquals(4L, json.get(1).path("id").asLong()),
+                            () -> assertEquals("iPhone 15", json.get(0).path("product").path("name").asText()),
+                            () -> assertEquals("Jeans Lee", json.get(1).path("product").path("name").asText()),
+                            () -> assertEquals("https://example.com/images/iphone15-black.jpg", json.get(0).path("imageUrl").asText()),
+                            () -> assertEquals("https://example.com/images/jeans-lee-black.jpg", json.get(1).path("imageUrl").asText())
+                        );
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                });
+    }
+
 }
