@@ -60,4 +60,32 @@ public class ProductGalleryControllerTest {
                 });
     }
 
+    @Test
+    @Order(2)
+    void testGetByProductId() {
+        client.get()
+                .uri("/product-gallery/product/4")
+                .exchange()
+                .expectStatus().isOk()
+                .expectHeader().contentType(MediaType.APPLICATION_JSON)
+                .expectBody()
+                .consumeWith(res -> {
+                    try {
+                        JsonNode json = objectMapper.readTree(res.getResponseBody());
+                        assertAll(
+                            () -> assertNotNull(json),
+                            () -> assertTrue(json.isArray()),
+                            () -> assertEquals(4L, json.get(0).path("id").asLong()),
+                            () -> assertEquals(5L, json.get(1).path("id").asLong()),
+                            () -> assertEquals("Jeans Lee", json.get(0).path("product").path("name").asText()),
+                            () -> assertEquals("Jeans Lee", json.get(1).path("product").path("name").asText()),
+                            () -> assertEquals("https://example.com/images/jeans-lee-black.jpg", json.get(0).path("imageUrl").asText()),
+                            () -> assertEquals("https://example.com/images/jeans-lee-blue.jpg", json.get(1).path("imageUrl").asText())
+                        );
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                });
+    }
+
 }
