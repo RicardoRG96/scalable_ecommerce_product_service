@@ -171,4 +171,13 @@ public class ProductGalleryServiceTest {
         );
     }
 
+    @Test
+    void testDelete() {
+        doNothing().when(productGalleryRepository).deleteById(1L);
+
+        productGalleryService.delete(1L);
+
+        verify(productGalleryRepository, times(1)).deleteById(1L);
+    }
+
 }
