@@ -3,7 +3,7 @@ package com.ricardo.scalable.ecommerce.platform.product_service.services;
 import java.util.List;
 import java.util.Optional;
 
-import com.ricardo.scalable.ecommerce.platform.product_service.entities.ProductSku;
+import com.ricardo.scalable.ecommerce.platform.libs_common.entities.ProductSku;
 import com.ricardo.scalable.ecommerce.platform.product_service.repositories.dto.ProductSkuCreationDto;
 
 public interface ProductSkuService {

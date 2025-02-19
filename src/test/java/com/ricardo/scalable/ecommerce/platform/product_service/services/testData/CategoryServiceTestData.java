@@ -5,7 +5,7 @@ import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 
-import com.ricardo.scalable.ecommerce.platform.product_service.entities.Category;
+import com.ricardo.scalable.ecommerce.platform.libs_common.entities.Category;
 import com.ricardo.scalable.ecommerce.platform.product_service.repositories.dto.CategoryCreationDto;
 
 public class CategoryServiceTestData {

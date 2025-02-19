@@ -2,7 +2,7 @@ package com.ricardo.scalable.ecommerce.platform.product_service.services;
 
 import java.util.Optional;
 
-import com.ricardo.scalable.ecommerce.platform.product_service.entities.Brand;
+import com.ricardo.scalable.ecommerce.platform.libs_common.entities.Brand;
 import com.ricardo.scalable.ecommerce.platform.product_service.repositories.dto.BrandCreationDto;
 
 public interface BrandService {

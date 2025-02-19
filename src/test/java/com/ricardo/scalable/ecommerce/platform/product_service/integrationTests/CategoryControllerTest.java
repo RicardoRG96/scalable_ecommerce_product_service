@@ -19,7 +19,7 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ricardo.scalable.ecommerce.platform.product_service.entities.Category;
+import com.ricardo.scalable.ecommerce.platform.libs_common.entities.Category;
 import com.ricardo.scalable.ecommerce.platform.product_service.repositories.dto.CategoryCreationDto;
 
 import static com.ricardo.scalable.ecommerce.platform.product_service.services.testData.CategoryControllerTestData.*;

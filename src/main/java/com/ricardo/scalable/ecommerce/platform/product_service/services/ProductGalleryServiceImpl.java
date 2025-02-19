@@ -3,8 +3,8 @@ package com.ricardo.scalable.ecommerce.platform.product_service.services;
 import java.util.List;
 import java.util.Optional;
 
-import com.ricardo.scalable.ecommerce.platform.product_service.entities.Product;
-import com.ricardo.scalable.ecommerce.platform.product_service.entities.ProductAttribute;
+import com.ricardo.scalable.ecommerce.platform.libs_common.entities.Product;
+import com.ricardo.scalable.ecommerce.platform.libs_common.entities.ProductAttribute;
 import com.ricardo.scalable.ecommerce.platform.product_service.entities.ProductGallery;
 import com.ricardo.scalable.ecommerce.platform.product_service.repositories.ProductAttributeRepository;
 import com.ricardo.scalable.ecommerce.platform.product_service.repositories.ProductGalleryRepository;

@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.ricardo.scalable.ecommerce.platform.product_service.entities.ProductSku;
+import com.ricardo.scalable.ecommerce.platform.libs_common.entities.ProductSku;
 
 @Service
 public class SearchServiceClientImpl implements SearchServiceClient {

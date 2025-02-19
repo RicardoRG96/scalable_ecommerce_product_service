@@ -2,7 +2,7 @@ package com.ricardo.scalable.ecommerce.platform.product_service.services.testDat
 
 import java.util.List;
 
-import com.ricardo.scalable.ecommerce.platform.product_service.entities.ProductSku;
+import com.ricardo.scalable.ecommerce.platform.libs_common.entities.ProductSku;
 
 import static com.ricardo.scalable.ecommerce.platform.product_service.services.testData.ProductSkuServiceTestData.*;
 

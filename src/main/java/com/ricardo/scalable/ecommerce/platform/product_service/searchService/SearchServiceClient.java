@@ -2,7 +2,7 @@ package com.ricardo.scalable.ecommerce.platform.product_service.searchService;
 
 import java.util.List;
 
-import com.ricardo.scalable.ecommerce.platform.product_service.entities.ProductSku;
+import com.ricardo.scalable.ecommerce.platform.libs_common.entities.ProductSku;
 
 public interface SearchServiceClient {
 

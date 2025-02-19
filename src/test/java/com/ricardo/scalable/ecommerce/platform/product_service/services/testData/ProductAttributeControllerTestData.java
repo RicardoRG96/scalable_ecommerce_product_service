@@ -3,7 +3,7 @@ package com.ricardo.scalable.ecommerce.platform.product_service.services.testDat
 import java.sql.Timestamp;
 import java.time.Instant;
 
-import com.ricardo.scalable.ecommerce.platform.product_service.entities.ProductAttribute;
+import com.ricardo.scalable.ecommerce.platform.libs_common.entities.ProductAttribute;
 
 public class ProductAttributeControllerTestData {
 

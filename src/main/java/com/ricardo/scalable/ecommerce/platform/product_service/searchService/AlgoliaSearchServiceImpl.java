@@ -11,7 +11,7 @@ import com.algolia.api.SearchClient;
 import com.algolia.model.search.Hit;
 import com.algolia.model.search.SearchParamsObject;
 import com.algolia.model.search.SearchResponse;
-import com.ricardo.scalable.ecommerce.platform.product_service.entities.ProductSku;
+import com.ricardo.scalable.ecommerce.platform.libs_common.entities.ProductSku;
 import com.ricardo.scalable.ecommerce.platform.product_service.services.ProductSkuService;
 
 @Service

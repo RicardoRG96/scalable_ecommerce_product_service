@@ -1,9 +1,9 @@
 package com.ricardo.scalable.ecommerce.platform.product_service.services.testData;
 
-import com.ricardo.scalable.ecommerce.platform.product_service.entities.Brand;
-import com.ricardo.scalable.ecommerce.platform.product_service.entities.Category;
-import com.ricardo.scalable.ecommerce.platform.product_service.entities.Product;
-import com.ricardo.scalable.ecommerce.platform.product_service.entities.ProductAttribute;
+import com.ricardo.scalable.ecommerce.platform.libs_common.entities.Brand;
+import com.ricardo.scalable.ecommerce.platform.libs_common.entities.Category;
+import com.ricardo.scalable.ecommerce.platform.libs_common.entities.Product;
+import com.ricardo.scalable.ecommerce.platform.libs_common.entities.ProductAttribute;
 import com.ricardo.scalable.ecommerce.platform.product_service.entities.ProductGallery;
 import com.ricardo.scalable.ecommerce.platform.product_service.repositories.dto.ProductGalleryCreationDto;
 

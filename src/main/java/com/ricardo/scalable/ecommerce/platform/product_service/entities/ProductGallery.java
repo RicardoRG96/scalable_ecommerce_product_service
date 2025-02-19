@@ -15,6 +15,9 @@ import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
+import com.ricardo.scalable.ecommerce.platform.libs_common.entities.Product;
+import com.ricardo.scalable.ecommerce.platform.libs_common.entities.ProductAttribute;
+
 @Entity
 @Table(name = "product_gallery")
 public class ProductGallery {

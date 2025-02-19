@@ -5,7 +5,7 @@ import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 
-import com.ricardo.scalable.ecommerce.platform.product_service.entities.ProductAttribute;
+import com.ricardo.scalable.ecommerce.platform.libs_common.entities.ProductAttribute;
 import com.ricardo.scalable.ecommerce.platform.product_service.repositories.dto.ProductAttributeCreationDto;
 
 public class ProductAttributeServiceTestData {

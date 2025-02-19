@@ -6,9 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.ricardo.scalable.ecommerce.platform.product_service.entities.Brand;
-import com.ricardo.scalable.ecommerce.platform.product_service.entities.Category;
-import com.ricardo.scalable.ecommerce.platform.product_service.entities.Product;
+import com.ricardo.scalable.ecommerce.platform.libs_common.entities.Brand;
+import com.ricardo.scalable.ecommerce.platform.libs_common.entities.Category;
+import com.ricardo.scalable.ecommerce.platform.libs_common.entities.Product;
 import com.ricardo.scalable.ecommerce.platform.product_service.repositories.BrandRepository;
 import com.ricardo.scalable.ecommerce.platform.product_service.repositories.CategoryRepository;
 import com.ricardo.scalable.ecommerce.platform.product_service.repositories.ProductRepository;

@@ -1,19 +1,13 @@
 package com.ricardo.scalable.ecommerce.platform.product_service.services.testData;
 
-import static com.ricardo.scalable.ecommerce.platform.product_service.services.testData.ProductSkuServiceTestData.createProductSku001;
-import static com.ricardo.scalable.ecommerce.platform.product_service.services.testData.ProductSkuServiceTestData.createProductSku002;
-import static com.ricardo.scalable.ecommerce.platform.product_service.services.testData.ProductSkuServiceTestData.createProductSku003;
-import static com.ricardo.scalable.ecommerce.platform.product_service.services.testData.ProductSkuServiceTestData.createProductSku004;
-import static com.ricardo.scalable.ecommerce.platform.product_service.services.testData.ProductSkuServiceTestData.createProductSku005;
-import static com.ricardo.scalable.ecommerce.platform.product_service.services.testData.ProductSkuServiceTestData.createProductSku006;
-import static com.ricardo.scalable.ecommerce.platform.product_service.services.testData.ProductSkuServiceTestData.createProductSku007;
+import static com.ricardo.scalable.ecommerce.platform.product_service.services.testData.ProductSkuServiceTestData.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.ricardo.scalable.ecommerce.platform.product_service.entities.ProductSku;
+import com.ricardo.scalable.ecommerce.platform.libs_common.entities.ProductSku;
 
 public class AlgoliaConfigTestData {
 

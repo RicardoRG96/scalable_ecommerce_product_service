@@ -92,6 +92,11 @@
 			<artifactId>algoliasearch</artifactId>
 			<version>4.10.1</version>
 		</dependency>
+		<dependency>
+			<groupId>com.ricardo.scalable.ecommerce.platform</groupId>
+			<artifactId>libs-common</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
 	</dependencies>
 	<dependencyManagement>
 		<dependencies>

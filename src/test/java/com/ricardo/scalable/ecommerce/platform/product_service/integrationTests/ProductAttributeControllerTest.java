@@ -17,7 +17,7 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ricardo.scalable.ecommerce.platform.product_service.entities.ProductAttribute;
+import com.ricardo.scalable.ecommerce.platform.libs_common.entities.ProductAttribute;
 import com.ricardo.scalable.ecommerce.platform.product_service.repositories.dto.ProductAttributeCreationDto;
 
 import static com.ricardo.scalable.ecommerce.platform.product_service.services.testData.ProductAttributeControllerTestData.*;

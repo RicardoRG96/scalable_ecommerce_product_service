@@ -18,7 +18,7 @@ import com.algolia.model.search.RemoveStopWords;
 import com.algolia.model.search.SupportedLanguage;
 import com.algolia.model.search.SynonymHit;
 import com.algolia.model.search.SynonymType;
-import com.ricardo.scalable.ecommerce.platform.product_service.entities.ProductSku;
+import com.ricardo.scalable.ecommerce.platform.libs_common.entities.ProductSku;
 import com.ricardo.scalable.ecommerce.platform.product_service.repositories.ProductRepository;
 import com.ricardo.scalable.ecommerce.platform.product_service.repositories.ProductSkuRepository;
 

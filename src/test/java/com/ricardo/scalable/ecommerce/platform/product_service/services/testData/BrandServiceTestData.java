@@ -5,7 +5,7 @@ import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 
-import com.ricardo.scalable.ecommerce.platform.product_service.entities.Brand;
+import com.ricardo.scalable.ecommerce.platform.libs_common.entities.Brand;
 import com.ricardo.scalable.ecommerce.platform.product_service.repositories.dto.BrandCreationDto;
 
 public class BrandServiceTestData {

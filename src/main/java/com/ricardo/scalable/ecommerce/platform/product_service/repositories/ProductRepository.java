@@ -5,7 +5,7 @@ import java.util.Optional;
 
 import org.springframework.data.repository.CrudRepository;
 
-import com.ricardo.scalable.ecommerce.platform.product_service.entities.Product;
+import com.ricardo.scalable.ecommerce.platform.libs_common.entities.Product;
 
 public interface ProductRepository extends CrudRepository<Product, Long> {
 

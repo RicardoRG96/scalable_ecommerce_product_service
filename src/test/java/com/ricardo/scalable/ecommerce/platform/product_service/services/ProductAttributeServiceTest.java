@@ -6,7 +6,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
-import com.ricardo.scalable.ecommerce.platform.product_service.entities.ProductAttribute;
+import com.ricardo.scalable.ecommerce.platform.libs_common.entities.ProductAttribute;
 import com.ricardo.scalable.ecommerce.platform.product_service.repositories.ProductAttributeRepository;
 import com.ricardo.scalable.ecommerce.platform.product_service.repositories.ProductSkuRepository;
 import com.ricardo.scalable.ecommerce.platform.product_service.repositories.dto.ProductAttributeCreationDto;

@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ricardo.scalable.ecommerce.platform.product_service.entities.Category;
+import com.ricardo.scalable.ecommerce.platform.libs_common.entities.Category;
 import com.ricardo.scalable.ecommerce.platform.product_service.repositories.dto.CategoryCreationDto;
 import com.ricardo.scalable.ecommerce.platform.product_service.services.CategoryService;
 
