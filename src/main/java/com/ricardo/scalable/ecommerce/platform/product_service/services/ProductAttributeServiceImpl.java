@@ -9,9 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.ricardo.scalable.ecommerce.platform.libs_common.entities.ProductAttribute;
 import com.ricardo.scalable.ecommerce.platform.libs_common.entities.ProductSku;
-import com.ricardo.scalable.ecommerce.platform.product_service.entities.ProductGallery;
 import com.ricardo.scalable.ecommerce.platform.product_service.repositories.ProductAttributeRepository;
-import com.ricardo.scalable.ecommerce.platform.product_service.repositories.ProductGalleryRepository;
 import com.ricardo.scalable.ecommerce.platform.product_service.repositories.ProductSkuRepository;
 import com.ricardo.scalable.ecommerce.platform.product_service.repositories.dto.ProductAttributeCreationDto;
 
@@ -23,9 +21,6 @@ public class ProductAttributeServiceImpl implements ProductAttributeService {
 
     @Autowired
     private ProductSkuRepository productSkuRepository;
-
-    @Autowired
-    private ProductGalleryRepository productGalleryRepository;
 
     @Override
     @Transactional(readOnly = true)
@@ -90,14 +85,6 @@ public class ProductAttributeServiceImpl implements ProductAttributeService {
             productSkusWithColorToDelete.forEach(productSku -> {
                 productSku.setColorAttribute(noneColor);
                 productSkuRepository.save(productSku);
-            });
-
-            List<ProductGallery> productGalleriesWithColorToDelete = 
-                productGalleryRepository.findByColorAttributeId(id).orElseThrow();
-
-            productGalleriesWithColorToDelete.forEach(productGallery -> {
-                productGallery.setColorAttribute(noneColor);
-                productGalleryRepository.save(productGallery);
             });
         } 
 
