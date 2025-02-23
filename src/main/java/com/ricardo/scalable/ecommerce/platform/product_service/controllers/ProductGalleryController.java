@@ -15,13 +15,17 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.ricardo.scalable.ecommerce.platform.product_service.entities.ProductGallery;
 import com.ricardo.scalable.ecommerce.platform.product_service.repositories.dto.ProductGalleryCreationDto;
 import com.ricardo.scalable.ecommerce.platform.product_service.services.ProductGalleryService;
 
 import jakarta.validation.Valid;
+
+import static com.ricardo.scalable.ecommerce.platform.product_service.controllers.validation.ProductGalleryFormInputValidation.*;
 
 @RestController
 public class ProductGalleryController {
@@ -84,14 +88,35 @@ public class ProductGalleryController {
         return ResponseEntity.ok(productGallery);
     }
 
+    // @PostMapping("/product-gallery")
+    // public ResponseEntity<?> createProductGallery(
+    //     @Valid @RequestBody ProductGalleryCreationDto productGallery,
+    //     BindingResult result
+    // ) {
+    //     if (result.hasErrors()) {
+    //         return validation(result);
+    //     }
+    //     Optional<ProductGallery> savedProductGallery = productGalleryService.save(productGallery);
+    //     boolean isPresent = savedProductGallery.isPresent();
+
+    //     if (isPresent) {
+    //         return ResponseEntity.status(HttpStatus.CREATED).body(savedProductGallery.orElseThrow());
+    //     }
+    //     return ResponseEntity.notFound().build();
+    // }
+
     @PostMapping("/product-gallery")
     public ResponseEntity<?> createProductGallery(
-        @Valid @RequestBody ProductGalleryCreationDto productGallery,
-        BindingResult result
+        @RequestParam("productName") String productName,
+        @RequestParam("colorAttributeName") String colorAttributeName,
+        @RequestParam("images") List<MultipartFile> images
     ) {
-        if (result.hasErrors()) {
-            return validation(result);
+        ResponseEntity<?> validateFields = validateFormData(productName, colorAttributeName, images);
+        if (validateFields != null) {
+            return validateFields;
         }
+
+        ProductGalleryCreationDto productGallery = new ProductGalleryCreationDto(productName, colorAttributeName, images);
         Optional<ProductGallery> savedProductGallery = productGalleryService.save(productGallery);
         boolean isPresent = savedProductGallery.isPresent();
 

@@ -1,53 +1,63 @@
 package com.ricardo.scalable.ecommerce.platform.product_service.repositories.dto;
 
-import jakarta.validation.constraints.Min;
+import java.util.List;
+
+import org.springframework.web.multipart.MultipartFile;
+
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 
 public class ProductGalleryCreationDto {
 
-    @Min(1)
-    @NotNull
-    private Long productId;
+    // @Min(1)
+    // @NotNull
+    // private Long productId;
 
-    @Min(1)
-    @NotNull
-    private Long colorAttributeId;
+    // @Min(1)
+    // @NotNull
+    // private Long colorAttributeId;
+
+    // @NotBlank
+    // private String imageUrl;
 
     @NotBlank
-    private String imageUrl;
+    private String productName;
+
+    @NotBlank
+    private String colorName;
+
+    private List<MultipartFile> images;
 
     public ProductGalleryCreationDto() {
     }
 
-    public ProductGalleryCreationDto(Long productId, Long colorAttributeId, String imageUrl) {
-        this.productId = productId;
-        this.colorAttributeId = colorAttributeId;
-        this.imageUrl = imageUrl;
+    public ProductGalleryCreationDto(String productName, String colorName, List<MultipartFile> images) {
+        this.productName = productName;
+        this.colorName = colorName;
+        this.images = images;
     }
 
-    public Long getProductId() {
-        return productId;
+    public String getProductName() {
+        return productName;
     }
 
-    public void setProductId(Long productId) {
-        this.productId = productId;
+    public void setProductName(String productName) {
+        this.productName = productName;
     }
 
-    public Long getColorAttributeId() {
-        return colorAttributeId;
+    public String getColorName() {
+        return colorName;
     }
 
-    public void setColorAttributeId(Long colorAttributeId) {
-        this.colorAttributeId = colorAttributeId;
+    public void setColorName(String colorName) {
+        this.colorName = colorName;
     }
 
-    public String getImageUrl() {
-        return imageUrl;
+    public List<MultipartFile> getImages() {
+        return images;
     }
 
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
+    public void setImages(List<MultipartFile> images) {
+        this.images = images;
     }
 
 }
