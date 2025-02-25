@@ -2,13 +2,16 @@ package com.ricardo.scalable.ecommerce.platform.product_service.storageService;
 
 import java.io.File;
 import java.nio.file.Path;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.S3Exception;
 
+@Service
 public class S3StorageService implements StorageService {
 
     @Autowired
@@ -18,7 +21,7 @@ public class S3StorageService implements StorageService {
     private String bucketName;
 
     @Override
-    public String store(File file) {
+    public Optional<String> store(File file) {
         try {
             s3Client.putObject(request -> 
             request
@@ -27,10 +30,11 @@ public class S3StorageService implements StorageService {
                 .ifNoneMatch("*"),
             file.toPath());
 
-            return "https://" + bucketName + ".s3.amazonaws.com/" + file.getName();
+            String fileUrl = "https://" + bucketName + ".s3.amazonaws.com/" + file.getName();
+            return Optional.of(fileUrl);
         } catch (S3Exception e) {
             e.printStackTrace();
-            return "Error uploading file";
+            return Optional.empty();
         }
     }
 

@@ -10,6 +10,7 @@ import com.ricardo.scalable.ecommerce.platform.product_service.repositories.Prod
 import com.ricardo.scalable.ecommerce.platform.product_service.repositories.ProductGalleryRepository;
 import com.ricardo.scalable.ecommerce.platform.product_service.repositories.ProductRepository;
 import com.ricardo.scalable.ecommerce.platform.product_service.repositories.dto.ProductGalleryCreationDto;
+import com.ricardo.scalable.ecommerce.platform.product_service.storageService.StorageService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,6 +27,9 @@ public class ProductGalleryServiceImpl implements ProductGalleryService {
 
     @Autowired
     private ProductAttributeRepository productAttributeRepository;
+
+    @Autowired
+    private StorageService storageService;
 
     @Override
     @Transactional(readOnly = true)

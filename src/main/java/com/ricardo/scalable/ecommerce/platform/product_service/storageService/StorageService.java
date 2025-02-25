@@ -2,10 +2,11 @@ package com.ricardo.scalable.ecommerce.platform.product_service.storageService;
 
 import java.io.File;
 import java.nio.file.Path;
+import java.util.Optional;
 
 public interface StorageService {
 
-    String store(File file);
+    Optional<String> store(File file);
 
     byte[] download(String filename, Path downloadPath);
 
