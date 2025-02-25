@@ -60,16 +60,16 @@ public class ProductGalleryServiceImpl implements ProductGalleryService {
     @Override
     @Transactional
     public Optional<ProductGallery> save(ProductGalleryCreationDto productGallery) {
-        Long productId = productGallery.getProductId();
-        Long colorAttributeId = productGallery.getColorAttributeId();
-        Optional<Product> product = productRepository.findById(productId);
-        Optional<ProductAttribute> colorAttribute = productAttributeRepository.findById(colorAttributeId);
+        String productName = productGallery.getProductName();
+        String colorName = productGallery.getColorName();
+        Optional<Product> product = productRepository.findByName(productName);
+        Optional<ProductAttribute> colorAttribute = productAttributeRepository.findByValue(colorName);
 
         if (product.isPresent() && colorAttribute.isPresent()) {
             ProductGallery newProductGallery = new ProductGallery();
             newProductGallery.setProduct(product.orElseThrow());
             newProductGallery.setColorAttribute(colorAttribute.orElseThrow());
-            newProductGallery.setImageUrl(productGallery.getImageUrl());
+            // newProductGallery.setImageUrl(productGallery.getImageUrl());
             return Optional.of(productGalleryRepository.save(newProductGallery));
         }
         return Optional.empty();
