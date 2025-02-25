@@ -8,17 +8,6 @@ import jakarta.validation.constraints.NotBlank;
 
 public class ProductGalleryCreationDto {
 
-    // @Min(1)
-    // @NotNull
-    // private Long productId;
-
-    // @Min(1)
-    // @NotNull
-    // private Long colorAttributeId;
-
-    // @NotBlank
-    // private String imageUrl;
-
     @NotBlank
     private String productName;
 

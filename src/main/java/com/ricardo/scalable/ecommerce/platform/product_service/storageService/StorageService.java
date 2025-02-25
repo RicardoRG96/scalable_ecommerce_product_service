@@ -5,12 +5,12 @@ import java.nio.file.Path;
 
 public interface StorageService {
 
-    void store(File file);
+    String store(File file);
 
     byte[] download(String filename, Path downloadPath);
 
-    void delete(String filename);
+    String delete(String filename);
 
-    void deleteAll();
+    String deleteAll();
 
 }
