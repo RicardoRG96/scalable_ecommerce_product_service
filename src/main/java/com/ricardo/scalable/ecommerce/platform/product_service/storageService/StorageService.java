@@ -8,6 +8,8 @@ public interface StorageService {
 
     Optional<String> store(File file);
 
+    // Optional<String> store(MultipartFile file);
+
     byte[] download(String filename, Path downloadPath);
 
     String delete(String filename);
