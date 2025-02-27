@@ -109,7 +109,7 @@ public class ProductGalleryController {
     public ResponseEntity<?> createProductGallery(
         @RequestParam("productName") String productName,
         @RequestParam("colorAttributeName") String colorAttributeName,
-        @RequestParam("images") MultipartFile image
+        @RequestParam("file") MultipartFile image
     ) {
         ResponseEntity<?> validateFields = validateFormData(productName, colorAttributeName, image);
         if (validateFields != null) {

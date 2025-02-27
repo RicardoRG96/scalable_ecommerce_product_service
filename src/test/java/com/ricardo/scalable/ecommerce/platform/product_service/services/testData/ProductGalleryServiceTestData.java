@@ -1,9 +1,12 @@
 package com.ricardo.scalable.ecommerce.platform.product_service.services.testData;
 
+import java.io.IOException;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
+
+import org.springframework.mock.web.MockMultipartFile;
 
 import com.ricardo.scalable.ecommerce.platform.libs_common.entities.Product;
 import com.ricardo.scalable.ecommerce.platform.libs_common.entities.ProductAttribute;
@@ -12,6 +15,7 @@ import com.ricardo.scalable.ecommerce.platform.product_service.repositories.dto.
 
 import static com.ricardo.scalable.ecommerce.platform.product_service.services.testData.ProductAttributeServiceTestData.*;
 import static com.ricardo.scalable.ecommerce.platform.product_service.services.testData.ProductServiceTestData.*;
+import static com.ricardo.scalable.ecommerce.platform.product_service.services.testData.FileUtils.*;
 
 public class ProductGalleryServiceTestData {
 
@@ -191,11 +195,20 @@ public class ProductGalleryServiceTestData {
         );
     }
 
-    public static ProductGalleryCreationDto createProductGalleryCreationDto() {
+    public static ProductGalleryCreationDto createProductGalleryCreationDto() throws IOException {
         ProductGalleryCreationDto productGalleryCreationDto = new ProductGalleryCreationDto();
-        productGalleryCreationDto.setProductId(4L);
-        productGalleryCreationDto.setColorAttributeId(3L);
-        productGalleryCreationDto.setImageUrl("https://example.com/image8.png");
+        byte[] imageBytes = createSamplePNG();
+
+        productGalleryCreationDto.setProductName("Polera manga corta");
+        productGalleryCreationDto.setColorName("negro");
+        MockMultipartFile file = 
+            new MockMultipartFile(
+                "file",
+                "polera-manga-corta.png",
+                "image/png",
+                imageBytes
+            );
+        productGalleryCreationDto.setImage(file);
 
         return productGalleryCreationDto;
     }

@@ -39,11 +39,11 @@ public class ProductGalleryCreationDto {
         this.colorName = colorName;
     }
 
-    public MultipartFile getImages() {
+    public MultipartFile getImage() {
         return image;
     }
 
-    public void setImages(MultipartFile image) {
+    public void setImage(MultipartFile image) {
         this.image = image;
     }
 

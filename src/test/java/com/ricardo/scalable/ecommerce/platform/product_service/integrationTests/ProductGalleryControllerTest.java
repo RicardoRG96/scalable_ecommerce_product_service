@@ -3,6 +3,8 @@ package com.ricardo.scalable.ecommerce.platform.product_service.integrationTests
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 
+import java.io.IOException;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
@@ -215,7 +217,7 @@ public class ProductGalleryControllerTest {
 
     @Test
     @Order(10)
-    void testCreateProductGallery() {
+    void testCreateProductGallery() throws IOException {
         ProductGalleryCreationDto requestBody = createProductGalleryCreationDto();
 
         client.post()
@@ -257,24 +259,24 @@ public class ProductGalleryControllerTest {
 
     @Test
     @Order(12)
-    void testCreateProductGalleryNotFound() {
-        ProductGalleryCreationDto requestBodyWithNotExistingProductId = createProductGalleryCreationDto();
-        requestBodyWithNotExistingProductId.setProductId(100L);
+    void testCreateProductGalleryNotFound() throws IOException {
+        ProductGalleryCreationDto requestBodyWithNotExistingProductName = createProductGalleryCreationDto();
+        requestBodyWithNotExistingProductName.setProductName("example");
 
         client.post()
                 .uri("/product-gallery")
                 .contentType(MediaType.APPLICATION_JSON)
-                .bodyValue(requestBodyWithNotExistingProductId)
+                .bodyValue(requestBodyWithNotExistingProductName)
                 .exchange()
                 .expectStatus().isNotFound();
 
-        ProductGalleryCreationDto requestBodyWithNotExistingColorAttributeId = createProductGalleryCreationDto();
-        requestBodyWithNotExistingColorAttributeId.setColorAttributeId(100L);
+        ProductGalleryCreationDto requestBodyWithNotExistingColorName = createProductGalleryCreationDto();
+        requestBodyWithNotExistingColorName.setColorName("color-example");
 
         client.post()
                 .uri("/product-gallery")
                 .contentType(MediaType.APPLICATION_JSON)
-                .bodyValue(requestBodyWithNotExistingColorAttributeId)
+                .bodyValue(requestBodyWithNotExistingColorName)
                 .exchange()
                 .expectStatus().isNotFound();
     }

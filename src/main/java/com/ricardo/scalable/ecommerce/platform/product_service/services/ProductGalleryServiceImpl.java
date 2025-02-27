@@ -4,8 +4,6 @@ import java.io.File;
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.time.Instant;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -75,33 +73,28 @@ public class ProductGalleryServiceImpl implements ProductGalleryService {
         String colorName = productGallery.getColorName();
         Optional<Product> product = productRepository.findByName(productName);
         Optional<ProductAttribute> colorAttribute = productAttributeRepository.findByValue(colorName);
-        List<MultipartFile> images = productGallery.getImages();
 
         if (product.isPresent() && colorAttribute.isPresent()) {
             ProductGallery newProductGallery = new ProductGallery();
             newProductGallery.setProduct(product.orElseThrow());
             newProductGallery.setColorAttribute(colorAttribute.orElseThrow());
-            storeImages(images);
-            // newProductGallery.setImageUrl(productGallery.getImageUrl());
+            MultipartFile image = productGallery.getImage();
+            String imageUrl = storeImage(image).orElseThrow();
+            newProductGallery.setImageUrl(imageUrl);
             return Optional.of(productGalleryRepository.save(newProductGallery));
         }
         return Optional.empty();
     }
 
-    private void storeImages(List<MultipartFile> images) {
-        List<File> fileImages = new ArrayList<>();
-        // Convert MultipartFile to File.
-        images.forEach(image -> {
-            try {
-                fileImages.add(multipartFileToFile(image));
-            } catch (IllegalStateException | IOException e) {
-                e.printStackTrace();
-            }
-        });
-        
-        fileImages.forEach(file -> {
-            storageService.store(file);
-        });
+    private Optional<String> storeImage(MultipartFile image) {
+        try {
+            File imageFile = multipartFileToFile(image);
+            Optional<String> imageUrl = storageService.store(imageFile);
+            return imageUrl;
+        } catch (IllegalStateException | IOException e) {
+            e.printStackTrace();
+            return Optional.empty();
+        }
     }
 
     private File multipartFileToFile(MultipartFile multipartFile) throws IllegalStateException, IOException {
