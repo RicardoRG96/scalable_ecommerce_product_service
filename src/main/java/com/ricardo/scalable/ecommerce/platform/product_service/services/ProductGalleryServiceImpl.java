@@ -3,7 +3,9 @@ package com.ricardo.scalable.ecommerce.platform.product_service.services;
 import java.io.File;
 import java.io.IOException;
 import java.sql.Timestamp;
+import java.time.Instant;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -73,12 +75,13 @@ public class ProductGalleryServiceImpl implements ProductGalleryService {
         String colorName = productGallery.getColorName();
         Optional<Product> product = productRepository.findByName(productName);
         Optional<ProductAttribute> colorAttribute = productAttributeRepository.findByValue(colorName);
-        Optional<String> imageUrl = storageService.store(productGallery.getImages().get(0));
+        List<MultipartFile> images = productGallery.getImages();
 
         if (product.isPresent() && colorAttribute.isPresent()) {
             ProductGallery newProductGallery = new ProductGallery();
             newProductGallery.setProduct(product.orElseThrow());
             newProductGallery.setColorAttribute(colorAttribute.orElseThrow());
+            storeImages(images);
             // newProductGallery.setImageUrl(productGallery.getImageUrl());
             return Optional.of(productGalleryRepository.save(newProductGallery));
         }
@@ -86,27 +89,31 @@ public class ProductGalleryServiceImpl implements ProductGalleryService {
     }
 
     private void storeImages(List<MultipartFile> images) {
-        List<File> files = new ArrayList<>();
+        List<File> fileImages = new ArrayList<>();
         // Convert MultipartFile to File.
-        files.add(new File(images.get(0).getOriginalFilename()));
-        files.forEach(file -> {
+        images.forEach(image -> {
+            try {
+                fileImages.add(multipartFileToFile(image));
+            } catch (IllegalStateException | IOException e) {
+                e.printStackTrace();
+            }
+        });
+        
+        fileImages.forEach(file -> {
             storageService.store(file);
         });
     }
 
-    private File multipartFileToFile(MultipartFile file) {
-        String fileName = file.getOriginalFilename();
-        File convFile = new File(file.getOriginalFilename());
-        try {
-            file.transferTo(convFile);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    private File multipartFileToFile(MultipartFile multipartFile) throws IllegalStateException, IOException {
+        String fileName = renameFile(multipartFile.getOriginalFilename());
+        File convFile = new File(System.getProperty("java.io.tmpdir") + "/" + fileName);
+        
+        multipartFile.transferTo(convFile);
         return convFile;
     }
 
     private String renameFile(String fileName) {
-        Timestamp now = 
+        Timestamp now = Timestamp.from(Instant.now());
         fileName = now + "_" + fileName;
         return fileName;
     }

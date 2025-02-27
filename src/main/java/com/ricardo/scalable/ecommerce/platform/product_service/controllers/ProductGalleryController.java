@@ -109,14 +109,14 @@ public class ProductGalleryController {
     public ResponseEntity<?> createProductGallery(
         @RequestParam("productName") String productName,
         @RequestParam("colorAttributeName") String colorAttributeName,
-        @RequestParam("images") List<MultipartFile> images
+        @RequestParam("images") MultipartFile image
     ) {
-        ResponseEntity<?> validateFields = validateFormData(productName, colorAttributeName, images);
+        ResponseEntity<?> validateFields = validateFormData(productName, colorAttributeName, image);
         if (validateFields != null) {
             return validateFields;
         }
 
-        ProductGalleryCreationDto productGallery = new ProductGalleryCreationDto(productName, colorAttributeName, images);
+        ProductGalleryCreationDto productGallery = new ProductGalleryCreationDto(productName, colorAttributeName, image);
         Optional<ProductGallery> savedProductGallery = productGalleryService.save(productGallery);
         boolean isPresent = savedProductGallery.isPresent();
 

@@ -1,7 +1,5 @@
 package com.ricardo.scalable.ecommerce.platform.product_service.repositories.dto;
 
-import java.util.List;
-
 import org.springframework.web.multipart.MultipartFile;
 
 import jakarta.validation.constraints.NotBlank;
@@ -14,15 +12,15 @@ public class ProductGalleryCreationDto {
     @NotBlank
     private String colorName;
 
-    private List<MultipartFile> images;
+    private MultipartFile image;
 
     public ProductGalleryCreationDto() {
     }
 
-    public ProductGalleryCreationDto(String productName, String colorName, List<MultipartFile> images) {
+    public ProductGalleryCreationDto(String productName, String colorName, MultipartFile image) {
         this.productName = productName;
         this.colorName = colorName;
-        this.images = images;
+        this.image = image;
     }
 
     public String getProductName() {
@@ -41,12 +39,12 @@ public class ProductGalleryCreationDto {
         this.colorName = colorName;
     }
 
-    public List<MultipartFile> getImages() {
-        return images;
+    public MultipartFile getImages() {
+        return image;
     }
 
-    public void setImages(List<MultipartFile> images) {
-        this.images = images;
+    public void setImages(MultipartFile image) {
+        this.image = image;
     }
 
 }
