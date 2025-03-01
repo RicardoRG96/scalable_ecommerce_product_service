@@ -8,7 +8,7 @@ public interface StorageService {
 
     Optional<String> store(File file);
 
-    // Optional<String> store(MultipartFile file);
+    String getImageUrl(String fileName);
 
     byte[] download(String filename, Path downloadPath);
 

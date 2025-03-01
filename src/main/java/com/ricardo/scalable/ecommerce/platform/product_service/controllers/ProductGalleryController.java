@@ -6,9 +6,11 @@ import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -28,7 +30,14 @@ import jakarta.validation.Valid;
 import static com.ricardo.scalable.ecommerce.platform.product_service.controllers.validation.ProductGalleryFormInputValidation.*;
 
 @RestController
+@CrossOrigin(origins = "http://127.0.0.1:5500")
 public class ProductGalleryController {
+
+    @Value("${aws.accessKeyId}")
+    private String accessKeyId;
+
+    @Value("${aws.secretKey}")
+    private String secretKey;
 
     @Autowired
     private ProductGalleryService productGalleryService;
@@ -87,23 +96,6 @@ public class ProductGalleryController {
         List<ProductGallery> productGallery = (List<ProductGallery>) productGalleryService.findAll();
         return ResponseEntity.ok(productGallery);
     }
-
-    // @PostMapping("/product-gallery")
-    // public ResponseEntity<?> createProductGallery(
-    //     @Valid @RequestBody ProductGalleryCreationDto productGallery,
-    //     BindingResult result
-    // ) {
-    //     if (result.hasErrors()) {
-    //         return validation(result);
-    //     }
-    //     Optional<ProductGallery> savedProductGallery = productGalleryService.save(productGallery);
-    //     boolean isPresent = savedProductGallery.isPresent();
-
-    //     if (isPresent) {
-    //         return ResponseEntity.status(HttpStatus.CREATED).body(savedProductGallery.orElseThrow());
-    //     }
-    //     return ResponseEntity.notFound().build();
-    // }
 
     @PostMapping("/product-gallery")
     public ResponseEntity<?> createProductGallery(

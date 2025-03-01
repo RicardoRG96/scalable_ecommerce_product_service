@@ -1,5 +1,8 @@
 package com.ricardo.scalable.ecommerce.platform.product_service.controllers.validation;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -89,7 +92,7 @@ public class ProductGalleryFormInputValidation {
     private static ResponseEntity<?> validateImageFormat(MultipartFile image) {
         String contentType = image.getContentType();
 
-        if (!contentType.equals("image/jpeg") && 
+        if (!contentType.equals("image/jpeg") &&
             !contentType.equals("image/png") &&
             !contentType.equals("image/webp")
         ) {
@@ -104,7 +107,9 @@ public class ProductGalleryFormInputValidation {
         int maxSize = maxNumberOfMegabyteAllowed * megabyteConversion;
 
         if (image.getSize() > maxSize) {
-            return ResponseEntity.badRequest().body("Las imágenes no pueden pesar más de 2MB");
+            Map<String, String> errors = new HashMap<>();
+            errors.put("message", "Las imágenes no pueden pesar más de 2MB");
+            return ResponseEntity.badRequest().body(errors);
         }
         
         return null;

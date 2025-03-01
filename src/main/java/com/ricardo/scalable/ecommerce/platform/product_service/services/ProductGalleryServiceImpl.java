@@ -3,6 +3,7 @@ package com.ricardo.scalable.ecommerce.platform.product_service.services;
 import java.io.File;
 import java.io.IOException;
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
@@ -89,8 +90,9 @@ public class ProductGalleryServiceImpl implements ProductGalleryService {
     private Optional<String> storeImage(MultipartFile image) {
         try {
             File imageFile = multipartFileToFile(image);
-            Optional<String> imageUrl = storageService.store(imageFile);
-            return imageUrl;
+            storageService.store(imageFile);
+            String imageUrl = storageService.getImageUrl(imageFile.getName());
+            return Optional.of(imageUrl);
         } catch (IllegalStateException | IOException e) {
             e.printStackTrace();
             return Optional.empty();
@@ -106,8 +108,10 @@ public class ProductGalleryServiceImpl implements ProductGalleryService {
     }
 
     private String renameFile(String fileName) {
+        SimpleDateFormat dateFormater = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss");
         Timestamp now = Timestamp.from(Instant.now());
-        fileName = now + "_" + fileName;
+        String formatedDate = dateFormater.format(now);
+        fileName = formatedDate + "_" + fileName;
         return fileName;
     }
 

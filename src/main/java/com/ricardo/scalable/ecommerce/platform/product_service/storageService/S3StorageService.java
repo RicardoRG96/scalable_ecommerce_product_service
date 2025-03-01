@@ -27,15 +27,25 @@ public class S3StorageService implements StorageService {
             request
                 .bucket(bucketName)
                 .key(file.getName())
+                .acl("public-read")
                 .ifNoneMatch("*"),
             file.toPath());
 
-            String fileUrl = "https://" + bucketName + ".s3.amazonaws.com/" + file.getName();
-            return Optional.of(fileUrl);
+            return Optional.of("Imagen cargada correctamente");
         } catch (S3Exception e) {
             e.printStackTrace();
             return Optional.empty();
         }
+    }
+
+    @Override
+    public String getImageUrl(String fileName) {
+        String url = s3Client.utilities()
+                .getUrl(builder -> 
+                    builder.bucket(bucketName)
+                            .key(fileName)
+                ).toString();
+        return url;
     }
 
     @Override

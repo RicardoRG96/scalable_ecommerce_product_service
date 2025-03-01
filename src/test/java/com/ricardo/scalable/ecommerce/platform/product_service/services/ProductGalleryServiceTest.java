@@ -18,6 +18,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -134,7 +135,7 @@ public class ProductGalleryServiceTest {
     }
 
     @Test
-    void testSave() {
+    void testSave() throws IOException {
         ProductGalleryCreationDto productGalleryCreationDto = createProductGalleryCreationDto();
         ProductGallery productGallery = createProductGalleryCreationResponse();
 
