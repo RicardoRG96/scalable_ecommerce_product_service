@@ -74,12 +74,12 @@ public class ProductGalleryServiceImpl implements ProductGalleryService {
         String colorName = productGallery.getColorName();
         Optional<Product> product = productRepository.findByName(productName);
         Optional<ProductAttribute> colorAttribute = productAttributeRepository.findByValue(colorName);
+        MultipartFile image = productGallery.getImage();
 
         if (product.isPresent() && colorAttribute.isPresent()) {
             ProductGallery newProductGallery = new ProductGallery();
             newProductGallery.setProduct(product.orElseThrow());
             newProductGallery.setColorAttribute(colorAttribute.orElseThrow());
-            MultipartFile image = productGallery.getImage();
             String imageUrl = storeImage(image).orElseThrow();
             newProductGallery.setImageUrl(imageUrl);
             return Optional.of(productGalleryRepository.save(newProductGallery));

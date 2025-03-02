@@ -9,6 +9,7 @@ import com.ricardo.scalable.ecommerce.platform.product_service.repositories.Prod
 import com.ricardo.scalable.ecommerce.platform.product_service.repositories.ProductRepository;
 import com.ricardo.scalable.ecommerce.platform.product_service.repositories.ProductAttributeRepository;
 import com.ricardo.scalable.ecommerce.platform.product_service.repositories.dto.ProductGalleryCreationDto;
+import com.ricardo.scalable.ecommerce.platform.product_service.storageService.StorageService;
 
 import static com.ricardo.scalable.ecommerce.platform.product_service.services.testData.ProductGalleryServiceTestData.*;
 import static com.ricardo.scalable.ecommerce.platform.product_service.services.testData.ProductAttributeServiceTestData.*;
@@ -35,6 +36,9 @@ public class ProductGalleryServiceTest {
 
     @MockitoBean
     private ProductAttributeRepository productAttributeRepository;
+
+    @MockitoBean
+    private StorageService storageService;
 
     @Autowired
     private ProductGalleryService productGalleryService;
@@ -138,9 +142,13 @@ public class ProductGalleryServiceTest {
     void testSave() throws IOException {
         ProductGalleryCreationDto productGalleryCreationDto = createProductGalleryCreationDto();
         ProductGallery productGallery = createProductGalleryCreationResponse();
+        Optional<String> imageStoredUrl = 
+            Optional.of("https://product-gallery-images-ecommerce.s3.us-east-2.amazonaws.com/2025.03.02.13.39.01_polera-manga-corta.png");
 
-        when(productRepository.findById(4L)).thenReturn(createProduct004());
-        when(productAttributeRepository.findById(3L)).thenReturn(createProductAttribute003());
+        when(productRepository.findByName("Polera manga corta")).thenReturn(createProduct004());
+        when(productAttributeRepository.findByValue("negro")).thenReturn(createProductAttribute003());
+        when(storageService.store(any())).thenReturn(imageStoredUrl);
+        when(storageService.getImageUrl(any())).thenReturn(imageStoredUrl.orElseThrow());
         when(productGalleryRepository.save(any())).thenReturn(productGallery);
 
         Optional<ProductGallery> result = productGalleryService.save(productGalleryCreationDto);
@@ -150,7 +158,9 @@ public class ProductGalleryServiceTest {
             () -> assertEquals(8L, result.orElseThrow().getId()),
             () -> assertEquals("Polera manga corta", result.orElseThrow().getProduct().getName()),
             () -> assertEquals("negro", result.orElseThrow().getColorAttribute().getValue()),
-            () -> assertEquals("https://example.com/image8.png", result.orElseThrow().getImageUrl())
+            () -> assertEquals("https://product-gallery-images-ecommerce.s3.us-east-2.amazonaws.com/2025.03.02.13.39.01_polera-manga-corta.png", 
+                result.orElseThrow().getImageUrl()
+            )
         );
     }
 

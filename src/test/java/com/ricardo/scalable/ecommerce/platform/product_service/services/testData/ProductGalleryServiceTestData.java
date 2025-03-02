@@ -219,7 +219,7 @@ public class ProductGalleryServiceTestData {
         productGallery.setId(8L);
         productGallery.setProduct(createProduct004().orElseThrow());
         productGallery.setColorAttribute(createProductAttribute003().orElseThrow());
-        productGallery.setImageUrl("https://example.com/image8.png");
+        productGallery.setImageUrl("https://product-gallery-images-ecommerce.s3.us-east-2.amazonaws.com/2025.03.02.13.39.01_polera-manga-corta.png");
         productGallery.setCreatedAt(Timestamp.from(Instant.now()));
         productGallery.setUpdatedAt(Timestamp.from(Instant.now()));
 
