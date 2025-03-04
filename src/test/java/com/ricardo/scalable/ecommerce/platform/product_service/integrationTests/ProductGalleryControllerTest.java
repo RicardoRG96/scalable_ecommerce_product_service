@@ -3,9 +3,7 @@ package com.ricardo.scalable.ecommerce.platform.product_service.integrationTests
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 
-import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
@@ -21,10 +19,8 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.MediaType;
 import org.springframework.http.client.MultipartBodyBuilder;
-import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.reactive.server.WebTestClient;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.reactive.function.BodyInserters;
 
 import com.fasterxml.jackson.databind.JsonNode;
@@ -32,8 +28,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.ricardo.scalable.ecommerce.platform.product_service.entities.ProductGallery;
 import com.ricardo.scalable.ecommerce.platform.product_service.repositories.dto.ProductGalleryCreationDto;
-
-import io.micrometer.common.lang.NonNull;
 
 import static com.ricardo.scalable.ecommerce.platform.product_service.services.testData.ProductGalleryControllerTestData.*;
 
@@ -236,12 +230,6 @@ public class ProductGalleryControllerTest {
         String colorName = "red";
         Resource image = new ClassPathResource("ok-example.jpg");
         byte[] fileContent = Files.readAllBytes(Path.of(image.getURI()));
-        // MockMultipartFile file = new MockMultipartFile(
-        //     "file", 
-        //     image.getFilename(), 
-        //     MediaType.IMAGE_JPEG_VALUE, 
-        //     fileContent
-        // );
 
         MultipartBodyBuilder builder = new MultipartBodyBuilder();
         builder.part("productName", productName);

@@ -93,9 +93,6 @@ public class ProductGalleryServiceImpl implements ProductGalleryService {
                 return Optional.of(imageUrl);
             }
             return Optional.empty();
-            // storageService.store(imageFile);
-            // String imageUrl = storageService.getImageUrl(imageFile.getName());
-            // return Optional.of(imageUrl);
         } catch (IllegalStateException | IOException e) {
             e.printStackTrace();
             return Optional.empty();

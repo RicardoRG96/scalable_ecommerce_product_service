@@ -1,14 +1,11 @@
 package com.ricardo.scalable.ecommerce.platform.product_service.services.testData;
 
-import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
-import org.springframework.web.multipart.MultipartFile;
 
 import com.ricardo.scalable.ecommerce.platform.libs_common.entities.Brand;
 import com.ricardo.scalable.ecommerce.platform.libs_common.entities.Category;
@@ -17,7 +14,6 @@ import com.ricardo.scalable.ecommerce.platform.libs_common.entities.ProductAttri
 import com.ricardo.scalable.ecommerce.platform.product_service.entities.ProductGallery;
 import com.ricardo.scalable.ecommerce.platform.product_service.repositories.dto.ProductGalleryCreationDto;
 
-import static com.ricardo.scalable.ecommerce.platform.product_service.services.testData.FileUtils.*;
 
 public class ProductGalleryControllerTestData {
 
