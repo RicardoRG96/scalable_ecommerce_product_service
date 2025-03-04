@@ -1,8 +1,14 @@
 package com.ricardo.scalable.ecommerce.platform.product_service.services.testData;
 
+import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.ricardo.scalable.ecommerce.platform.libs_common.entities.Brand;
 import com.ricardo.scalable.ecommerce.platform.libs_common.entities.Category;
@@ -15,18 +21,43 @@ import static com.ricardo.scalable.ecommerce.platform.product_service.services.t
 
 public class ProductGalleryControllerTestData {
 
-    public static ProductGalleryCreationDto createProductGalleryCreationDto() throws IOException {
+    // public static ProductGalleryCreationDto createProductGalleryCreationDto() throws IOException {
+    //     ProductGalleryCreationDto productGallery = new ProductGalleryCreationDto();
+    //     byte[] imageBytes = createSamplePNG();
+
+    //     productGallery.setProductName("Polera Puma");
+    //     productGallery.setColorName("red");
+    //     MockMultipartFile file = 
+    //         new MockMultipartFile(
+    //             "file",
+    //             "polera-puma.png",
+    //             "image/png",
+    //             imageBytes
+    //         );
+    //     productGallery.setImage(file);
+
+    //     return productGallery;
+    // }
+
+    public static ProductGalleryCreationDto createProductGalleryCreationDtoOkResponse() throws IOException {
         ProductGalleryCreationDto productGallery = new ProductGalleryCreationDto();
-        byte[] imageBytes = createSamplePNG();
 
         productGallery.setProductName("Polera Puma");
         productGallery.setColorName("red");
+        Resource image = new ClassPathResource("ok-example.jpg");
+        // MockMultipartFile file = 
+        //     new MockMultipartFile(
+        //         "file",
+        //         "ok-example.jpg",
+        //         "image/jpg",
+        //         image.getInputStream()
+        //     );
         MockMultipartFile file = 
             new MockMultipartFile(
                 "file",
-                "polera-puma.png",
-                "image/png",
-                imageBytes
+                image.getFilename(), 
+                MediaType.IMAGE_JPEG_VALUE, 
+                image.getInputStream()
             );
         productGallery.setImage(file);
 

@@ -70,18 +70,15 @@ public class ProductGalleryServiceImpl implements ProductGalleryService {
     @Override
     @Transactional
     public Optional<ProductGallery> save(ProductGalleryCreationDto productGallery) {
-        String productName = productGallery.getProductName();
-        String colorName = productGallery.getColorName();
-        Optional<Product> product = productRepository.findByName(productName);
-        Optional<ProductAttribute> colorAttribute = productAttributeRepository.findByValue(colorName);
-        MultipartFile image = productGallery.getImage();
+        Optional<Product> product = productRepository.findByName(productGallery.getProductName());
+        Optional<ProductAttribute> colorAttribute = productAttributeRepository.findByValue(productGallery.getColorName());
+        Optional<String> imageUrl = storeImage(productGallery.getImage());
 
-        if (product.isPresent() && colorAttribute.isPresent()) {
+        if (product.isPresent() && colorAttribute.isPresent() && imageUrl.isPresent()) {
             ProductGallery newProductGallery = new ProductGallery();
             newProductGallery.setProduct(product.orElseThrow());
             newProductGallery.setColorAttribute(colorAttribute.orElseThrow());
-            String imageUrl = storeImage(image).orElseThrow();
-            newProductGallery.setImageUrl(imageUrl);
+            newProductGallery.setImageUrl(imageUrl.orElseThrow());
             return Optional.of(productGalleryRepository.save(newProductGallery));
         }
         return Optional.empty();
@@ -90,9 +87,15 @@ public class ProductGalleryServiceImpl implements ProductGalleryService {
     private Optional<String> storeImage(MultipartFile image) {
         try {
             File imageFile = multipartFileToFile(image);
-            storageService.store(imageFile);
-            String imageUrl = storageService.getImageUrl(imageFile.getName());
-            return Optional.of(imageUrl);
+            Optional<String> storedImage = storageService.store(imageFile);
+            if (storedImage.isPresent()) {
+                String imageUrl = storageService.getImageUrl(imageFile.getName());
+                return Optional.of(imageUrl);
+            }
+            return Optional.empty();
+            // storageService.store(imageFile);
+            // String imageUrl = storageService.getImageUrl(imageFile.getName());
+            // return Optional.of(imageUrl);
         } catch (IllegalStateException | IOException e) {
             e.printStackTrace();
             return Optional.empty();

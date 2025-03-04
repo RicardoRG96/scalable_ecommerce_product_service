@@ -3,7 +3,11 @@ package com.ricardo.scalable.ecommerce.platform.product_service.integrationTests
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 
+import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.MethodOrderer;
@@ -13,14 +17,23 @@ import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.env.Environment;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 import org.springframework.http.MediaType;
+import org.springframework.http.client.MultipartBodyBuilder;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.reactive.server.WebTestClient;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.reactive.function.BodyInserters;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.ricardo.scalable.ecommerce.platform.product_service.entities.ProductGallery;
 import com.ricardo.scalable.ecommerce.platform.product_service.repositories.dto.ProductGalleryCreationDto;
+
+import io.micrometer.common.lang.NonNull;
 
 import static com.ricardo.scalable.ecommerce.platform.product_service.services.testData.ProductGalleryControllerTestData.*;
 
@@ -40,6 +53,7 @@ public class ProductGalleryControllerTest {
     @BeforeEach
     public void setUp() {
         objectMapper = new ObjectMapper();
+        objectMapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
     }
 
     @Test
@@ -218,12 +232,28 @@ public class ProductGalleryControllerTest {
     @Test
     @Order(10)
     void testCreateProductGallery() throws IOException {
-        ProductGalleryCreationDto requestBody = createProductGalleryCreationDto();
+        String productName = "Polera Puma";
+        String colorName = "red";
+        Resource image = new ClassPathResource("ok-example.jpg");
+        byte[] fileContent = Files.readAllBytes(Path.of(image.getURI()));
+        // MockMultipartFile file = new MockMultipartFile(
+        //     "file", 
+        //     image.getFilename(), 
+        //     MediaType.IMAGE_JPEG_VALUE, 
+        //     fileContent
+        // );
+
+        MultipartBodyBuilder builder = new MultipartBodyBuilder();
+        builder.part("productName", productName);
+        builder.part("colorAttributeName", colorName);
+        builder.part("file", fileContent)
+              .filename("ok-example.jpg")
+              .contentType(MediaType.IMAGE_JPEG);
 
         client.post()
                 .uri("/product-gallery")
-                .contentType(MediaType.APPLICATION_JSON)
-                .bodyValue(requestBody)
+                .contentType(MediaType.MULTIPART_FORM_DATA)
+                .body(BodyInserters.fromMultipartData(builder.build()))
                 .exchange()
                 .expectStatus().isCreated()
                 .expectHeader().contentType(MediaType.APPLICATION_JSON)
@@ -236,7 +266,8 @@ public class ProductGalleryControllerTest {
                             () -> assertEquals(8L, json.path("id").asLong()),
                             () -> assertEquals(5L, json.path("product").path("id").asLong()),
                             () -> assertEquals(1L, json.path("colorAttribute").path("id").asLong()),
-                            () -> assertEquals("https://example.com/images/polera-puma-red.jpg", json.path("imageUrl").asText())
+                            () -> assertTrue(json.path("imageUrl").asText().contains("https://product-gallery-images-ecommerce-test.s3.us-east-2.amazonaws.com")),
+                            () -> assertTrue(json.path("imageUrl").asText().contains("ok-example.jpg"))
                         );
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -260,7 +291,7 @@ public class ProductGalleryControllerTest {
     @Test
     @Order(12)
     void testCreateProductGalleryNotFound() throws IOException {
-        ProductGalleryCreationDto requestBodyWithNotExistingProductName = createProductGalleryCreationDto();
+        ProductGalleryCreationDto requestBodyWithNotExistingProductName = createProductGalleryCreationDtoOkResponse();
         requestBodyWithNotExistingProductName.setProductName("example");
 
         client.post()
@@ -270,7 +301,7 @@ public class ProductGalleryControllerTest {
                 .exchange()
                 .expectStatus().isNotFound();
 
-        ProductGalleryCreationDto requestBodyWithNotExistingColorName = createProductGalleryCreationDto();
+        ProductGalleryCreationDto requestBodyWithNotExistingColorName = createProductGalleryCreationDtoOkResponse();
         requestBodyWithNotExistingColorName.setColorName("color-example");
 
         client.post()
@@ -373,6 +404,11 @@ public class ProductGalleryControllerTest {
                 .uri("/product-gallery/5")
                 .exchange()
                 .expectStatus().isNotFound();
+    }
+
+    @Test
+    void testBucketName() {
+        assertEquals("product-gallery-images-ecommerce-test", env.getProperty("aws.s3.bucketName"));
     }
 
     @Test
