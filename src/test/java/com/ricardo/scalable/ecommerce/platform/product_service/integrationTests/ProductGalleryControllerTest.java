@@ -4,8 +4,6 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.MethodOrderer;
@@ -15,8 +13,6 @@ import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.env.Environment;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.Resource;
 import org.springframework.http.MediaType;
 import org.springframework.http.client.MultipartBodyBuilder;
 import org.springframework.test.context.ActiveProfiles;
@@ -226,17 +222,7 @@ public class ProductGalleryControllerTest {
     @Test
     @Order(10)
     void testCreateProductGallery() throws IOException {
-        String productName = "Polera Puma";
-        String colorName = "red";
-        Resource image = new ClassPathResource("ok-example.jpg");
-        byte[] fileContent = Files.readAllBytes(Path.of(image.getURI()));
-
-        MultipartBodyBuilder builder = new MultipartBodyBuilder();
-        builder.part("productName", productName);
-        builder.part("colorAttributeName", colorName);
-        builder.part("file", fileContent)
-              .filename("ok-example.jpg")
-              .contentType(MediaType.IMAGE_JPEG);
+        MultipartBodyBuilder builder = createProductGalleryMultipartFormRequest();
 
         client.post()
                 .uri("/product-gallery")
@@ -265,15 +251,28 @@ public class ProductGalleryControllerTest {
 
     @Test
     @Order(11)
-    void testCreateProductGalleryBadRequest() {
-        ProductGalleryCreationDto requestBody = new ProductGalleryCreationDto();
+    void testCreateProductGalleryBadRequestEmptyProduct() throws IOException {
+        MultipartBodyBuilder builder = createProductGalleryMultipartFormBadRequestEmptyProductName();
 
         client.post()
                 .uri("/product-gallery")
-                .contentType(MediaType.APPLICATION_JSON)
-                .bodyValue(requestBody)
+                .contentType(MediaType.MULTIPART_FORM_DATA)
+                .body(BodyInserters.fromMultipartData(builder.build()))
                 .exchange()
                 .expectStatus().isBadRequest();
+    }
+
+    @Test
+    @Order(12)
+    void testCreateProductGalleryBadRequestEmptyColor() throws IOException {
+        MultipartBodyBuilder builder = createProductGalleryMultipartFormBadRequestEmptyColorName();
+
+        client.post()
+                .uri("/product-gallery")
+                .contentType(MediaType.MULTIPART_FORM_DATA)
+                .body(BodyInserters.fromMultipartData(builder.build()))
+                .exchange()
+                .expectStatus().isOk();
     }
 
     @Test

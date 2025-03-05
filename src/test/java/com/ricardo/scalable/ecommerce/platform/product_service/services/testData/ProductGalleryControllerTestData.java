@@ -1,10 +1,13 @@
 package com.ricardo.scalable.ecommerce.platform.product_service.services.testData;
 
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.MediaType;
+import org.springframework.http.client.MultipartBodyBuilder;
 import org.springframework.mock.web.MockMultipartFile;
 
 import com.ricardo.scalable.ecommerce.platform.libs_common.entities.Brand;
@@ -35,19 +38,100 @@ public class ProductGalleryControllerTestData {
     //     return productGallery;
     // }
 
+    public static MultipartBodyBuilder createProductGalleryMultipartFormRequest() throws IOException {
+        String productName = "Polera Puma";
+        String colorName = "red";
+        Resource image = new ClassPathResource("ok-example.jpg");
+        byte[] fileContent = Files.readAllBytes(Path.of(image.getURI()));
+
+        MultipartBodyBuilder builder = new MultipartBodyBuilder();
+        builder.part("productName", productName);
+        builder.part("colorAttributeName", colorName);
+        builder.part("file", fileContent)
+              .filename("ok-example.jpg")
+              .contentType(MediaType.IMAGE_JPEG);
+
+        return builder;
+    }
+
+    public static MultipartBodyBuilder createProductGalleryMultipartFormBadRequestEmptyColorName() throws IOException {
+        String productName = "Polera Puma";
+        Resource image = new ClassPathResource("ok-example.jpg");
+        byte[] fileContent = Files.readAllBytes(Path.of(image.getURI()));
+
+        MultipartBodyBuilder builder = new MultipartBodyBuilder();
+        builder.part("productName", productName);
+        builder.part("file", fileContent)
+              .filename("ok-example.jpg")
+              .contentType(MediaType.IMAGE_JPEG);
+
+        return builder;
+    }
+
+    public static MultipartBodyBuilder createProductGalleryMultipartFormBadRequestEmptyProductName() throws IOException {
+        String colorName = "red";
+        Resource image = new ClassPathResource("ok-example.jpg");
+        byte[] fileContent = Files.readAllBytes(Path.of(image.getURI()));
+
+        MultipartBodyBuilder builder = new MultipartBodyBuilder();
+        builder.part("colorAttributeName", colorName);
+        builder.part("file", fileContent)
+              .filename("ok-example.jpg")
+              .contentType(MediaType.IMAGE_JPEG);
+
+        return builder;
+    }
+
+    public static MultipartBodyBuilder createProductGalleryMultipartFormBadRequestEmptyImage() throws IOException {
+        String productName = "Polera Puma";
+        String colorName = "red";
+
+        MultipartBodyBuilder builder = new MultipartBodyBuilder();
+        builder.part("productName", productName);
+        builder.part("colorAttributeName", colorName);
+
+        return builder;
+    }
+
+    public static MultipartBodyBuilder createProductGalleryMultipartFormBadRequestImageName() throws IOException {
+        String productName = "Polera Puma";
+        String colorName = "red";
+        Resource image = new ClassPathResource("invalid-..name.jpg");
+        byte[] fileContent = Files.readAllBytes(Path.of(image.getURI()));
+
+        MultipartBodyBuilder builder = new MultipartBodyBuilder();
+        builder.part("productName", productName);
+        builder.part("colorAttributeName", colorName);
+        builder.part("file", fileContent)
+              .filename("invalid-..name.jpg")
+              .contentType(MediaType.IMAGE_JPEG);
+
+        return builder;
+    }
+
+    public static MultipartBodyBuilder createProductGalleryMultipartFormBadRequestImageFormat() throws IOException {
+        String productName = "Polera Puma";
+        String colorName = "red";
+        Resource image = new ClassPathResource("test.txt");
+        byte[] fileContent = Files.readAllBytes(Path.of(image.getURI()));
+
+        MultipartBodyBuilder builder = new MultipartBodyBuilder();
+        builder.part("productName", productName);
+        builder.part("colorAttributeName", colorName);
+        builder.part("file", fileContent)
+              .filename("test.txt")
+              .contentType(MediaType.IMAGE_JPEG);
+
+        return builder;
+    }
+
     public static ProductGalleryCreationDto createProductGalleryCreationDtoOkResponse() throws IOException {
         ProductGalleryCreationDto productGallery = new ProductGalleryCreationDto();
 
         productGallery.setProductName("Polera Puma");
         productGallery.setColorName("red");
         Resource image = new ClassPathResource("ok-example.jpg");
-        // MockMultipartFile file = 
-        //     new MockMultipartFile(
-        //         "file",
-        //         "ok-example.jpg",
-        //         "image/jpg",
-        //         image.getInputStream()
-        //     );
+   
         MockMultipartFile file = 
             new MockMultipartFile(
                 "file",
