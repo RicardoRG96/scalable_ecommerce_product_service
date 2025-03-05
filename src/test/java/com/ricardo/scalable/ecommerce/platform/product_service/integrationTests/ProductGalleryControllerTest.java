@@ -302,6 +302,19 @@ public class ProductGalleryControllerTest {
     }
 
     @Test
+    @Order(15)
+    void testCreateProductGalleryBadRequestImageFormat() throws IOException {
+        MultipartBodyBuilder builder = createProductGalleryMultipartFormBadRequestImageFormat();
+
+        client.post()
+                .uri("/product-gallery")
+                .contentType(MediaType.MULTIPART_FORM_DATA)
+                .body(BodyInserters.fromMultipartData(builder.build()))
+                .exchange()
+                .expectStatus().isBadRequest();
+    }
+
+    @Test
     @Order(12)
     void testCreateProductGalleryNotFound() throws IOException {
         ProductGalleryCreationDto requestBodyWithNotExistingProductName = createProductGalleryCreationDtoOkResponse();

@@ -120,7 +120,7 @@ public class ProductGalleryControllerTestData {
         builder.part("colorAttributeName", colorName);
         builder.part("file", fileContent)
               .filename("test.txt")
-              .contentType(MediaType.IMAGE_JPEG);
+              .contentType(MediaType.TEXT_PLAIN);
 
         return builder;
     }
