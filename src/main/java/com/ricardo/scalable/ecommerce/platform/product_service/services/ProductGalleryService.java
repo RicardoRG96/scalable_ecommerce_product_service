@@ -20,7 +20,7 @@ public interface ProductGalleryService {
 
     Optional<ProductGallery> save(ProductGalleryCreationDto productGallery);
 
-    Optional<ProductGallery> update(ProductGallery productGallery, Long id);
+    Optional<ProductGallery> update(ProductGalleryCreationDto productGallery, Long id);
 
     void delete(Long id);
 

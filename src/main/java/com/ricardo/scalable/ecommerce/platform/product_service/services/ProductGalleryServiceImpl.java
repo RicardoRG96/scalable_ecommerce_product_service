@@ -74,7 +74,11 @@ public class ProductGalleryServiceImpl implements ProductGalleryService {
         Optional<ProductAttribute> colorAttribute = productAttributeRepository.findByValue(productGallery.getColorName());
         Optional<String> imageUrl = storeImage(productGallery.getImage());
 
-        if (product.isPresent() && colorAttribute.isPresent() && imageUrl.isPresent()) {
+        if (
+            product.isPresent() && 
+            colorAttribute.isPresent() && 
+            imageUrl.isPresent()
+        ) {
             ProductGallery newProductGallery = new ProductGallery();
             newProductGallery.setProduct(product.orElseThrow());
             newProductGallery.setColorAttribute(colorAttribute.orElseThrow());
@@ -117,16 +121,24 @@ public class ProductGalleryServiceImpl implements ProductGalleryService {
 
     @Override
     @Transactional
-    public Optional<ProductGallery> update(ProductGallery productGallery, Long id) {
+    public Optional<ProductGallery> update(ProductGalleryCreationDto productGallery, Long id) {
         Optional<ProductGallery> existingProductGallery = productGalleryRepository.findById(id);
+        Optional<Product> product = productRepository.findByName(productGallery.getProductName());
+        Optional<ProductAttribute> colorAttribute = productAttributeRepository.findByValue(productGallery.getColorName());
+        Optional<String> imageUrl = storeImage(productGallery.getImage());
 
-        return existingProductGallery.map(dbProductGallery -> {
-            dbProductGallery.setProduct(productGallery.getProduct());
-            dbProductGallery.setColorAttribute(productGallery.getColorAttribute());
-            dbProductGallery.setImageUrl(productGallery.getImageUrl());
+        if (existingProductGallery.isPresent() &&
+            product.isPresent() && 
+            colorAttribute.isPresent() && 
+            imageUrl.isPresent()
+        ) {
+            ProductGallery dbProductGallery = existingProductGallery.orElseThrow();
+            dbProductGallery.setProduct(product.orElseThrow());
+            dbProductGallery.setColorAttribute(colorAttribute.orElseThrow());
+            dbProductGallery.setImageUrl(imageUrl.orElseThrow());
             return Optional.of(productGalleryRepository.save(dbProductGallery));
-        }).orElseGet(Optional::empty);
-        
+        }
+        return Optional.empty();
     }
 
     @Override
