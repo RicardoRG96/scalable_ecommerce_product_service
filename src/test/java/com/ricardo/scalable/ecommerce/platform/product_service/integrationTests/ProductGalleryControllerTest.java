@@ -272,7 +272,7 @@ public class ProductGalleryControllerTest {
                 .contentType(MediaType.MULTIPART_FORM_DATA)
                 .body(BodyInserters.fromMultipartData(builder.build()))
                 .exchange()
-                .expectStatus().isOk();
+                .expectStatus().isBadRequest();
     }
 
     @Test
