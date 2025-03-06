@@ -226,13 +226,33 @@ public class ProductGalleryServiceTestData {
         return productGallery;
     }
 
-    public static ProductGallery createUpdatedProductGallery() {
+    public static ProductGalleryCreationDto createUpdatedProductGallery() throws IOException {
+        ProductGalleryCreationDto productGallery = new ProductGalleryCreationDto();
+
+        byte[] imageBytes = createSamplePNG();
+        MockMultipartFile file = 
+            new MockMultipartFile(
+                "file",
+                "polera-manga-corta.png",
+                "image/png",
+                imageBytes
+            );
+
+        productGallery.setProductName("Polera manga corta");
+        productGallery.setColorName("rojo");
+        productGallery.setImage(file);
+
+        return productGallery;
+    }
+
+    public static ProductGallery createProductGalleryUpdateResponse() {
         ProductGallery productGallery = new ProductGallery();
 
-        productGallery.setId(7L);
-        productGallery.setProduct(createProduct005().orElseThrow());
-        productGallery.setColorAttribute(createProductAttribute002().orElseThrow());
-        productGallery.setImageUrl("https://example.com/image8-blue.png");
+        productGallery.setId(8L);
+        productGallery.setProduct(createProduct004().orElseThrow());
+        productGallery.setColorAttribute(createProductAttribute001().orElseThrow());
+        productGallery.setImageUrl(
+            "https://product-gallery-images-ecommerce.s3.us-east-2.amazonaws.com/2025.03.02.13.39.01_polera-manga-corta2.png");
         productGallery.setCreatedAt(Timestamp.from(Instant.now()));
         productGallery.setUpdatedAt(Timestamp.from(Instant.now()));
 

@@ -315,7 +315,7 @@ public class ProductGalleryControllerTest {
     }
 
     @Test
-    @Order(12)
+    @Order(16)
     void testCreateProductGalleryNotFound() throws IOException {
         ProductGalleryCreationDto requestBodyWithNotExistingProductName = createProductGalleryCreationDtoOkResponse();
         requestBodyWithNotExistingProductName.setProductName("example");
@@ -339,7 +339,7 @@ public class ProductGalleryControllerTest {
     }
 
     @Test
-    @Order(13)
+    @Order(17)
     void testUpdateProductGallery() {
         ProductGallery requestBody = createProductGallery();
         requestBody.setImageUrl("https://example.com/images/polera-puma-blue-full-hd.png");
@@ -369,7 +369,7 @@ public class ProductGalleryControllerTest {
     }
 
     @Test
-    @Order(14)
+    @Order(18)
     void testUpdateProductGalleryBadRequest() {
         ProductGallery requestBody = new ProductGallery();
 
@@ -382,7 +382,7 @@ public class ProductGalleryControllerTest {
     }
 
     @Test
-    @Order(15)
+    @Order(19)
     void testUpdateProductGalleryNotFound() {
         ProductGallery requestBody = createProductGallery();
         String notExistingId = "100";
@@ -396,7 +396,7 @@ public class ProductGalleryControllerTest {
     }
 
     @Test
-    @Order(16)
+    @Order(20)
     void testDeleteProductGallery() {
         client.delete()
                 .uri("/product-gallery/5")
@@ -424,7 +424,7 @@ public class ProductGalleryControllerTest {
     }
 
     @Test
-    @Order(17)
+    @Order(21)
     void testGetDeletedProductGallery() {
         client.get()
                 .uri("/product-gallery/5")

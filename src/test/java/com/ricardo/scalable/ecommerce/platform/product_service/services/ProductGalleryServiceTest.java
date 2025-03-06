@@ -165,20 +165,30 @@ public class ProductGalleryServiceTest {
     }
 
     @Test
-    void testUpdate() {
-        ProductGallery updatedProductGallery = createUpdatedProductGallery();
+    void testUpdate() throws IOException {
+        ProductGalleryCreationDto updatedProductGallery = createUpdatedProductGallery();
+        ProductGallery updatedProductGalleryResponse = createProductGalleryUpdateResponse();
+        Optional<String> imageStoredUrl = 
+            Optional.of("https://product-gallery-images-ecommerce.s3.us-east-2.amazonaws.com/2025.03.02.13.39.01_polera-manga-corta2.png");
 
-        when(productGalleryRepository.findById(7L)).thenReturn(createProductGallery007());
-        when(productGalleryRepository.save(any())).thenReturn(updatedProductGallery);
+        when(productGalleryRepository.findById(8L)).thenReturn(Optional.of(createProductGalleryCreationResponse()));
+        when(productRepository.findByName("Polera manga corta")).thenReturn(createProduct005());
+        when(productAttributeRepository.findByValue("rojo")).thenReturn(createProductAttribute002());
+        when(storageService.store(any())).thenReturn(imageStoredUrl);
+        when(storageService.getImageUrl(any())).thenReturn(imageStoredUrl.orElseThrow());
+        when(productGalleryRepository.save(any())).thenReturn(updatedProductGalleryResponse);
 
-        Optional<ProductGallery> result = productGalleryService.update(updatedProductGallery, 7L);
+        Optional<ProductGallery> result = productGalleryService.update(updatedProductGallery, 8L);
 
         assertAll(
             () -> assertTrue(result.isPresent()),
-            () -> assertEquals(7L, result.orElseThrow().getId()),
-            () -> assertEquals("Jeans Americanino", result.orElseThrow().getProduct().getName()),
-            () -> assertEquals("azul", result.orElseThrow().getColorAttribute().getValue()),
-            () -> assertEquals("https://example.com/image8-blue.png", result.orElseThrow().getImageUrl())
+            () -> assertEquals(8L, result.orElseThrow().getId()),
+            () -> assertEquals("Polera manga corta", result.orElseThrow().getProduct().getName()),
+            () -> assertEquals("rojo", result.orElseThrow().getColorAttribute().getValue()),
+            () -> assertEquals(
+                "https://product-gallery-images-ecommerce.s3.us-east-2.amazonaws.com/2025.03.02.13.39.01_polera-manga-corta2.png", 
+                result.orElseThrow().getImageUrl()
+            )
         );
     }
 
