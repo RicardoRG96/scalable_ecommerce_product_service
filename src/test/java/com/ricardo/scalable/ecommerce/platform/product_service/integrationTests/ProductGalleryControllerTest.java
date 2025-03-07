@@ -22,8 +22,6 @@ import org.springframework.web.reactive.function.BodyInserters;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import com.ricardo.scalable.ecommerce.platform.product_service.entities.ProductGallery;
-import com.ricardo.scalable.ecommerce.platform.product_service.repositories.dto.ProductGalleryCreationDto;
 
 import static com.ricardo.scalable.ecommerce.platform.product_service.services.testData.ProductGalleryControllerTestData.*;
 
@@ -316,38 +314,39 @@ public class ProductGalleryControllerTest {
 
     @Test
     @Order(16)
-    void testCreateProductGalleryNotFound() throws IOException {
-        ProductGalleryCreationDto requestBodyWithNotExistingProductName = createProductGalleryCreationDtoOkResponse();
-        requestBodyWithNotExistingProductName.setProductName("example");
+    void testCreateProductGalleryNotFoundProductName() throws IOException {
+        MultipartBodyBuilder builder = createProductGalleryMultipartFormNotFoundProductName();
 
         client.post()
                 .uri("/product-gallery")
-                .contentType(MediaType.APPLICATION_JSON)
-                .bodyValue(requestBodyWithNotExistingProductName)
-                .exchange()
-                .expectStatus().isNotFound();
-
-        ProductGalleryCreationDto requestBodyWithNotExistingColorName = createProductGalleryCreationDtoOkResponse();
-        requestBodyWithNotExistingColorName.setColorName("color-example");
-
-        client.post()
-                .uri("/product-gallery")
-                .contentType(MediaType.APPLICATION_JSON)
-                .bodyValue(requestBodyWithNotExistingColorName)
+                .contentType(MediaType.MULTIPART_FORM_DATA)
+                .body(BodyInserters.fromMultipartData(builder.build()))
                 .exchange()
                 .expectStatus().isNotFound();
     }
 
     @Test
     @Order(17)
-    void testUpdateProductGallery() {
-        ProductGallery requestBody = createProductGallery();
-        requestBody.setImageUrl("https://example.com/images/polera-puma-blue-full-hd.png");
+    void testCreateProductGalleryNotFoundColorName() throws IOException {
+        MultipartBodyBuilder builder = createProductGalleryMultipartFormNotFoundColorName();
+
+        client.post()
+                .uri("/product-gallery")
+                .contentType(MediaType.MULTIPART_FORM_DATA)
+                .body(BodyInserters.fromMultipartData(builder.build()))
+                .exchange()
+                .expectStatus().isNotFound();
+    }
+
+    @Test
+    @Order(18)
+    void testUpdateProductGallery() throws IOException {
+        MultipartBodyBuilder builder = createProductGalleryMultipartFormUpdateRequest();
 
         client.put()
-                .uri("/product-gallery/5")
-                .contentType(MediaType.APPLICATION_JSON)
-                .bodyValue(requestBody)
+                .uri("/product-gallery/8")
+                .contentType(MediaType.MULTIPART_FORM_DATA)
+                .body(BodyInserters.fromMultipartData(builder.build()))
                 .exchange()
                 .expectStatus().isOk()
                 .expectHeader().contentType(MediaType.APPLICATION_JSON)
@@ -357,10 +356,13 @@ public class ProductGalleryControllerTest {
                         JsonNode json = objectMapper.readTree(res.getResponseBody());
                         assertAll(
                             () -> assertNotNull(json),
-                            () -> assertEquals(5L, json.path("id").asLong()),
-                            () -> assertEquals(4L, json.path("product").path("id").asLong()),
-                            () -> assertEquals(2L, json.path("colorAttribute").path("id").asLong()),
-                            () -> assertEquals("https://example.com/images/polera-puma-blue-full-hd.png", json.path("imageUrl").asText())
+                            () -> assertEquals(8L, json.path("id").asLong()),
+                            () -> assertEquals(5L, json.path("product").path("id").asLong()),
+                            () -> assertEquals(1L, json.path("colorAttribute").path("id").asLong()),
+                            () -> assertTrue(
+                                json.path("imageUrl").asText().contains(
+                                    "https://product-gallery-images-ecommerce-test.s3.us-east-2.amazonaws.com")),
+                            () -> assertTrue(json.path("imageUrl").asText().contains("ok-update-example.jpg"))
                         );
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -369,34 +371,112 @@ public class ProductGalleryControllerTest {
     }
 
     @Test
-    @Order(18)
-    void testUpdateProductGalleryBadRequest() {
-        ProductGallery requestBody = new ProductGallery();
+    @Order(19)
+    void testUpdateProductGalleryBadRequestEmptyProduct() throws IOException {
+        MultipartBodyBuilder builder = createProductGalleryMultipartFormBadRequestEmptyProductName();
 
         client.put()
-                .uri("/product-gallery/5")
-                .contentType(MediaType.APPLICATION_JSON)
-                .bodyValue(requestBody)
+                .uri("/product-gallery/8")
+                .contentType(MediaType.MULTIPART_FORM_DATA)
+                .body(BodyInserters.fromMultipartData(builder.build()))
                 .exchange()
                 .expectStatus().isBadRequest();
     }
 
     @Test
-    @Order(19)
-    void testUpdateProductGalleryNotFound() {
-        ProductGallery requestBody = createProductGallery();
+    @Order(20)
+    void testUpdateProductGalleryBadRequestEmptyColor() throws IOException {
+        MultipartBodyBuilder builder = createProductGalleryMultipartFormBadRequestEmptyColorName();
+
+        client.put()
+                .uri("/product-gallery/8")
+                .contentType(MediaType.MULTIPART_FORM_DATA)
+                .body(BodyInserters.fromMultipartData(builder.build()))
+                .exchange()
+                .expectStatus().isBadRequest();
+    }
+
+    @Test
+    @Order(21)
+    void testUpdateProductGalleryBadRequestEmptyImage() throws IOException {
+        MultipartBodyBuilder builder = createProductGalleryMultipartFormBadRequestEmptyImage();
+
+        client.put()
+                .uri("/product-gallery/8")
+                .contentType(MediaType.MULTIPART_FORM_DATA)
+                .body(BodyInserters.fromMultipartData(builder.build()))
+                .exchange()
+                .expectStatus().isBadRequest();
+    }
+
+    @Test
+    @Order(22)
+    void testUpdateProductGalleryBadRequestImageName() throws IOException {
+        MultipartBodyBuilder builder = createProductGalleryMultipartFormBadRequestImageName();
+
+        client.put()
+                .uri("/product-gallery/8")
+                .contentType(MediaType.MULTIPART_FORM_DATA)
+                .body(BodyInserters.fromMultipartData(builder.build()))
+                .exchange()
+                .expectStatus().isBadRequest();
+    }
+
+    @Test
+    @Order(23)
+    void testUpdateProductGalleryBadRequestImageFormat() throws IOException {
+        MultipartBodyBuilder builder = createProductGalleryMultipartFormBadRequestImageFormat();
+
+        client.put()
+                .uri("/product-gallery/8")
+                .contentType(MediaType.MULTIPART_FORM_DATA)
+                .body(BodyInserters.fromMultipartData(builder.build()))
+                .exchange()
+                .expectStatus().isBadRequest();
+    }
+
+    @Test
+    @Order(24)
+    void testUpdateProductGalleryNotFound() throws IOException {
+        MultipartBodyBuilder builder = createProductGalleryMultipartFormUpdateRequest();
         String notExistingId = "100";
 
         client.put()
                 .uri("/product-gallery/" + notExistingId)
-                .contentType(MediaType.APPLICATION_JSON)
-                .bodyValue(requestBody)
+                .contentType(MediaType.MULTIPART_FORM_DATA)
+                .body(BodyInserters.fromMultipartData(builder.build()))
                 .exchange()
                 .expectStatus().isNotFound();
     }
 
     @Test
-    @Order(20)
+    @Order(25)
+    void testUpdateProductGalleryNotFoundProductName() throws IOException {
+        MultipartBodyBuilder builder = createProductGalleryMultipartFormNotFoundProductName();
+
+        client.put()
+                .uri("/product-gallery/8")
+                .contentType(MediaType.MULTIPART_FORM_DATA)
+                .body(BodyInserters.fromMultipartData(builder.build()))
+                .exchange()
+                .expectStatus().isNotFound();
+    }
+
+    @Test
+    @Order(26)
+    void testUpdateProductGalleryNotFoundColorName() throws IOException {
+        MultipartBodyBuilder builder = createProductGalleryMultipartFormNotFoundColorName();
+
+        client.put()
+                .uri("/product-gallery/8")
+                .contentType(MediaType.MULTIPART_FORM_DATA)
+                .body(BodyInserters.fromMultipartData(builder.build()))
+                .exchange()
+                .expectStatus().isNotFound();
+    }
+
+    @Test
+    @Order(27)
     void testDeleteProductGallery() {
         client.delete()
                 .uri("/product-gallery/5")
@@ -424,7 +504,7 @@ public class ProductGalleryControllerTest {
     }
 
     @Test
-    @Order(21)
+    @Order(28)
     void testGetDeletedProductGallery() {
         client.get()
                 .uri("/product-gallery/5")

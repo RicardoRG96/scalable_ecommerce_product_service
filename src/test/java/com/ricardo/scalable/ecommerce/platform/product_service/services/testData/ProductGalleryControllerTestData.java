@@ -54,6 +54,22 @@ public class ProductGalleryControllerTestData {
         return builder;
     }
 
+    public static MultipartBodyBuilder createProductGalleryMultipartFormUpdateRequest() throws IOException {
+        String productName = "Polera Puma";
+        String colorName = "red";
+        Resource image = new ClassPathResource("ok-update-example.jpg");
+        byte[] fileContent = Files.readAllBytes(Path.of(image.getURI()));
+
+        MultipartBodyBuilder builder = new MultipartBodyBuilder();
+        builder.part("productName", productName);
+        builder.part("colorAttributeName", colorName);
+        builder.part("file", fileContent)
+              .filename("ok-update-example.jpg")
+              .contentType(MediaType.IMAGE_JPEG);
+
+        return builder;
+    }
+
     public static MultipartBodyBuilder createProductGalleryMultipartFormBadRequestEmptyColorName() throws IOException {
         String productName = "Polera Puma";
         Resource image = new ClassPathResource("ok-example.jpg");
@@ -121,6 +137,38 @@ public class ProductGalleryControllerTestData {
         builder.part("file", fileContent)
               .filename("test.txt")
               .contentType(MediaType.TEXT_PLAIN);
+
+        return builder;
+    }
+
+    public static MultipartBodyBuilder createProductGalleryMultipartFormNotFoundProductName() throws IOException {
+        String productName = "Polera manga corta Puma";
+        String colorName = "red";
+        Resource image = new ClassPathResource("ok-example.jpg");
+        byte[] fileContent = Files.readAllBytes(Path.of(image.getURI()));
+
+        MultipartBodyBuilder builder = new MultipartBodyBuilder();
+        builder.part("productName", productName);
+        builder.part("colorAttributeName", colorName);
+        builder.part("file", fileContent)
+              .filename("ok-example.jpg")
+              .contentType(MediaType.IMAGE_JPEG);
+
+        return builder;
+    }
+
+    public static MultipartBodyBuilder createProductGalleryMultipartFormNotFoundColorName() throws IOException {
+        String productName = "Polera Puma";
+        String colorName = "orange";
+        Resource image = new ClassPathResource("ok-example.jpg");
+        byte[] fileContent = Files.readAllBytes(Path.of(image.getURI()));
+
+        MultipartBodyBuilder builder = new MultipartBodyBuilder();
+        builder.part("productName", productName);
+        builder.part("colorAttributeName", colorName);
+        builder.part("file", fileContent)
+              .filename("ok-example.jpg")
+              .contentType(MediaType.IMAGE_JPEG);
 
         return builder;
     }
