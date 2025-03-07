@@ -1,13 +1,13 @@
 package com.ricardo.scalable.ecommerce.platform.product_service.storageService;
 
 import java.io.File;
-import java.nio.file.Path;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import software.amazon.awssdk.core.exception.SdkClientException;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.S3Exception;
 
@@ -49,18 +49,21 @@ public class S3StorageService implements StorageService {
     }
 
     @Override
-    public byte[] download(String filename, Path downloadPath) {
-        return null;
-    }
-
-    @Override
-    public String delete(String filename) {
-        return null;
-    }
-
-    @Override
-    public String deleteAll() {
-        return null;
+    public Optional<String> delete(String filename) {
+        try {
+            s3Client.deleteObject(request -> 
+                request
+                    .bucket(bucketName)
+                    .key(filename)
+            );
+            return Optional.of("Imagen eliminada correctamente");
+        } catch (S3Exception e) {
+            e.printStackTrace();
+            return Optional.empty();
+        } catch (SdkClientException e) {
+            e.printStackTrace();
+            return Optional.empty();
+        }
     }
 
 }

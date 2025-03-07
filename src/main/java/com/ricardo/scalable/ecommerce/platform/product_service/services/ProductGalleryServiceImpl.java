@@ -144,6 +144,10 @@ public class ProductGalleryServiceImpl implements ProductGalleryService {
     @Override
     @Transactional
     public void delete(Long id) {
+        ProductGallery productGallery = productGalleryRepository.findById(id).orElseThrow();
+        String imageUrl = productGallery.getImageUrl();
+        String fileName = imageUrl.substring(imageUrl.lastIndexOf("/") + 1);
+        storageService.delete(fileName);
         productGalleryRepository.deleteById(id);
     }
 
