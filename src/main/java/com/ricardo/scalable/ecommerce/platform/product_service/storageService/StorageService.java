@@ -7,7 +7,7 @@ public interface StorageService {
 
     Optional<String> store(File file);
 
-    String getImageUrl(String fileName);
+    Optional<String> getImageUrl(String fileName);
 
     Optional<String> delete(String filename);
 

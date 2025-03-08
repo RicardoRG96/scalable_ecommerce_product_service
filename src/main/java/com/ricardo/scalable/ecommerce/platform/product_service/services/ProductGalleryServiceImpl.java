@@ -72,13 +72,12 @@ public class ProductGalleryServiceImpl implements ProductGalleryService {
     public Optional<ProductGallery> save(ProductGalleryCreationDto productGallery) {
         Optional<Product> product = productRepository.findByName(productGallery.getProductName());
         Optional<ProductAttribute> colorAttribute = productAttributeRepository.findByValue(productGallery.getColorName());
-        Optional<String> imageUrl = storeImage(productGallery.getImage());
 
         if (
             product.isPresent() && 
-            colorAttribute.isPresent() && 
-            imageUrl.isPresent()
+            colorAttribute.isPresent()
         ) {
+            Optional<String> imageUrl = storeImage(productGallery.getImage());
             ProductGallery newProductGallery = new ProductGallery();
             newProductGallery.setProduct(product.orElseThrow());
             newProductGallery.setColorAttribute(colorAttribute.orElseThrow());
@@ -93,8 +92,8 @@ public class ProductGalleryServiceImpl implements ProductGalleryService {
             File imageFile = multipartFileToFile(image);
             Optional<String> storedImage = storageService.store(imageFile);
             if (storedImage.isPresent()) {
-                String imageUrl = storageService.getImageUrl(imageFile.getName());
-                return Optional.of(imageUrl);
+                Optional<String> imageUrl = storageService.getImageUrl(imageFile.getName());
+                return imageUrl;
             }
             return Optional.empty();
         } catch (IllegalStateException | IOException e) {
@@ -125,13 +124,12 @@ public class ProductGalleryServiceImpl implements ProductGalleryService {
         Optional<ProductGallery> existingProductGallery = productGalleryRepository.findById(id);
         Optional<Product> product = productRepository.findByName(productGallery.getProductName());
         Optional<ProductAttribute> colorAttribute = productAttributeRepository.findByValue(productGallery.getColorName());
-        Optional<String> imageUrl = storeImage(productGallery.getImage());
 
         if (existingProductGallery.isPresent() &&
             product.isPresent() && 
-            colorAttribute.isPresent() && 
-            imageUrl.isPresent()
+            colorAttribute.isPresent()
         ) {
+            Optional<String> imageUrl = storeImage(productGallery.getImage());
             ProductGallery dbProductGallery = existingProductGallery.orElseThrow();
             dbProductGallery.setProduct(product.orElseThrow());
             dbProductGallery.setColorAttribute(colorAttribute.orElseThrow());

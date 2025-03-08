@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import software.amazon.awssdk.core.exception.SdkClientException;
+import software.amazon.awssdk.core.exception.SdkException;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.S3Exception;
 
@@ -39,13 +40,21 @@ public class S3StorageService implements StorageService {
     }
 
     @Override
-    public String getImageUrl(String fileName) {
-        String url = s3Client.utilities()
+    public Optional<String> getImageUrl(String fileName) {
+        try {
+            String url = s3Client.utilities()
                 .getUrl(builder -> 
                     builder.bucket(bucketName)
                             .key(fileName)
                 ).toString();
-        return url;
+            return Optional.of(url);
+        } catch (SdkException e) {
+            e.printStackTrace();
+            return Optional.empty();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Optional.empty();
+        }
     }
 
     @Override

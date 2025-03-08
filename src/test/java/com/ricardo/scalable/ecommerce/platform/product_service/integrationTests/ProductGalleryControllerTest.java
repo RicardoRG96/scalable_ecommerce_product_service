@@ -479,10 +479,10 @@ public class ProductGalleryControllerTest {
     @Order(27)
     void testDeleteProductGallery() {
         client.delete()
-                .uri("/product-gallery/5")
+                .uri("/product-gallery/8")
                 .exchange()
                 .expectStatus().isNoContent();
-        
+
         client.get()
                 .uri("/product-gallery")
                 .exchange()
@@ -507,7 +507,7 @@ public class ProductGalleryControllerTest {
     @Order(28)
     void testGetDeletedProductGallery() {
         client.get()
-                .uri("/product-gallery/5")
+                .uri("/product-gallery/8")
                 .exchange()
                 .expectStatus().isNotFound();
     }

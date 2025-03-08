@@ -148,7 +148,7 @@ public class ProductGalleryServiceTest {
         when(productRepository.findByName("Polera manga corta")).thenReturn(createProduct004());
         when(productAttributeRepository.findByValue("negro")).thenReturn(createProductAttribute003());
         when(storageService.store(any())).thenReturn(imageStoredUrl);
-        when(storageService.getImageUrl(any())).thenReturn(imageStoredUrl.orElseThrow());
+        when(storageService.getImageUrl(any())).thenReturn(imageStoredUrl);
         when(productGalleryRepository.save(any())).thenReturn(productGallery);
 
         Optional<ProductGallery> result = productGalleryService.save(productGalleryCreationDto);
@@ -175,7 +175,7 @@ public class ProductGalleryServiceTest {
         when(productRepository.findByName("Polera manga corta")).thenReturn(createProduct005());
         when(productAttributeRepository.findByValue("rojo")).thenReturn(createProductAttribute002());
         when(storageService.store(any())).thenReturn(imageStoredUrl);
-        when(storageService.getImageUrl(any())).thenReturn(imageStoredUrl.orElseThrow());
+        when(storageService.getImageUrl(any())).thenReturn(imageStoredUrl);
         when(productGalleryRepository.save(any())).thenReturn(updatedProductGalleryResponse);
 
         Optional<ProductGallery> result = productGalleryService.update(updatedProductGallery, 8L);
@@ -194,11 +194,14 @@ public class ProductGalleryServiceTest {
 
     @Test
     void testDelete() {
+        when(productGalleryRepository.findById(1L)).thenReturn(createProductGallery001());
         doNothing().when(productGalleryRepository).deleteById(1L);
+        when(storageService.delete("image1.png")).thenReturn(Optional.of("Imagen eliminada correctamente"));
 
         productGalleryService.delete(1L);
 
         verify(productGalleryRepository, times(1)).deleteById(1L);
+        verify(storageService, times(1)).delete("image1.png");
     }
 
 }
