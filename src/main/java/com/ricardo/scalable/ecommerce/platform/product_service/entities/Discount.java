@@ -69,12 +69,18 @@ public class Discount {
     public Discount() {
     }
 
-    public Discount(String discountType, Double discountValue, Timestamp startDate, Timestamp endDate, Boolean isActive) {
+    public Discount(Long id, @NotBlank String discountType, @NotBlank Double discountValue,
+            @NotNull Timestamp startDate, @NotNull Timestamp endDate, Boolean isActive, List<ProductSku> productSkus,
+            Timestamp createdAt, Timestamp updatedAt) {
+        this.id = id;
         this.discountType = discountType;
         this.discountValue = discountValue;
         this.startDate = startDate;
         this.endDate = endDate;
         this.isActive = isActive;
+        this.productSkus = productSkus;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
     }
 
     public Long getId() {
@@ -125,6 +131,14 @@ public class Discount {
         this.isActive = isActive;
     }
 
+    public List<ProductSku> getProductSkus() {
+        return productSkus;
+    }
+
+    public void setProductSkus(List<ProductSku> productSkus) {
+        this.productSkus = productSkus;
+    }
+
     public Timestamp getCreatedAt() {
         return createdAt;
     }
@@ -141,4 +155,5 @@ public class Discount {
         this.updatedAt = updatedAt;
     }
 
+    
 }
