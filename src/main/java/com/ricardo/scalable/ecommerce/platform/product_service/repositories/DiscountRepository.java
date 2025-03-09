@@ -11,7 +11,12 @@ import com.ricardo.scalable.ecommerce.platform.product_service.entities.Discount
 
 public interface DiscountRepository extends CrudRepository<Discount, Long> {
 
-    Optional<Discount> findByProductSkuId(Long productSkuId);
+    @Query(value = "SELECT d.id, d.discount_type, d.discount_value, d.start_date, d.end_date, d.is_active, d.created_at, d.updated_at " +
+                   "FROM discounts d " +
+                   "JOIN discount_product_sku dps ON d.id = dps.discount_id " +
+                   "WHERE dps.product_sku_id = :productSkuId ",
+                   nativeQuery = true)
+    Optional<Discount> findByProductSkuId(@Param("productSkuId") Long productSkuId);
 
     Optional<Discount> findByDiscountType(String discountType);
 
