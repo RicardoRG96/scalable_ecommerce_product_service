@@ -6,7 +6,7 @@ import java.util.List;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
-public class DiscountCreationDto {
+public class DiscountDto {
 
     @NotBlank
     private String discountType;
@@ -25,10 +25,10 @@ public class DiscountCreationDto {
     @NotNull
     private List<Long> productSkuIds;
 
-    public DiscountCreationDto() {
+    public DiscountDto() {
     }
 
-    public DiscountCreationDto(String discountType, Double discountValue, LocalDateTime startDate,
+    public DiscountDto(String discountType, Double discountValue, LocalDateTime startDate,
             LocalDateTime endDate, Boolean isActive, List<Long> productSkuIds) {
         this.discountType = discountType;
         this.discountValue = discountValue;
