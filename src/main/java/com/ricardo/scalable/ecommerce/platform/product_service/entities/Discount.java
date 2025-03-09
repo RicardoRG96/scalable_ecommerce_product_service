@@ -1,17 +1,25 @@
 package com.ricardo.scalable.ecommerce.platform.product_service.entities;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 import org.hibernate.annotations.CreationTimestamp;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.ricardo.scalable.ecommerce.platform.libs_common.entities.ProductSku;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.persistence.JoinColumn;
 
 @Entity
 @Table(name = "discounts")
@@ -39,6 +47,16 @@ public class Discount {
 
     @Column(name = "is_active")
     private Boolean isActive;
+
+    @JsonIgnoreProperties({ "handler", "hibernateLazyInitializer" })
+    @ManyToMany
+    @JoinTable(
+        name = "discount_product_sku",
+        joinColumns = { @JoinColumn(name = "discount_id") },
+        inverseJoinColumns = { @JoinColumn(name = "product_sku_id") },
+        uniqueConstraints = { @UniqueConstraint(columnNames = { "discount_id", "product_sku_id" }) }
+    )
+    private List<ProductSku> productSkus;
 
     @Column(name = "created_at")
     @CreationTimestamp
