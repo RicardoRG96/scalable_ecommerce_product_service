@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Optional;
 
 import com.ricardo.scalable.ecommerce.platform.product_service.entities.Discount;
-import com.ricardo.scalable.ecommerce.platform.product_service.repositories.dto.DiscountCreationDto;
+import com.ricardo.scalable.ecommerce.platform.product_service.repositories.dto.DiscountDto;
 
 public interface DiscountService {
 
@@ -23,9 +23,9 @@ public interface DiscountService {
 
     List<Discount> findAll();
 
-    Optional<Discount> save(DiscountCreationDto discount);
+    Optional<Discount> save(DiscountDto discount);
 
-    Optional<Discount> update(Discount discount);
+    Optional<Discount> update(DiscountDto discount, Long id);
 
     void delete(Long id);
 
