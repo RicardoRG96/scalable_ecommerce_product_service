@@ -11,11 +11,11 @@ public interface DiscountService {
 
     Optional<Discount> findById(Long id);
 
-    Optional<Discount> findByProductSkuId(Long productSkuId);
+    Optional<List<Discount>> findByProductSkuId(Long productSkuId);
 
-    Optional<Discount> findByDiscountType(String discountType);
+    Optional<List<Discount>> findByDiscountType(String discountType);
 
-    Optional<Discount> findByDiscountValue(Double discountValue);
+    Optional<List<Discount>> findByDiscountValue(Double discountValue);
 
     Optional<Discount> verifyValidityPeriod(Long discountId);
 

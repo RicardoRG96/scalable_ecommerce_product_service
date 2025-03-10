@@ -29,17 +29,17 @@ public class DiscountServiceImpl implements DiscountService {
     }
 
     @Override
-    public Optional<Discount> findByProductSkuId(Long productSkuId) {
+    public Optional<List<Discount>> findByProductSkuId(Long productSkuId) {
         return discountRepository.findByProductSkuId(productSkuId);
     }
 
     @Override
-    public Optional<Discount> findByDiscountType(String discountType) {
+    public Optional<List<Discount>> findByDiscountType(String discountType) {
         return discountRepository.findByDiscountType(discountType);
     }
 
     @Override
-    public Optional<Discount> findByDiscountValue(Double discountValue) {
+    public Optional<List<Discount>> findByDiscountValue(Double discountValue) {
         return discountRepository.findByDiscountValue(discountValue);
     }
 

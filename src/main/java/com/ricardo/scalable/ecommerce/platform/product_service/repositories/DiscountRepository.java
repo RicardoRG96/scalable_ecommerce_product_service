@@ -1,6 +1,7 @@
 package com.ricardo.scalable.ecommerce.platform.product_service.repositories;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.Query;
@@ -16,11 +17,11 @@ public interface DiscountRepository extends CrudRepository<Discount, Long> {
                    "JOIN discount_product_sku dps ON d.id = dps.discount_id " +
                    "WHERE dps.product_sku_id = :productSkuId ",
                    nativeQuery = true)
-    Optional<Discount> findByProductSkuId(@Param("productSkuId") Long productSkuId);
+    Optional<List<Discount>> findByProductSkuId(@Param("productSkuId") Long productSkuId);
 
-    Optional<Discount> findByDiscountType(String discountType);
+    Optional<List<Discount>> findByDiscountType(String discountType);
 
-    Optional<Discount> findByDiscountValue(Double discountValue);
+    Optional<List<Discount>> findByDiscountValue(Double discountValue);
 
     @Query(
         "SELECT d FROM Discount d WHERE d.startDate <= CURRENT_TIMESTAMP AND d.endDate >= CURRENT_TIMESTAMP AND d.isActive = true AND d.id = ?1")
