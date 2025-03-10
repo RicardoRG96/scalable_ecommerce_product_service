@@ -2,6 +2,7 @@ package com.ricardo.scalable.ecommerce.platform.product_service.controllers;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -39,27 +40,33 @@ public class DiscountController {
     }
 
     @GetMapping("/discounts/product_sku/{productSkuId}")
-    public ResponseEntity<Discount> getDiscountByProductSkuId(@PathVariable Long productSkuId) {
-        Optional<Discount> discount = discountService.findByProductSkuId(productSkuId);
-        if (discount.isPresent()) {
+    public ResponseEntity<List<Discount>> getDiscountByProductSkuId(@PathVariable Long productSkuId) {
+        Optional<List<Discount>> discount = discountService.findByProductSkuId(productSkuId);
+        boolean isPresent = discount.isPresent();
+        boolean isEmpty = discount.orElseThrow().isEmpty();
+        if (isPresent && !isEmpty) {
             return ResponseEntity.ok(discount.orElseThrow());
         }
         return ResponseEntity.notFound().build();
     }
 
     @GetMapping("/discounts/discount_type/{discountType}")
-    public ResponseEntity<Discount> getDiscountByDiscountType(@PathVariable String discountType) {
-        Optional<Discount> discount = discountService.findByDiscountType(discountType);
-        if (discount.isPresent()) {
+    public ResponseEntity<List<Discount>> getDiscountByDiscountType(@PathVariable String discountType) {
+        Optional<List<Discount>> discount = discountService.findByDiscountType(discountType);
+        boolean isPresent = discount.isPresent();
+        boolean isEmpty = discount.orElseThrow().isEmpty();
+        if (isPresent && !isEmpty) {
             return ResponseEntity.ok(discount.orElseThrow());
         }
         return ResponseEntity.notFound().build();
     }
 
     @GetMapping("/discounts/discount_value/{discountValue}")
-    public ResponseEntity<Discount> getDiscountByDiscountValue(@PathVariable Double discountValue) {
-        Optional<Discount> discount = discountService.findByDiscountValue(discountValue);
-        if (discount.isPresent()) {
+    public ResponseEntity<List<Discount>> getDiscountByDiscountValue(@PathVariable Double discountValue) {
+        Optional<List<Discount>> discount = discountService.findByDiscountValue(discountValue);
+        boolean isPresent = discount.isPresent();
+        boolean isEmpty = discount.orElseThrow().isEmpty();
+        if (isPresent && !isEmpty) {
             return ResponseEntity.ok(discount.orElseThrow());
         }
         return ResponseEntity.notFound().build();
