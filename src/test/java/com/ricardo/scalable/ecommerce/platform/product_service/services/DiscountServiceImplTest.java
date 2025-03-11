@@ -195,4 +195,13 @@ public class DiscountServiceImplTest {
         );
     }
 
+    @Test
+    void testDelete() {
+        doNothing().when(discountRepository).deleteById(5L);
+
+        discountService.delete(5L);
+
+        verify(discountRepository, times(1)).deleteById(5L);
+    }
+
 }
