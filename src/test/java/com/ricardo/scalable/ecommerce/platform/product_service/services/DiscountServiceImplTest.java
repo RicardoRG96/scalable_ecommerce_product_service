@@ -98,4 +98,22 @@ public class DiscountServiceImplTest {
         );
     }
 
+    @Test
+    void testVerifyValidityPeriod() {
+        when(discountRepository.verifyValidityPeriod(1L)).thenReturn(createDiscount001());
+
+        Optional<Discount> discount = discountService.verifyValidityPeriod(1L);
+
+        assertAll(
+            () -> assertTrue(discount.isPresent()),
+            () -> assertEquals(1L, discount.orElseThrow().getId()),
+            () -> assertEquals("percentage", discount.orElseThrow().getDiscountType()),
+            () -> assertEquals(10.0, discount.orElseThrow().getDiscountValue()),
+            () -> assertEquals("2025-03-10 00:00:00.0", discount.orElseThrow().getStartDate().toString()),
+            () -> assertEquals("2025-04-10 23:59:59.0", discount.orElseThrow().getEndDate().toString()),
+            () -> assertTrue(discount.orElseThrow().getIsActive()),
+            () -> assertEquals(2, discount.orElseThrow().getProductSkus().size())
+        );
+    }
+
 }
