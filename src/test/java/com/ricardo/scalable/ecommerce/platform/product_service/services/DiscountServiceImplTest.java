@@ -8,6 +8,7 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import com.ricardo.scalable.ecommerce.platform.product_service.entities.Discount;
 import com.ricardo.scalable.ecommerce.platform.product_service.repositories.DiscountRepository;
 import com.ricardo.scalable.ecommerce.platform.product_service.repositories.ProductSkuRepository;
+import com.ricardo.scalable.ecommerce.platform.product_service.repositories.dto.DiscountDto;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -18,6 +19,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static com.ricardo.scalable.ecommerce.platform.product_service.services.testData.DiscountServiceImplTestData.*;
+import static com.ricardo.scalable.ecommerce.platform.product_service.services.testData.ProductSkuServiceTestData.*;
 
 @SpringBootTest
 public class DiscountServiceImplTest {
@@ -143,6 +145,29 @@ public class DiscountServiceImplTest {
             () -> assertEquals("percentage", discounts.get(0).getDiscountType()),
             () -> assertEquals("fixed amount", discounts.get(1).getDiscountType()),
             () -> assertEquals("free shipping", discounts.get(2).getDiscountType())
+        );
+    }
+
+    @Test
+    void testSave() {
+        DiscountDto discountDto = createDiscountDtoCreation();
+        Discount discount = createDiscountCreationResponse();
+
+        when(productSkuRepository.findById(6L)).thenReturn(createProductSku006());
+        when(productSkuRepository.findById(7L)).thenReturn(createProductSku007());
+        when(discountRepository.save(any())).thenReturn(discount);
+
+        Optional<Discount> newDiscount = discountService.save(discountDto);
+
+        assertAll(
+            () -> assertTrue(newDiscount.isPresent()),
+            () -> assertEquals(6L, newDiscount.orElseThrow().getId()),
+            () -> assertEquals("fixed amount", newDiscount.orElseThrow().getDiscountType()),
+            () -> assertEquals(12.0, newDiscount.orElseThrow().getDiscountValue()),
+            () -> assertEquals("2025-03-10 00:00:00.0", newDiscount.orElseThrow().getStartDate().toString()),
+            () -> assertEquals("2025-04-02 23:59:59.0", newDiscount.orElseThrow().getEndDate().toString()),
+            () -> assertTrue(newDiscount.orElseThrow().getIsActive()),
+            () -> assertEquals(2, newDiscount.orElseThrow().getProductSkus().size())
         );
     }
 

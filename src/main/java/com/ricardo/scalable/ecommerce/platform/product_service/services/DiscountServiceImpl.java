@@ -60,20 +60,21 @@ public class DiscountServiceImpl implements DiscountService {
 
     @Override
     public Optional<Discount> save(DiscountDto discount) {
-        Optional<List<ProductSku>> productSkus = Optional.of(
-            discount.getProductSkuIds().stream()
-                .map(prodSkuId -> productSkuRepository.findById(prodSkuId).orElseThrow())
-                .toList()
-        );
+        List<Optional<ProductSku>> productSkus =discount.getProductSkuIds().stream()
+                    .map(prodSkuId -> productSkuRepository.findById(prodSkuId))
+                    .toList();
 
-        if (productSkus.isPresent()) {
+        boolean areAllPresent = productSkus.stream().allMatch(Optional::isPresent);
+        boolean isEmpty = productSkus.isEmpty();
+
+        if (areAllPresent && !isEmpty) {
             Discount newDiscount = new Discount();
             newDiscount.setDiscountType(discount.getDiscountType());
             newDiscount.setDiscountValue(discount.getDiscountValue());
             newDiscount.setStartDate(Timestamp.valueOf(discount.getStartDate()));
             newDiscount.setEndDate(Timestamp.valueOf(discount.getEndDate()));
             newDiscount.setIsActive(discount.getIsActive());
-            newDiscount.setProductSkus(productSkus.orElseThrow());
+            newDiscount.setProductSkus(productSkus.stream().map(Optional::orElseThrow).toList());
 
             return Optional.of(discountRepository.save(newDiscount));
         }
