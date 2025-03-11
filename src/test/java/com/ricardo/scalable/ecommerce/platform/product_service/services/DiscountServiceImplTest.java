@@ -13,6 +13,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
+import java.util.List;
 import java.util.Optional;
 
 import static com.ricardo.scalable.ecommerce.platform.product_service.services.testData.DiscountServiceImplTestData.*;
@@ -44,6 +45,24 @@ public class DiscountServiceImplTest {
             () -> assertEquals("2025-04-10 23:59:59.0", discount.orElseThrow().getEndDate().toString()),
             () -> assertTrue(discount.orElseThrow().getIsActive()),
             () -> assertEquals(2, discount.orElseThrow().getProductSkus().size())
+        );
+    }
+
+    @Test
+    void testFindByProductSkuId() {
+        when(discountRepository.findByProductSkuId(4L)).thenReturn(createListOfDiscountByProductSkuId4());
+
+        Optional<List<Discount>> discount = discountService.findByProductSkuId(4L);
+
+        assertAll(
+            () -> assertTrue(discount.isPresent()),
+            () -> assertEquals(3, discount.orElseThrow().size()),
+            () -> assertEquals(2L, discount.orElseThrow().get(0).getId()),
+            () -> assertEquals(4L, discount.orElseThrow().get(1).getId()),
+            () -> assertEquals(5L, discount.orElseThrow().get(2).getId()),
+            () -> assertEquals("fixed amount", discount.orElseThrow().get(0).getDiscountType()),
+            () -> assertEquals("quantity discount", discount.orElseThrow().get(1).getDiscountType()),
+            () -> assertEquals("percentage", discount.orElseThrow().get(2).getDiscountType())
         );
     }
 
