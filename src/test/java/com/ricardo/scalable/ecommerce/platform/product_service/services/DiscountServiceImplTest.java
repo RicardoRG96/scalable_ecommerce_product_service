@@ -13,6 +13,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -114,6 +115,18 @@ public class DiscountServiceImplTest {
             () -> assertTrue(discount.orElseThrow().getIsActive()),
             () -> assertEquals(2, discount.orElseThrow().getProductSkus().size())
         );
+    }
+
+    @Test
+    void testCheckOverlappingDiscount() {
+        LocalDateTime startDate = LocalDateTime.of(2025, 3, 1, 0, 0, 0);
+        LocalDateTime endDate = LocalDateTime.of(2025, 3, 8, 23, 59, 59);
+
+        when(discountRepository.checkOverlappingDiscount(4L, startDate, endDate)).thenReturn(2);
+
+        int count = discountService.checkOverlappingDiscount(4L, startDate, endDate);
+
+        assertEquals(2, count);
     }
 
 }

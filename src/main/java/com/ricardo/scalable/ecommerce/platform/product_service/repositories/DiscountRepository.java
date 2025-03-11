@@ -32,10 +32,10 @@ public interface DiscountRepository extends CrudRepository<Discount, Long> {
                    "JOIN discount_product_sku dps ON d.id = dps.discount_id " +
                    "WHERE dps.product_sku_id = :productSkuId " +
                    "AND d.is_active = TRUE " +
-                   "AND (d.start_date <= :newEndDate AND d.end_date >= :newStartDate)",
+                   "AND (d.start_date <= :endDate AND d.end_date >= :startDate)",
                    nativeQuery = true)
     int checkOverlappingDiscount(@Param("productSkuId") Long productSkuId,
-                                      @Param("newStartDate") LocalDateTime newStartDate,
-                                      @Param("newEndDate") LocalDateTime newEndDate);
+                                      @Param("startDate") LocalDateTime startDate,
+                                      @Param("endDate") LocalDateTime endDate);
 
 }

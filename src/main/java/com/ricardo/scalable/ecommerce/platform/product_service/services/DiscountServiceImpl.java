@@ -49,8 +49,8 @@ public class DiscountServiceImpl implements DiscountService {
     }
 
     @Override
-    public int checkOverlappingDiscount(Long productSkuId, LocalDateTime newStartDate, LocalDateTime newEndDate) {
-        return discountRepository.checkOverlappingDiscount(productSkuId, newStartDate, newEndDate);
+    public int checkOverlappingDiscount(Long productSkuId, LocalDateTime startDate, LocalDateTime endDate) {
+        return discountRepository.checkOverlappingDiscount(productSkuId, startDate, endDate);
     }
 
     @Override
