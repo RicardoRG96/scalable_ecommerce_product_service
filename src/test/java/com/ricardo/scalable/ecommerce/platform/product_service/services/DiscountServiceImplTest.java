@@ -129,4 +129,21 @@ public class DiscountServiceImplTest {
         assertEquals(2, count);
     }
 
+    @Test
+    void testFindAll() {
+        when(discountRepository.findAll()).thenReturn(createListOfDiscounts());
+
+        List<Discount> discounts = discountService.findAll();
+
+        assertAll(
+            () -> assertEquals(5, discounts.size()),
+            () -> assertEquals(1L, discounts.get(0).getId()),
+            () -> assertEquals(2L, discounts.get(1).getId()),
+            () -> assertEquals(3L, discounts.get(2).getId()),
+            () -> assertEquals("percentage", discounts.get(0).getDiscountType()),
+            () -> assertEquals("fixed amount", discounts.get(1).getDiscountType()),
+            () -> assertEquals("free shipping", discounts.get(2).getDiscountType())
+        );
+    }
+
 }
