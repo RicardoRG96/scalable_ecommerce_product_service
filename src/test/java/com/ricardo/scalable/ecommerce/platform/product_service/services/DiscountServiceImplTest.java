@@ -171,4 +171,28 @@ public class DiscountServiceImplTest {
         );
     }
 
+    @Test
+    void testUpdate() {
+        DiscountDto discountDto = createDiscountDtoUpdate();
+        Discount discount = createDiscountUpdatedResponse();
+
+        when(discountRepository.findById(5L)).thenReturn(createDiscount005());
+        when(productSkuRepository.findById(3L)).thenReturn(createProductSku003());
+        when(productSkuRepository.findById(4L)).thenReturn(createProductSku004());
+        when(discountRepository.save(any())).thenReturn(discount);
+
+        Optional<Discount> updatedDiscount = discountService.update(discountDto, 5L);
+
+        assertAll(
+            () -> assertTrue(updatedDiscount.isPresent()),
+            () -> assertEquals(5L, updatedDiscount.orElseThrow().getId()),
+            () -> assertEquals("percentage", updatedDiscount.orElseThrow().getDiscountType()),
+            () -> assertEquals(25.0, updatedDiscount.orElseThrow().getDiscountValue()),
+            () -> assertEquals("2025-03-10 00:00:00.0", updatedDiscount.orElseThrow().getStartDate().toString()),
+            () -> assertEquals("2025-04-12 23:59:59.0", updatedDiscount.orElseThrow().getEndDate().toString()),
+            () -> assertTrue(updatedDiscount.orElseThrow().getIsActive()),
+            () -> assertEquals(2, updatedDiscount.orElseThrow().getProductSkus().size())
+        );
+    }
+
 }

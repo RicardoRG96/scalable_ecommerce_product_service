@@ -64,10 +64,10 @@ public class DiscountServiceImpl implements DiscountService {
                     .map(prodSkuId -> productSkuRepository.findById(prodSkuId))
                     .toList();
 
-        boolean areAllPresent = productSkus.stream().allMatch(Optional::isPresent);
-        boolean isEmpty = productSkus.isEmpty();
+        boolean areAllProductSkusPresent = productSkus.stream().allMatch(Optional::isPresent);
+        boolean isProductSkusListEmpty = productSkus.isEmpty();
 
-        if (areAllPresent && !isEmpty) {
+        if (areAllProductSkusPresent && !isProductSkusListEmpty) {
             Discount newDiscount = new Discount();
             newDiscount.setDiscountType(discount.getDiscountType());
             newDiscount.setDiscountValue(discount.getDiscountValue());
@@ -85,20 +85,25 @@ public class DiscountServiceImpl implements DiscountService {
     @Override
     public Optional<Discount> update(DiscountDto discount, Long id) {
         Optional<Discount> discountToUpdate = discountRepository.findById(id);
-        Optional<List<ProductSku>> productSkus = Optional.of(
-            discount.getProductSkuIds().stream()
-                .map(prodSkuId -> productSkuRepository.findById(prodSkuId).orElseThrow())
-                .toList()
-        );
+        List<Optional<ProductSku>> productSkus = discount.getProductSkuIds().stream()
+                    .map(prodSkuId -> productSkuRepository.findById(prodSkuId))
+                    .toList();
 
-        if (discountToUpdate.isPresent() && productSkus.isPresent()) {
+        boolean isDiscountToUpdatePresent = discountToUpdate.isPresent();
+        boolean areAllProductSkusPresent = productSkus.stream().allMatch(Optional::isPresent);
+        boolean isProductSkusListEmpty = productSkus.isEmpty();
+
+        if (isDiscountToUpdatePresent && 
+            areAllProductSkusPresent && 
+            !isProductSkusListEmpty
+        ) {
             Discount dbDiscount = discountToUpdate.orElseThrow();
             dbDiscount.setDiscountType(discount.getDiscountType());
             dbDiscount.setDiscountValue(discount.getDiscountValue());
             dbDiscount.setStartDate(Timestamp.valueOf(discount.getStartDate()));
             dbDiscount.setEndDate(Timestamp.valueOf(discount.getEndDate()));
             dbDiscount.setIsActive(discount.getIsActive());
-            dbDiscount.setProductSkus(productSkus.orElseThrow());
+            dbDiscount.setProductSkus(productSkus.stream().map(Optional::orElseThrow).toList());
 
             return Optional.of(discountRepository.save(dbDiscount));
         }
