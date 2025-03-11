@@ -66,4 +66,20 @@ public class DiscountServiceImplTest {
         );
     }
 
+    @Test
+    void testFindByDiscountType() {
+        when(discountRepository.findByDiscountType("percentage")).thenReturn(createListOfDiscountByType());
+
+        Optional<List<Discount>> discount = discountService.findByDiscountType("percentage");
+
+        assertAll(
+            () -> assertTrue(discount.isPresent()),
+            () -> assertEquals(2, discount.orElseThrow().size()),
+            () -> assertEquals(1L, discount.orElseThrow().get(0).getId()),
+            () -> assertEquals(5L, discount.orElseThrow().get(1).getId()),
+            () -> assertEquals(10.0, discount.orElseThrow().get(0).getDiscountValue()),
+            () -> assertEquals(20.0, discount.orElseThrow().get(1).getDiscountValue())
+        );
+    }
+
 }
