@@ -3,6 +3,7 @@ package com.ricardo.scalable.ecommerce.platform.product_service.repositories;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
@@ -28,6 +29,23 @@ public class DiscountRepositoryTest {
             () -> assertEquals("fixed_amount", discounts.orElseThrow().get(0).getDiscountType()),
             () -> assertEquals("percentage", discounts.orElseThrow().get(1).getDiscountType()),
             () -> assertEquals("free_shipping", discounts.orElseThrow().get(2).getDiscountType())
+        );
+    }
+
+    @Test
+    void testVerifyValidityPeriod() {
+        Optional<Discount> validDiscount = discountRepository.verifyValidityPeriod(1L);
+        Optional<Discount> invalidDiscount = discountRepository.verifyValidityPeriod(4L);
+
+        assertAll(
+            () -> assertTrue(validDiscount.isPresent()),
+            () -> assertFalse(invalidDiscount.isPresent()),
+            () -> assertEquals("fixed_amount", validDiscount.orElseThrow().getDiscountType()),
+            () -> assertEquals(10.00, validDiscount.orElseThrow().getDiscountValue()),
+            () -> assertThrows(
+                NoSuchElementException.class, 
+                () -> invalidDiscount.orElseThrow().getDiscountType()    
+            )
         );
     }
 
