@@ -1,3 +1,5 @@
+SET NON_KEYWORDS VALUE;
+
 -- CATEGORIES
 
 INSERT INTO categories (name, description, parent)
@@ -152,3 +154,45 @@ INSERT INTO product_gallery (product_id, color_attribute_id, image_url)
 
 INSERT INTO product_gallery (product_id, color_attribute_id, image_url) 
     VALUES (5, 2, 'https://example.com/images/polera-puma-blue.jpg');
+
+
+-- DISCOUNTS
+
+INSERT INTO discounts (discount_type, discount_value, start_date, end_date, is_active)
+    VALUES ('fixed_amount', 10.00, '2025-03-01 00:00:00', '2023-10-31 23:59:59', TRUE);
+
+INSERT INTO discounts (discount_type, discount_value, start_date, end_date, is_active)
+    VALUES ('free_shipping', 5.00, '2025-03-10 00:00:00', '2023-04-15 23:59:59', TRUE);
+
+INSERT INTO discounts (discount_type, discount_value, start_date, end_date, is_active)
+    VALUES ('percentage', 20.00, '2025-03-03 00:00:00', '2025-03-31 23:59:59', TRUE);
+
+INSERT INTO discounts (discount_type, discount_value, start_date, end_date, is_active)
+    VALUES ('percentage', 10.00, '2025-02-01 00:00:00', '2025-02-28 23:59:59', TRUE);
+
+
+-- DISCOUNTS_PRODUCT_SKU
+
+INSERT INTO discount_product_sku (discount_id, product_sku_id)
+    VALUES (1, 1);
+
+INSERT INTO discount_product_sku (discount_id, product_sku_id)
+    VALUES (4, 1);
+
+INSERT INTO discount_product_sku (discount_id, product_sku_id)
+    VALUES (2, 1);
+
+INSERT INTO discount_product_sku (discount_id, product_sku_id)
+    VALUES (3, 2);
+
+INSERT INTO discount_product_sku (discount_id, product_sku_id)
+    VALUES (4, 3);
+
+INSERT INTO discount_product_sku (discount_id, product_sku_id)
+    VALUES (2, 3);
+
+INSERT INTO discount_product_sku (discount_id, product_sku_id)
+    VALUES (1, 4);
+
+INSERT INTO discount_product_sku (discount_id, product_sku_id)
+    VALUES (2, 4);
