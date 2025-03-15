@@ -409,17 +409,53 @@ public class DiscountControllerTest {
                     try {
                         JsonNode json = objectMapper.readTree(res.getResponseBody());
                         assertAll(
-                            () -> assertNull(json),
-                            () -> assertEquals(50L, json.path("id").asLong()),
-                            () -> assertEquals("fixed_amounts", json.path("discountType").asText()),
-                            () -> assertEquals(90.00, json.path("discountValue").asDouble()),
-                            () -> assertEquals("2025-03-14T00:00:00.000-03:00s", json.path("startDate").asText()),
-                            () -> assertEquals("2025-03-22T23:59:59.000-03:00s", json.path("endDate").asText())
+                            () -> assertNotNull(json),
+                            () -> assertEquals(5L, json.path("id").asLong()),
+                            () -> assertEquals("fixed_amount", json.path("discountType").asText()),
+                            () -> assertEquals(9.00, json.path("discountValue").asDouble()),
+                            () -> assertEquals("2025-03-14T00:00:00.000-03:00", json.path("startDate").asText()),
+                            () -> assertEquals("2025-03-22T23:59:59.000-03:00", json.path("endDate").asText())
                         );
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
                 });
+    }
+
+    @Test
+    @Order(20)
+    void testUpdateDiscountBadRequest() {
+        DiscountDto requestBody = new DiscountDto();
+
+        client.put()
+                .uri("/discounts/5")
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(requestBody)
+                .exchange()
+                .expectStatus().isBadRequest();
+    }
+
+    @Test
+    @Order(21)
+    void testUpdateDiscountNotFound() {
+        DiscountDto requestBody = createDiscountToUpdate();
+
+        client.put()
+                .uri("/discounts/500")
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(requestBody)
+                .exchange()
+                .expectStatus().isNotFound();
+
+        DiscountDto requestBodyWithNotExistingProductSkuIds = createDiscountToUpdate();
+        requestBodyWithNotExistingProductSkuIds.setProductSkuIds(List.of(5000L, 6000L));
+
+        client.put()
+        .uri("/discounts/5")
+        .contentType(MediaType.APPLICATION_JSON)
+        .bodyValue(requestBodyWithNotExistingProductSkuIds)
+        .exchange()
+        .expectStatus().isNotFound();
     }
 
     @Test
