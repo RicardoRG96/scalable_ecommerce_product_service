@@ -198,6 +198,41 @@ public class DiscountControllerTest {
     }
 
     @Test
+    @Order(9)
+    void testVerifyValidityPeriod() {
+        client.get()
+                .uri("/discounts/validity/1")
+                .exchange()
+                .expectStatus().isOk()
+                .expectHeader().contentType(MediaType.APPLICATION_JSON)
+                .expectBody()
+                .consumeWith(res -> {
+                    try {
+                        JsonNode json = objectMapper.readTree(res.getResponseBody());
+                        assertAll(
+                            () -> assertNotNull(json),
+                            () -> assertEquals(1L, json.path("id").asLong()),
+                            () -> assertEquals("fixed_amount", json.path("discountType").asText()),
+                            () -> assertEquals(10.00, json.path("discountValue").asDouble()),
+                            () -> assertEquals("2025-03-01T00:00:00.000-03:00", json.path("startDate").asText()),
+                            () -> assertEquals("2025-03-31T23:59:59.000-03:00", json.path("endDate").asText())
+                        );
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                });
+    }
+
+    @Test
+    @Order(10)
+    void testVerifyValidityPeriodNotValid() {
+        client.get()
+                .uri("/discounts/validity/4")
+                .exchange()
+                .expectStatus().isNotFound();
+    }
+
+    @Test
     void testProfile() {
         String[] activeProfiles = env.getActiveProfiles();
         assertArrayEquals(new String[] { "test" }, activeProfiles);
