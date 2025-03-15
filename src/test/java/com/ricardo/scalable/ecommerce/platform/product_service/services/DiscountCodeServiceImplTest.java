@@ -9,9 +9,9 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
+import java.util.List;
 import java.util.Optional;
 
-import static com.ricardo.scalable.ecommerce.platform.product_service.services.testData.DiscountServiceImplTestData.*;
 import static com.ricardo.scalable.ecommerce.platform.product_service.services.testData.DiscountCodeServiceImplTestData.*;
 
 import com.ricardo.scalable.ecommerce.platform.product_service.entities.DiscountCode;
@@ -59,6 +59,28 @@ public class DiscountCodeServiceImplTest {
             () -> assertEquals("fixed amount", discountCode.orElseThrow().getDiscount().getDiscountType()),
             () -> assertEquals(70, discountCode.orElseThrow().getUsageLimit()),
             () -> assertEquals(10, discountCode.orElseThrow().getUsedCount())
+        );
+    }
+
+    @Test
+    void testFindByDiscountId() {
+        when(discountCodeRepository.findByDiscountId(1L)).thenReturn(createListOfDiscountCodeByDiscountId1());
+
+        Optional<List<DiscountCode>> discountCodes = discountCodeService.findByDiscountId(1L);
+
+        assertAll(
+            () -> assertTrue(discountCodes.isPresent()),
+            () -> assertFalse(discountCodes.orElseThrow().isEmpty()),
+            () -> assertEquals(1L, discountCodes.orElseThrow().get(0).getId()),
+            () -> assertEquals(5L, discountCodes.orElseThrow().get(1).getId()),
+            () -> assertEquals("MATEO2025", discountCodes.orElseThrow().get(0).getCode()),
+            () -> assertEquals("10OFFMARZO", discountCodes.orElseThrow().get(1).getCode()),
+            () -> assertEquals("percentage", discountCodes.orElseThrow().get(0).getDiscount().getDiscountType()),
+            () -> assertEquals("percentage", discountCodes.orElseThrow().get(1).getDiscount().getDiscountType()),
+            () -> assertEquals(50, discountCodes.orElseThrow().get(0).getUsageLimit()),
+            () -> assertEquals(100, discountCodes.orElseThrow().get(1).getUsageLimit()),
+            () -> assertEquals(10, discountCodes.orElseThrow().get(0).getUsedCount()),
+            () -> assertEquals(0, discountCodes.orElseThrow().get(1).getUsedCount())
         );
     }
 
