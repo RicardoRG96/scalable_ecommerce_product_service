@@ -46,4 +46,20 @@ public class DiscountCodeServiceImplTest {
         );
     }
 
+    @Test
+    void testFindByCode() {
+        when(discountCodeRepository.findByCode("SUMMER2025")).thenReturn(createDiscountCode002());
+
+        Optional<DiscountCode> discountCode = discountCodeService.findByCode("SUMMER2025");
+
+        assertAll(
+            () -> assertTrue(discountCode.isPresent()),
+            () -> assertEquals(2L, discountCode.orElseThrow().getId()),
+            () -> assertEquals("SUMMER2025", discountCode.orElseThrow().getCode()),
+            () -> assertEquals("fixed amount", discountCode.orElseThrow().getDiscount().getDiscountType()),
+            () -> assertEquals(70, discountCode.orElseThrow().getUsageLimit()),
+            () -> assertEquals(10, discountCode.orElseThrow().getUsedCount())
+        );
+    }
+
 }
