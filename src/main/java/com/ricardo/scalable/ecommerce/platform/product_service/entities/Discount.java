@@ -33,7 +33,7 @@ public class Discount {
     @Column(name = "discount_type")
     private String discountType;
 
-    @NotBlank
+    @NotNull
     @Column(name = "discount_value")
     private Double discountValue;
 

@@ -3,6 +3,10 @@ package com.ricardo.scalable.ecommerce.platform.product_service.integrationTests
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 
+import java.util.List;
+
+import static com.ricardo.scalable.ecommerce.platform.product_service.services.testData.DiscountControllerTestData.*;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
@@ -17,6 +21,7 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ricardo.scalable.ecommerce.platform.product_service.repositories.dto.DiscountDto;
 
 @ActiveProfiles("test")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
@@ -305,6 +310,86 @@ public class DiscountControllerTest {
         .uri("/discounts/overlapping/1/2025-03-01T00:00:00.000-03:00/2025-03-31T23:59:59.000-03:00")
         .exchange()
         .expectStatus().isBadRequest();
+    }
+
+    @Test
+    @Order(15)
+    void testGetAllDiscounts() {
+        client.get()
+                .uri("/discounts")
+                .exchange()
+                .expectStatus().isOk()
+                .expectHeader().contentType(MediaType.APPLICATION_JSON)
+                .expectBody()
+                .consumeWith(res -> {
+                    try {
+                        JsonNode json = objectMapper.readTree(res.getResponseBody());
+                        assertAll(
+                            () -> assertNotNull(json),
+                            () -> assertTrue(json.isArray()),
+                            () -> assertEquals(4, json.size())
+                        );
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                });
+    }
+
+    @Test
+    @Order(16)
+    void testCreateDiscount() {
+        DiscountDto requestBody = createDiscountDto();
+
+        client.post()
+                .uri("/discounts")
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(requestBody)
+                .exchange()
+                .expectStatus().isCreated()
+                .expectHeader().contentType(MediaType.APPLICATION_JSON)
+                .expectBody()
+                .consumeWith(res -> {
+                    try {
+                        JsonNode json = objectMapper.readTree(res.getResponseBody());
+                        assertAll(
+                            () -> assertNotNull(json),
+                            () -> assertEquals(5L, json.path("id").asLong()),
+                            () -> assertEquals("fixed_amount", json.path("discountType").asText()),
+                            () -> assertEquals(8.00, json.path("discountValue").asDouble()),
+                            () -> assertEquals("2025-03-14T00:00:00.000-03:00", json.path("startDate").asText()),
+                            () -> assertEquals("2025-03-21T23:59:59.000-03:00", json.path("endDate").asText())
+                        );
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                });
+    }
+
+    @Test
+    @Order(17)
+    void testCreateDiscountBadRequest() {
+        DiscountDto requestBody = new DiscountDto();
+
+        client.post()
+                .uri("/discounts")
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(requestBody)
+                .exchange()
+                .expectStatus().isBadRequest();        
+    }
+
+    @Test
+    @Order(18)
+    void testCreateDiscountNotFound() {
+        DiscountDto requestBody = createDiscountDto();
+        requestBody.setProductSkuIds(List.of(100L));
+
+        client.post()
+                .uri("/discounts")
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(requestBody)
+                .exchange()
+                .expectStatus().isNotFound();
     }
 
     @Test
