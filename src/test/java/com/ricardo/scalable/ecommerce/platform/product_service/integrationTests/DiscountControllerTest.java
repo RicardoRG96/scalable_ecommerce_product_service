@@ -156,6 +156,48 @@ public class DiscountControllerTest {
     }
 
     @Test
+    @Order(7)
+    void getDiscountByValue() {
+        client.get()
+                .uri("/discounts/discount_value/10.00")
+                .exchange()
+                .expectStatus().isOk()
+                .expectHeader().contentType(MediaType.APPLICATION_JSON)
+                .expectBody()
+                .consumeWith(res -> {
+                    try {
+                        JsonNode json = objectMapper.readTree(res.getResponseBody());
+                        assertAll(
+                            () -> assertNotNull(json),
+                            () -> assertTrue(json.isArray()),
+                            () -> assertEquals(2, json.size()),
+                            () -> assertEquals(1L, json.get(0).path("id").asLong()),
+                            () -> assertEquals("fixed_amount", json.get(0).path("discountType").asText()),
+                            () -> assertEquals(10.00, json.get(0).path("discountValue").asDouble()),
+                            () -> assertEquals("2025-03-01T00:00:00.000-03:00", json.get(0).path("startDate").asText()),
+                            () -> assertEquals("2025-03-31T23:59:59.000-03:00", json.get(0).path("endDate").asText()),
+                            () -> assertEquals(4L, json.get(1).path("id").asLong()),
+                            () -> assertEquals("percentage", json.get(1).path("discountType").asText()),
+                            () -> assertEquals(10.00, json.get(1).path("discountValue").asDouble()),
+                            () -> assertEquals("2025-02-01T00:00:00.000-03:00", json.get(1).path("startDate").asText()),
+                            () -> assertEquals("2025-02-28T23:59:59.000-03:00", json.get(1).path("endDate").asText())
+                        );
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                });
+    }
+
+    @Test
+    @Order(8)
+    void testGetDiscountByValueNotFound() {
+        client.get()
+                .uri("/discounts/discount_value/999999.00")
+                .exchange()
+                .expectStatus().isNotFound();
+    }
+
+    @Test
     void testProfile() {
         String[] activeProfiles = env.getActiveProfiles();
         assertArrayEquals(new String[] { "test" }, activeProfiles);

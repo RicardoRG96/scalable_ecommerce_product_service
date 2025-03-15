@@ -51,7 +51,7 @@ public class DiscountController {
     }
 
     @GetMapping("/discounts/discount_type/{discountType}")
-    public ResponseEntity<List<Discount>> getDiscountByDiscountType(@PathVariable String discountType) {
+    public ResponseEntity<List<Discount>> getDiscountByType(@PathVariable String discountType) {
         Optional<List<Discount>> discount = discountService.findByDiscountType(discountType);
         boolean isPresent = discount.isPresent();
         boolean isEmpty = discount.orElseThrow().isEmpty();
@@ -62,7 +62,7 @@ public class DiscountController {
     }
 
     @GetMapping("/discounts/discount_value/{discountValue}")
-    public ResponseEntity<List<Discount>> getDiscountByDiscountValue(@PathVariable Double discountValue) {
+    public ResponseEntity<List<Discount>> getDiscountByValue(@PathVariable Double discountValue) {
         Optional<List<Discount>> discount = discountService.findByDiscountValue(discountValue);
         boolean isPresent = discount.isPresent();
         boolean isEmpty = discount.orElseThrow().isEmpty();
