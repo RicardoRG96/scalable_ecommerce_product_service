@@ -479,6 +479,42 @@ public class DiscountControllerTest {
     }
 
     @Test
+    @Order(22)
+    void testDeleteDiscount() {
+        client.delete()
+                .uri("/discounts/5")
+                .exchange()
+                .expectStatus().isNoContent();
+
+        client.get()
+                .uri("/discounts")
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody()
+                .consumeWith(res -> {
+                    try {
+                        JsonNode json = objectMapper.readTree(res.getResponseBody());
+                        assertAll(
+                            () -> assertNotNull(json),
+                            () -> assertTrue(json.isArray()),
+                            () -> assertEquals(4, json.size())
+                        );
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                });
+    }
+
+    @Test
+    @Order(23)
+    void testGetDeletedDiscount() {
+        client.get()
+                .uri("/discounts/5")
+                .exchange()
+                .expectStatus().isNotFound();
+    }
+
+    @Test
     void testProfile() {
         String[] activeProfiles = env.getActiveProfiles();
         assertArrayEquals(new String[] { "test" }, activeProfiles);
