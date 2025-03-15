@@ -89,11 +89,7 @@ public class DiscountController {
     ) {
         Map<String, Integer> mapResponse = new HashMap<>();
         int count = discountService.checkOverlappingDiscount(productSkuId, newStartDate, newEndDate);
-        if (count > 0) {
-            mapResponse.put("overlapping_discounts", count);
-            return ResponseEntity.ok(mapResponse);
-        }
-        mapResponse.put("overlapping_discounts", 0);
+        mapResponse.put("overlappingDiscounts", count);
         return ResponseEntity.ok(mapResponse);
     }
 

@@ -233,6 +233,81 @@ public class DiscountControllerTest {
     }
 
     @Test
+    @Order(11)
+    void testCheckOverlappingDiscount() {
+        client.get()
+                .uri("/discounts/overlapping/1/2025-03-01T00:00:00.000000/2025-03-31T23:59:59.000000")
+                .exchange()
+                .expectStatus().isOk()
+                .expectHeader().contentType(MediaType.APPLICATION_JSON)
+                .expectBody()
+                .consumeWith(res -> {
+                    try {
+                        JsonNode json = objectMapper.readTree(res.getResponseBody());
+                        assertAll(
+                            () -> assertNotNull(json),
+                            () -> assertEquals(2, json.path("overlappingDiscounts").asInt())
+                        );
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                });
+    }
+
+    @Test
+    @Order(12)
+    void testCheckOverlappingDiscountWithNotExistingProductSkuId() {
+        client.get()
+                .uri("/discounts/overlapping/100/2025-03-01T00:00:00.000000/2025-03-31T23:59:59.000000")
+                .exchange()
+                .expectStatus().isOk()
+                .expectHeader().contentType(MediaType.APPLICATION_JSON)
+                .expectBody()
+                .consumeWith(res -> {
+                    try {
+                        JsonNode json = objectMapper.readTree(res.getResponseBody());
+                        assertAll(
+                            () -> assertNotNull(json),
+                            () -> assertEquals(0, json.path("overlappingDiscounts").asInt())
+                        );
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                });
+    }
+
+    @Test
+    @Order(13)
+    void testCheckOverlappingDiscountWithNotOverlapDates() {
+        client.get()
+        .uri("/discounts/overlapping/1/2025-02-01T00:00:00.000000/2025-02-28T23:59:59.000000")
+        .exchange()
+        .expectStatus().isOk()
+        .expectHeader().contentType(MediaType.APPLICATION_JSON)
+        .expectBody()
+        .consumeWith(res -> {
+            try {
+                JsonNode json = objectMapper.readTree(res.getResponseBody());
+                assertAll(
+                    () -> assertNotNull(json),
+                    () -> assertEquals(1, json.path("overlappingDiscounts").asInt())
+                );
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+    }
+
+    @Test
+    @Order(14)
+    void testCheckOverlappingDiscountWithInvalidDates() {
+        client.get()
+        .uri("/discounts/overlapping/1/2025-03-01T00:00:00.000-03:00/2025-03-31T23:59:59.000-03:00")
+        .exchange()
+        .expectStatus().isBadRequest();
+    }
+
+    @Test
     void testProfile() {
         String[] activeProfiles = env.getActiveProfiles();
         assertArrayEquals(new String[] { "test" }, activeProfiles);
