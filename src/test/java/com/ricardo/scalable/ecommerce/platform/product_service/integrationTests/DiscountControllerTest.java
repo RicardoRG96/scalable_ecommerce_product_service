@@ -390,6 +390,16 @@ public class DiscountControllerTest {
                 .bodyValue(requestBody)
                 .exchange()
                 .expectStatus().isNotFound();
+
+        DiscountDto requestBodyWithExistingAndNotExistingProductSkuIds = createDiscountDto();
+        requestBodyWithExistingAndNotExistingProductSkuIds.setProductSkuIds(List.of(1L, 6000L));
+
+        client.post()
+                .uri("/discounts")
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(requestBodyWithExistingAndNotExistingProductSkuIds)
+                .exchange()
+                .expectStatus().isNotFound();
     }
 
     @Test
@@ -454,6 +464,16 @@ public class DiscountControllerTest {
         .uri("/discounts/5")
         .contentType(MediaType.APPLICATION_JSON)
         .bodyValue(requestBodyWithNotExistingProductSkuIds)
+        .exchange()
+        .expectStatus().isNotFound();
+
+        DiscountDto requestBodyWithExistingAndNotExistingProductSkuIds = createDiscountToUpdate();
+        requestBodyWithExistingAndNotExistingProductSkuIds.setProductSkuIds(List.of(1L, 6000L));
+
+        client.put()
+        .uri("/discounts/5")
+        .contentType(MediaType.APPLICATION_JSON)
+        .bodyValue(requestBodyWithExistingAndNotExistingProductSkuIds)
         .exchange()
         .expectStatus().isNotFound();
     }
