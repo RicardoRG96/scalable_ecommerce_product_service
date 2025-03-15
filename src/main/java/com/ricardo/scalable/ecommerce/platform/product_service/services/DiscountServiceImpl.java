@@ -4,6 +4,7 @@ import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -60,9 +61,9 @@ public class DiscountServiceImpl implements DiscountService {
 
     @Override
     public Optional<Discount> save(DiscountDto discount) {
-        List<Optional<ProductSku>> productSkus =discount.getProductSkuIds().stream()
+        List<Optional<ProductSku>> productSkus = discount.getProductSkuIds().stream()
                     .map(prodSkuId -> productSkuRepository.findById(prodSkuId))
-                    .toList();
+                    .collect(Collectors.toList());
 
         boolean areAllProductSkusPresent = productSkus.stream().allMatch(Optional::isPresent);
         boolean isProductSkusListEmpty = productSkus.isEmpty();
@@ -74,7 +75,7 @@ public class DiscountServiceImpl implements DiscountService {
             newDiscount.setStartDate(Timestamp.valueOf(discount.getStartDate()));
             newDiscount.setEndDate(Timestamp.valueOf(discount.getEndDate()));
             newDiscount.setIsActive(discount.getIsActive());
-            newDiscount.setProductSkus(productSkus.stream().map(Optional::orElseThrow).toList());
+            newDiscount.setProductSkus(productSkus.stream().map(Optional::orElseThrow).collect(Collectors.toList()));
 
             return Optional.of(discountRepository.save(newDiscount));
         }
@@ -87,7 +88,7 @@ public class DiscountServiceImpl implements DiscountService {
         Optional<Discount> discountToUpdate = discountRepository.findById(id);
         List<Optional<ProductSku>> productSkus = discount.getProductSkuIds().stream()
                     .map(prodSkuId -> productSkuRepository.findById(prodSkuId))
-                    .toList();
+                    .collect(Collectors.toList());
 
         boolean isDiscountToUpdatePresent = discountToUpdate.isPresent();
         boolean areAllProductSkusPresent = productSkus.stream().allMatch(Optional::isPresent);
@@ -103,7 +104,7 @@ public class DiscountServiceImpl implements DiscountService {
             dbDiscount.setStartDate(Timestamp.valueOf(discount.getStartDate()));
             dbDiscount.setEndDate(Timestamp.valueOf(discount.getEndDate()));
             dbDiscount.setIsActive(discount.getIsActive());
-            dbDiscount.setProductSkus(productSkus.stream().map(Optional::orElseThrow).toList());
+            dbDiscount.setProductSkus(productSkus.stream().map(Optional::orElseThrow).collect(Collectors.toList()));
 
             return Optional.of(discountRepository.save(dbDiscount));
         }
