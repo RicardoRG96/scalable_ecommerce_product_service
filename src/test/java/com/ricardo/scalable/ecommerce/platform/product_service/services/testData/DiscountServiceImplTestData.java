@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Optional;
 
 import com.ricardo.scalable.ecommerce.platform.libs_common.entities.ProductSku;
-import com.ricardo.scalable.ecommerce.platform.product_service.entities.Discount;
+import com.ricardo.scalable.ecommerce.platform.libs_common.entities.Discount;
 import com.ricardo.scalable.ecommerce.platform.product_service.repositories.dto.DiscountDto;
 
 import static com.ricardo.scalable.ecommerce.platform.product_service.services.testData.ProductSkuServiceTestData.*;

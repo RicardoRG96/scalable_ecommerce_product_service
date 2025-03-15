@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
-import com.ricardo.scalable.ecommerce.platform.product_service.entities.Discount;
+import com.ricardo.scalable.ecommerce.platform.libs_common.entities.Discount;
 
 @DataJpaTest
 public class DiscountRepositoryTest {

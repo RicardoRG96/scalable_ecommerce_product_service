@@ -5,7 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
-import com.ricardo.scalable.ecommerce.platform.product_service.entities.Discount;
+import com.ricardo.scalable.ecommerce.platform.libs_common.entities.Discount;
 import com.ricardo.scalable.ecommerce.platform.product_service.repositories.DiscountRepository;
 import com.ricardo.scalable.ecommerce.platform.product_service.repositories.ProductSkuRepository;
 import com.ricardo.scalable.ecommerce.platform.product_service.repositories.dto.DiscountDto;

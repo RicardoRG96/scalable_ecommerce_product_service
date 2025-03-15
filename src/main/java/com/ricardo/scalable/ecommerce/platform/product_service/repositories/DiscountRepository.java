@@ -8,7 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 
-import com.ricardo.scalable.ecommerce.platform.product_service.entities.Discount;
+import com.ricardo.scalable.ecommerce.platform.libs_common.entities.Discount;
 
 public interface DiscountRepository extends CrudRepository<Discount, Long> {
 

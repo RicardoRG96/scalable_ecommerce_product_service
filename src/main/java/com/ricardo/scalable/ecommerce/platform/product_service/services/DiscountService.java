@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
-import com.ricardo.scalable.ecommerce.platform.product_service.entities.Discount;
+import com.ricardo.scalable.ecommerce.platform.libs_common.entities.Discount;
 import com.ricardo.scalable.ecommerce.platform.product_service.repositories.dto.DiscountDto;
 
 public interface DiscountService {

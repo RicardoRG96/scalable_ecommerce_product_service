@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ricardo.scalable.ecommerce.platform.product_service.entities.Discount;
+import com.ricardo.scalable.ecommerce.platform.libs_common.entities.Discount;
 import com.ricardo.scalable.ecommerce.platform.product_service.repositories.dto.DiscountDto;
 import com.ricardo.scalable.ecommerce.platform.product_service.services.DiscountService;
 

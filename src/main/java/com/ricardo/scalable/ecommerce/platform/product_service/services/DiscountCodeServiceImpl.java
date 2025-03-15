@@ -6,7 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.ricardo.scalable.ecommerce.platform.product_service.entities.Discount;
+import com.ricardo.scalable.ecommerce.platform.libs_common.entities.Discount;
 import com.ricardo.scalable.ecommerce.platform.product_service.entities.DiscountCode;
 import com.ricardo.scalable.ecommerce.platform.product_service.repositories.DiscountCodeRepository;
 import com.ricardo.scalable.ecommerce.platform.product_service.repositories.DiscountRepository;
