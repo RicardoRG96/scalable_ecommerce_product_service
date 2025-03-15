@@ -64,6 +64,15 @@ public class DiscountControllerTest {
 
     @Test
     @Order(2)
+    void testGetDiscountByIdNotFound() {
+        client.get()
+                .uri("/discounts/1000")
+                .exchange()
+                .expectStatus().isNotFound();
+    }
+
+    @Test
+    @Order(3)
     void testGetDiscountByProductSkuId() {
         client.get()
                 .uri("/discounts/product_sku/1")
@@ -96,7 +105,16 @@ public class DiscountControllerTest {
     }
 
     @Test
-    @Order(3)
+    @Order(4)
+    void testGetDiscountByProductSkuIdNotFound() {
+        client.get()
+                .uri("/discounts/product_sku/10000")
+                .exchange()
+                .expectStatus().isNotFound();
+    }
+
+    @Test
+    @Order(5)
     void testGetDiscountByType() {
         client.get()
                 .uri("/discounts/discount_type/percentage")
@@ -129,7 +147,7 @@ public class DiscountControllerTest {
     }
 
     @Test
-    @Order(4)
+    @Order(6)
     void testGetDiscountByTypeNotFound() {
         client.get()
                 .uri("/discounts/discount_type/promo")
