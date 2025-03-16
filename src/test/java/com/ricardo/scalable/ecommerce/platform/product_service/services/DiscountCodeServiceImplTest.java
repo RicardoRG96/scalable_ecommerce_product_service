@@ -122,4 +122,26 @@ public class DiscountCodeServiceImplTest {
         );
     }
 
+    @Test
+    void testFindByUsedCount() {
+        when(discountCodeRepository.findByUsedCount(10)).thenReturn(createListOfDiscountCodeByUsedCount());
+
+        Optional<List<DiscountCode>> discountCodes = discountCodeService.findByUsedCount(10);
+
+        assertAll(
+            () -> assertTrue(discountCodes.isPresent()),
+            () -> assertFalse(discountCodes.orElseThrow().isEmpty()),
+            () -> assertEquals(1L, discountCodes.orElseThrow().get(0).getId()),
+            () -> assertEquals(2L, discountCodes.orElseThrow().get(1).getId()),
+            () -> assertEquals("MATEO2025", discountCodes.orElseThrow().get(0).getCode()),
+            () -> assertEquals("SUMMER2025", discountCodes.orElseThrow().get(1).getCode()),
+            () -> assertEquals("percentage", discountCodes.orElseThrow().get(0).getDiscount().getDiscountType()),
+            () -> assertEquals("fixed amount", discountCodes.orElseThrow().get(1).getDiscount().getDiscountType()),
+            () -> assertEquals(50, discountCodes.orElseThrow().get(0).getUsageLimit()),
+            () -> assertEquals(70, discountCodes.orElseThrow().get(1).getUsageLimit()),
+            () -> assertEquals(10, discountCodes.orElseThrow().get(0).getUsedCount()),
+            () -> assertEquals(10, discountCodes.orElseThrow().get(1).getUsedCount())
+        );
+    }
+
 }
