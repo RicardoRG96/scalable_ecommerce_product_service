@@ -146,6 +146,51 @@ public class DiscountCodeControllerTest {
     }
 
     @Test
+    @Order(7)
+    void testGetDiscountCodeByCodeAndDiscountId() {
+        client.get()
+                .uri("/discount-code/code/10DOLLARSOFFMARCH/discount-id/1")
+                .exchange()
+                .expectStatus().isOk()
+                .expectHeader().contentType(MediaType.APPLICATION_JSON)
+                .expectBody()
+                .consumeWith(res -> {
+                    try {
+                        JsonNode json = objectMapper.readTree(res.getResponseBody());
+                        assertAll(
+                            () -> assertNotNull(json),
+                            () -> assertEquals(3L, json.path("id").asLong()),
+                            () -> assertEquals("10DOLLARSOFFMARCH", json.path("code").asText()),
+                            () -> assertEquals(1L, json.path("discount").path("id").asLong()),
+                            () -> assertEquals(70, json.path("usageLimit").asInt()),
+                            () -> assertEquals(0, json.path("usedCount").asInt())
+                        );
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                });
+    }
+
+    @Test
+    @Order(8)
+    void testGetDiscountCodeByCodeAndDiscountIdNotFound() {
+        client.get()
+                .uri("/discount-code/code/NOEXISTE2025/discount-id/1")
+                .exchange()
+                .expectStatus().isNotFound();
+
+        client.get()
+                .uri("/discount-code/code/10DOLLARSOFFMARCH/discount-id/1597")
+                .exchange()
+                .expectStatus().isNotFound();
+
+        client.get()
+                .uri("/discount-code/code/NOEXISTE2025/discount-id/1597")
+                .exchange()
+                .expectStatus().isNotFound();
+    }
+
+    @Test
     void testProfile() {
         String[] activeProfiles = env.getActiveProfiles();
         assertArrayEquals(new String[] { "test" }, activeProfiles);
