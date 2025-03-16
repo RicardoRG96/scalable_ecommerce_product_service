@@ -13,10 +13,12 @@ import java.util.List;
 import java.util.Optional;
 
 import static com.ricardo.scalable.ecommerce.platform.product_service.services.testData.DiscountCodeServiceImplTestData.*;
+import static com.ricardo.scalable.ecommerce.platform.product_service.services.testData.DiscountServiceImplTestData.createDiscount005;
 
 import com.ricardo.scalable.ecommerce.platform.product_service.entities.DiscountCode;
 import com.ricardo.scalable.ecommerce.platform.product_service.repositories.DiscountCodeRepository;
 import com.ricardo.scalable.ecommerce.platform.product_service.repositories.DiscountRepository;
+import com.ricardo.scalable.ecommerce.platform.product_service.repositories.dto.DiscountCodeDto;
 
 @SpringBootTest
 public class DiscountCodeServiceImplTest {
@@ -158,6 +160,24 @@ public class DiscountCodeServiceImplTest {
             () -> assertEquals(3L, discountCodes.get(2).getId()),
             () -> assertEquals(4L, discountCodes.get(3).getId()),
             () -> assertEquals(5L, discountCodes.get(4).getId())
+        );
+    }
+
+    @Test
+    void testSave() {
+        when(discountRepository.findById(5L)).thenReturn(createDiscount005());
+        when(discountCodeRepository.save(any())).thenReturn(createDiscountCodeCreationResponse());
+
+        DiscountCodeDto discountCodeCreationRequest = createDiscountCodeDtoCreation();
+        Optional<DiscountCode> createdDiscountCode = discountCodeService.save(discountCodeCreationRequest);
+
+        assertAll(
+            () -> assertTrue(createdDiscountCode.isPresent()),
+            () -> assertEquals(6L, createdDiscountCode.orElseThrow().getId()),
+            () -> assertEquals("20OFFMARZO2025", createdDiscountCode.orElseThrow().getCode()),
+            () -> assertEquals("percentage", createdDiscountCode.orElseThrow().getDiscount().getDiscountType()),
+            () -> assertEquals(100, createdDiscountCode.orElseThrow().getUsageLimit()),
+            () -> assertEquals(0, createdDiscountCode.orElseThrow().getUsedCount())
         );
     }
 
