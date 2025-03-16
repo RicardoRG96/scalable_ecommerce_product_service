@@ -481,6 +481,41 @@ public class DiscountCodeControllerTest {
                 .expectStatus().isNotFound();
     }
 
+    @Test
+    @Order(25)
+    void testDeleteDiscountCode() {
+        client.delete()
+                .uri("/discount-code/5")
+                .exchange()
+                .expectStatus().isNoContent();
+
+        client.get()
+                .uri("/discount-code")
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody()
+                .consumeWith(res -> {
+                    try {
+                        JsonNode json = objectMapper.readTree(res.getResponseBody());
+                        assertAll(
+                            () -> assertNotNull(json),
+                            () -> assertTrue(json.isArray()),
+                            () -> assertEquals(4, json.size())
+                        );
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                });
+    }
+
+    @Test
+    @Order(26)
+    void testGetDeletedDiscountCode() {
+        client.get()
+                .uri("/discount-code/5")
+                .exchange()
+                .expectStatus().isNotFound();
+    }
 
     @Test
     void testProfile() {
