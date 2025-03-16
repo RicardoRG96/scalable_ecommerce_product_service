@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 
 import static com.ricardo.scalable.ecommerce.platform.product_service.services.testData.DiscountCodeControllerTestData.*;
+import static com.ricardo.scalable.ecommerce.platform.product_service.services.testData.DiscountControllerTestData.createDiscountDto;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.MethodOrderer;
@@ -19,6 +20,8 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ricardo.scalable.ecommerce.platform.product_service.repositories.dto.DiscountCodeDto;
+import com.ricardo.scalable.ecommerce.platform.product_service.repositories.dto.DiscountDto;
 
 @ActiveProfiles("test")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
@@ -293,6 +296,92 @@ public class DiscountCodeControllerTest {
                         e.printStackTrace();
                     }
                 });
+    }
+
+    @Test
+    @Order(14)
+    void testCreateDiscountCode() {
+        DiscountCodeDto requestBody = createDiscountCodeDto();
+
+        client.post()
+                .uri("/discount-code")
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(requestBody)
+                .exchange()
+                .expectStatus().isCreated()
+                .expectHeader().contentType(MediaType.APPLICATION_JSON)
+                .expectBody()
+                .consumeWith(res -> {
+                    try {
+                        JsonNode json = objectMapper.readTree(res.getResponseBody());
+                        assertAll(
+                            () -> assertNotNull(json),
+                            () -> assertEquals(5L, json.path("id").asLong()),
+                            () -> assertEquals("20OFFLOYALCUSTOMER", json.path("code").asText()),
+                            () -> assertEquals(3L, json.path("discount").path("id").asLong()),
+                            () -> assertEquals(100, json.path("usageLimit").asInt()),
+                            () -> assertEquals(0, json.path("usedCount").asInt())
+                        );
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                });        
+    }
+
+    @Test
+    @Order(15)
+    void testCreateDiscountCodeWithNoCode() {
+        DiscountCodeDto requestBodyWithNoCode = createDiscountCodeDto();
+        requestBodyWithNoCode.setCode("");
+
+        client.post()
+                .uri("/discount-code")
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(requestBodyWithNoCode)
+                .exchange()
+                .expectStatus().isBadRequest();
+    }
+
+    @Test
+    @Order(16)
+    void testCreateDiscountCodeWithNoDiscountId() {
+        DiscountCodeDto requestBodyWithNoDiscountId = createDiscountCodeDto();
+        requestBodyWithNoDiscountId.setDiscountId(null);
+
+        client.post()
+                .uri("/discount-code")
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(requestBodyWithNoDiscountId)
+                .exchange()
+                .expectStatus().isBadRequest();
+    }
+
+    @Test
+    @Order(17)
+    void testCreateDiscountCodeWithNoUsageLimit() {
+        DiscountCodeDto requestBodyWithNoUsageLimit = createDiscountCodeDto();
+        requestBodyWithNoUsageLimit.setUsageLimit(null);
+
+        client.post()
+                .uri("/discount-code")
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(requestBodyWithNoUsageLimit)
+                .exchange()
+                .expectStatus().isBadRequest();
+    }
+
+    @Test
+    @Order(18)
+    void testCreateDiscountCodeNotFound() {
+        DiscountCodeDto requestBody = createDiscountCodeDto();
+        requestBody.setDiscountId(15142L);
+
+        client.post()
+                .uri("/discount-code")
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(requestBody)
+                .exchange()
+                .expectStatus().isNotFound();
     }
 
     @Test
