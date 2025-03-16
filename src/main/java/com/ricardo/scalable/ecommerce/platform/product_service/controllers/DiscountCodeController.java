@@ -38,7 +38,7 @@ public class DiscountCodeController {
         return ResponseEntity.notFound().build();
     }
 
-    @GetMapping("/discount-code/{code}")
+    @GetMapping("/discount-code/code/{code}")
     public ResponseEntity<DiscountCode> getDiscountCodeByCode(@PathVariable String code) {
         Optional<DiscountCode> discountCode = discountCodeService.findByCode(code);
         if (discountCode.isPresent()) {
@@ -47,7 +47,7 @@ public class DiscountCodeController {
         return ResponseEntity.notFound().build();
     }
 
-    @GetMapping("/discount-code/{discountId}")
+    @GetMapping("/discount-code/discount-id/{discountId}")
     public ResponseEntity<List<DiscountCode>> getDiscountCodeByDiscountId(@PathVariable Long discountId) {
         Optional<List<DiscountCode>> discountCode = discountCodeService.findByDiscountId(discountId);
         boolean isPresent = discountCode.isPresent();
@@ -59,7 +59,7 @@ public class DiscountCodeController {
         return ResponseEntity.notFound().build();
     }
 
-    @GetMapping("/discount-code/{code}/{discountId}")
+    @GetMapping("/discount-code/code/{code}/discount-id/{discountId}")
     public ResponseEntity<DiscountCode> getDiscountCodeByCodeAndDiscountId(@PathVariable String code, @PathVariable Long discountId) {
         Optional<DiscountCode> discountCode = discountCodeService.findByCodeAndDiscountId(code, discountId);
         if (discountCode.isPresent()) {
@@ -68,7 +68,7 @@ public class DiscountCodeController {
         return ResponseEntity.notFound().build();
     }
 
-    @GetMapping("/discount-code/{usageLimit}")
+    @GetMapping("/discount-code/usage-limit/{usageLimit}")
     public ResponseEntity<List<DiscountCode>> getDiscountCodeByUsageLimit(@PathVariable Integer usageLimit) {
         Optional<List<DiscountCode>> discountCode = discountCodeService.findByUsageLimit(usageLimit);
         boolean isPresent = discountCode.isPresent();
@@ -80,7 +80,7 @@ public class DiscountCodeController {
         return ResponseEntity.notFound().build();
     }
 
-    @GetMapping("/discount-code/{usedCount}")
+    @GetMapping("/discount-code/used-count/{usedCount}")
     public ResponseEntity<List<DiscountCode>> getDiscountCodeByUsedCount(@PathVariable Integer usedCount) {
         Optional<List<DiscountCode>> discountCode = discountCodeService.findByUsedCount(usedCount);
         boolean isPresent = discountCode.isPresent();

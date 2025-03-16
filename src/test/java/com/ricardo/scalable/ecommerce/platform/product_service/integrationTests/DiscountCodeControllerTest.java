@@ -7,14 +7,17 @@ import static com.ricardo.scalable.ecommerce.platform.product_service.services.t
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.env.Environment;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @ActiveProfiles("test")
@@ -33,6 +36,41 @@ public class DiscountCodeControllerTest {
     @BeforeEach
     void setUp() {
         objectMapper = new ObjectMapper();
+    }
+
+    @Test
+    @Order(1)
+    void testGetDiscountCodeById() {
+        client.get()
+                .uri("/discount-code/1")
+                .exchange()
+                .expectStatus().isOk()
+                .expectHeader().contentType(MediaType.APPLICATION_JSON)
+                .expectBody()
+                .consumeWith(res -> {
+                    try {
+                        JsonNode json = objectMapper.readTree(res.getResponseBody());
+                        assertAll(
+                            () -> assertNotNull(json),
+                            () -> assertEquals(1L, json.path("id").asLong()),
+                            () -> assertEquals("10OFFMARCH2025", json.path("code").asText()),
+                            () -> assertEquals(4L, json.path("discount").path("id").asLong()),
+                            () -> assertEquals(100, json.path("usageLimit").asInt()),
+                            () -> assertEquals(0, json.path("usedCount").asInt())
+                        );
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                });
+    }
+
+    @Test
+    @Order(2)
+    void testGetDiscountCodeByIdNotFound() {
+        client.get()
+                .uri("/discount-code/15682")
+                .exchange()
+                .expectStatus().isNotFound();
     }
 
     @Test
