@@ -13,8 +13,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static com.ricardo.scalable.ecommerce.platform.product_service.services.testData.DiscountCodeServiceImplTestData.*;
-import static com.ricardo.scalable.ecommerce.platform.product_service.services.testData.DiscountServiceImplTestData.createDiscount004;
-import static com.ricardo.scalable.ecommerce.platform.product_service.services.testData.DiscountServiceImplTestData.createDiscount005;
+import static com.ricardo.scalable.ecommerce.platform.product_service.services.testData.DiscountServiceImplTestData.*;
 
 import com.ricardo.scalable.ecommerce.platform.product_service.entities.DiscountCode;
 import com.ricardo.scalable.ecommerce.platform.product_service.repositories.DiscountCodeRepository;
@@ -199,6 +198,15 @@ public class DiscountCodeServiceImplTest {
             () -> assertEquals(120, updatedDiscountCode.orElseThrow().getUsageLimit()),
             () -> assertEquals(0, updatedDiscountCode.orElseThrow().getUsedCount())
         );
+    }
+
+    @Test
+    void testDelete() {
+        doNothing().when(discountCodeRepository).deleteById(5L);
+
+        discountCodeService.delete(5L);
+
+        verify(discountCodeRepository, times(1)).deleteById(5L);
     }
 
 }
