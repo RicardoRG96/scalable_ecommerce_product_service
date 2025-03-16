@@ -196,3 +196,18 @@ INSERT INTO discount_product_sku (discount_id, product_sku_id)
 
 INSERT INTO discount_product_sku (discount_id, product_sku_id)
     VALUES (2, 4);
+
+
+-- DISCOUNT_CODES
+
+INSERT INTO discount_codes (code, discount_id, usage_limit, used_count)
+    VALUES ('10OFFMARCH2025', 4, 100, 0);
+
+INSERT INTO discount_codes (code, discount_id, usage_limit, used_count)
+    VALUES ('20OFFAPRIL2025', 3, 50, 0);
+
+INSERT INTO discount_codes (code, discount_id, usage_limit, used_count)
+    VALUES ('10DOLLARSOFFMARCH', 1, 70, 0);
+
+INSERT INTO discount_codes (code, discount_id, usage_limit, used_count)
+    VALUES ('FREESHIPPINGAPRIL2025', 2, 150, 0);
