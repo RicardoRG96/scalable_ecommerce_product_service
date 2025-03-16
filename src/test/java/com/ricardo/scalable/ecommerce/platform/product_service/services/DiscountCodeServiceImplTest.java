@@ -144,4 +144,21 @@ public class DiscountCodeServiceImplTest {
         );
     }
 
+    @Test
+    void testFindAll() {
+        when(discountCodeRepository.findAll()).thenReturn(createListOfDiscountCodes());
+
+        List<DiscountCode> discountCodes = discountCodeService.findAll();
+
+        assertAll(
+            () -> assertFalse(discountCodes.isEmpty()),
+            () -> assertEquals(5, discountCodes.size()),
+            () -> assertEquals(1L, discountCodes.get(0).getId()),
+            () -> assertEquals(2L, discountCodes.get(1).getId()),
+            () -> assertEquals(3L, discountCodes.get(2).getId()),
+            () -> assertEquals(4L, discountCodes.get(3).getId()),
+            () -> assertEquals(5L, discountCodes.get(4).getId())
+        );
+    }
+
 }
