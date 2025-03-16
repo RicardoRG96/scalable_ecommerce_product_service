@@ -109,6 +109,43 @@ public class DiscountCodeControllerTest {
     }
 
     @Test
+    @Order(5)
+    void testGetDiscountCodeByDiscountId() {
+        client.get()
+                .uri("/discount-code/discount-id/3")
+                .exchange()
+                .expectStatus().isOk()
+                .expectHeader().contentType(MediaType.APPLICATION_JSON)
+                .expectBody()
+                .consumeWith(res -> {
+                    try {
+                        JsonNode json = objectMapper.readTree(res.getResponseBody());
+                        assertAll(
+                            () -> assertNotNull(json),
+                            () -> assertTrue(json.isArray()),
+                            () -> assertEquals(1, json.size()),
+                            () -> assertEquals(2L, json.get(0).path("id").asLong()),
+                            () -> assertEquals("20OFFAPRIL2025", json.get(0).path("code").asText()),
+                            () -> assertEquals(3L, json.get(0).path("discount").path("id").asLong()),
+                            () -> assertEquals(50, json.get(0).path("usageLimit").asInt()),
+                            () -> assertEquals(0, json.get(0).path("usedCount").asInt())
+                        );
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                });
+    }
+
+    @Test
+    @Order(6)
+    void testGetDiscountCodeByDiscountIdNotFound() {
+        client.get()
+                .uri("/discount-code/discount-id/3521")
+                .exchange()
+                .expectStatus().isNotFound();
+    }
+
+    @Test
     void testProfile() {
         String[] activeProfiles = env.getActiveProfiles();
         assertArrayEquals(new String[] { "test" }, activeProfiles);
