@@ -210,4 +210,4 @@ INSERT INTO discount_codes (code, discount_id, usage_limit, used_count)
     VALUES ('10DOLLARSOFFMARCH', 1, 70, 0);
 
 INSERT INTO discount_codes (code, discount_id, usage_limit, used_count)
-    VALUES ('FREESHIPPINGAPRIL2025', 2, 150, 0);
+    VALUES ('FREESHIPPINGAPRIL2025', 2, 100, 0);

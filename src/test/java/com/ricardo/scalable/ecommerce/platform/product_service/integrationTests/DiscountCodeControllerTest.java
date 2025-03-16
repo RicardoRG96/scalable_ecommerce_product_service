@@ -191,6 +191,48 @@ public class DiscountCodeControllerTest {
     }
 
     @Test
+    @Order(9)
+    void testGetDiscountCodeByUsageLimit() {
+        client.get()
+                .uri("/discount-code/usage-limit/100")
+                .exchange()
+                .expectStatus().isOk()
+                .expectHeader().contentType(MediaType.APPLICATION_JSON)
+                .expectBody()
+                .consumeWith(res -> {
+                    try {
+                        JsonNode json = objectMapper.readTree(res.getResponseBody());
+                        assertAll(
+                            () -> assertNotNull(json),
+                            () -> assertTrue(json.isArray()),
+                            () -> assertEquals(2, json.size()),
+                            () -> assertEquals(1L, json.get(0).path("id").asLong()),
+                            () -> assertEquals(4L, json.get(1).path("id").asLong()),
+                            () -> assertEquals("10OFFMARCH2025", json.get(0).path("code").asText()),
+                            () -> assertEquals("FREESHIPPINGAPRIL2025", json.get(1).path("code").asText()),
+                            () -> assertEquals(4L, json.get(0).path("discount").path("id").asLong()),
+                            () -> assertEquals(2L, json.get(1).path("discount").path("id").asLong()),
+                            () -> assertEquals(100, json.get(0).path("usageLimit").asInt()),
+                            () -> assertEquals(100, json.get(1).path("usageLimit").asInt()),
+                            () -> assertEquals(0, json.get(0).path("usedCount").asInt()),
+                            () -> assertEquals(0, json.get(1).path("usedCount").asInt())
+                        );
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                });
+    }
+
+    @Test
+    @Order(10)
+    void testGetDiscountCodeByUsageLimitNotFound() {
+        client.get()
+                .uri("/discount-code/usage-limit/12974")
+                .exchange()
+                .expectStatus().isNotFound();
+    }
+
+    @Test
     void testProfile() {
         String[] activeProfiles = env.getActiveProfiles();
         assertArrayEquals(new String[] { "test" }, activeProfiles);
