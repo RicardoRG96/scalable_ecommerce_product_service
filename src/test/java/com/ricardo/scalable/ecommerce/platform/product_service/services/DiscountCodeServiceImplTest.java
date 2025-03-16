@@ -84,4 +84,20 @@ public class DiscountCodeServiceImplTest {
         );
     }
 
+    @Test
+    void testFindByCodeAndDiscountId() {
+        when(discountCodeRepository.findByCodeAndDiscountId("10OFFMARZO", 1L)).thenReturn(createDiscountCode005());
+
+        Optional<DiscountCode> discountCode = discountCodeService.findByCodeAndDiscountId("10OFFMARZO", 1L);
+
+        assertAll(
+            () -> assertTrue(discountCode.isPresent()),
+            () -> assertEquals(5L, discountCode.orElseThrow().getId()),
+            () -> assertEquals("10OFFMARZO", discountCode.orElseThrow().getCode()),
+            () -> assertEquals("percentage", discountCode.orElseThrow().getDiscount().getDiscountType()),
+            () -> assertEquals(100, discountCode.orElseThrow().getUsageLimit()),
+            () -> assertEquals(0, discountCode.orElseThrow().getUsedCount())
+        );
+    }
+
 }
