@@ -100,4 +100,26 @@ public class DiscountCodeServiceImplTest {
         );
     }
 
+    @Test
+    void testFindByUsageLimit() {
+        when(discountCodeRepository.findByUsageLimit(70)).thenReturn(createListOfDiscountCodeByUsageLimit());
+
+        Optional<List<DiscountCode>> discountCodes = discountCodeService.findByUsageLimit(70);
+
+        assertAll(
+            () -> assertTrue(discountCodes.isPresent()),
+            () -> assertFalse(discountCodes.orElseThrow().isEmpty()),
+            () -> assertEquals(2L, discountCodes.orElseThrow().get(0).getId()),
+            () -> assertEquals(4L, discountCodes.orElseThrow().get(1).getId()),
+            () -> assertEquals("SUMMER2025", discountCodes.orElseThrow().get(0).getCode()),
+            () -> assertEquals("LOYALTY2025", discountCodes.orElseThrow().get(1).getCode()),
+            () -> assertEquals("fixed amount", discountCodes.orElseThrow().get(0).getDiscount().getDiscountType()),
+            () -> assertEquals("quantity discount", discountCodes.orElseThrow().get(1).getDiscount().getDiscountType()),
+            () -> assertEquals(70, discountCodes.orElseThrow().get(0).getUsageLimit()),
+            () -> assertEquals(70, discountCodes.orElseThrow().get(1).getUsageLimit()),
+            () -> assertEquals(10, discountCodes.orElseThrow().get(0).getUsedCount()),
+            () -> assertEquals(0, discountCodes.orElseThrow().get(1).getUsedCount())
+        );
+    }
+
 }
