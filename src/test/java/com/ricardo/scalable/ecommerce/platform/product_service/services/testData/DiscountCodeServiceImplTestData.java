@@ -189,12 +189,11 @@ public class DiscountCodeServiceImplTestData {
 
     public static DiscountCode createDiscountCodeUpdateResponse() {
         DiscountCode discountCode = new DiscountCode();
-        discountCode.setId(6L);
+        discountCode.setId(5L);
         discountCode.setCode("20OFFMARZO-ABRIL2025");
         discountCode.setDiscount(createDiscount005().orElseThrow());
         discountCode.setUsageLimit(120);
         discountCode.setUsedCount(0);
-        discountCode.setCreatedAt(Timestamp.from(Instant.now()));
         discountCode.setUpdatedAt(Timestamp.from(Instant.now()));
 
         return discountCode;

@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static com.ricardo.scalable.ecommerce.platform.product_service.services.testData.DiscountCodeServiceImplTestData.*;
+import static com.ricardo.scalable.ecommerce.platform.product_service.services.testData.DiscountServiceImplTestData.createDiscount004;
 import static com.ricardo.scalable.ecommerce.platform.product_service.services.testData.DiscountServiceImplTestData.createDiscount005;
 
 import com.ricardo.scalable.ecommerce.platform.product_service.entities.DiscountCode;
@@ -178,6 +179,25 @@ public class DiscountCodeServiceImplTest {
             () -> assertEquals("percentage", createdDiscountCode.orElseThrow().getDiscount().getDiscountType()),
             () -> assertEquals(100, createdDiscountCode.orElseThrow().getUsageLimit()),
             () -> assertEquals(0, createdDiscountCode.orElseThrow().getUsedCount())
+        );
+    }
+
+    @Test
+    void testUpdate() {
+        when(discountCodeRepository.findById(5L)).thenReturn(createDiscountCode005());
+        when(discountRepository.findById(5L)).thenReturn(createDiscount005());
+        when(discountCodeRepository.save(any())).thenReturn(createDiscountCodeUpdateResponse());
+
+        DiscountCodeDto discountCodeUpdateRequest = createDiscountCodeDtoUpdate();
+        Optional<DiscountCode> updatedDiscountCode = discountCodeService.update(discountCodeUpdateRequest, 5L);
+
+        assertAll(
+            () -> assertTrue(updatedDiscountCode.isPresent()),
+            () -> assertEquals(5L, updatedDiscountCode.orElseThrow().getId()),
+            () -> assertEquals("20OFFMARZO-ABRIL2025", updatedDiscountCode.orElseThrow().getCode()),
+            () -> assertEquals("percentage", updatedDiscountCode.orElseThrow().getDiscount().getDiscountType()),
+            () -> assertEquals(120, updatedDiscountCode.orElseThrow().getUsageLimit()),
+            () -> assertEquals(0, updatedDiscountCode.orElseThrow().getUsedCount())
         );
     }
 
