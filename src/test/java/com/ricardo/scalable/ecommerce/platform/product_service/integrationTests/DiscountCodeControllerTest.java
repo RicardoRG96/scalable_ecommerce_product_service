@@ -233,6 +233,46 @@ public class DiscountCodeControllerTest {
     }
 
     @Test
+    @Order(11)
+    void testGetDiscountCodeByUsedCount() {
+        client.get()
+                .uri("/discount-code/used-count/0")
+                .exchange()
+                .expectStatus().isOk()
+                .expectHeader().contentType(MediaType.APPLICATION_JSON)
+                .expectBody()
+                .consumeWith(res -> {
+                    try {
+                        JsonNode json = objectMapper.readTree(res.getResponseBody());
+                        assertAll(
+                            () -> assertNotNull(json),
+                            () -> assertTrue(json.isArray()),
+                            () -> assertEquals(4, json.size()),
+                            () -> assertEquals(1L, json.get(0).path("id").asLong()),
+                            () -> assertEquals(2L, json.get(1).path("id").asLong()),
+                            () -> assertEquals(3L, json.get(2).path("id").asLong()),
+                            () -> assertEquals(4L, json.get(3).path("id").asLong()),
+                            () -> assertEquals(4L, json.get(0).path("discount").path("id").asLong()),
+                            () -> assertEquals(3L, json.get(1).path("discount").path("id").asLong()),
+                            () -> assertEquals(1L, json.get(2).path("discount").path("id").asLong()),
+                            () -> assertEquals(2L, json.get(3).path("discount").path("id").asLong())
+                        );
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                });
+    }
+
+    @Test
+    @Order(12)
+    void testGetDiscountCodeByUsedCountNotFound() {
+        client.get()
+                .uri("/discount-code/used-count/356")
+                .exchange()
+                .expectStatus().isNotFound();
+    }
+
+    @Test
     void testProfile() {
         String[] activeProfiles = env.getActiveProfiles();
         assertArrayEquals(new String[] { "test" }, activeProfiles);
