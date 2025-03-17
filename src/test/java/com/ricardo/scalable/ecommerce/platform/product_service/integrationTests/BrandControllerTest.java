@@ -126,6 +126,7 @@ public class BrandControllerTest {
                 try {
                     JsonNode json = objectMapper.readTree(res.getResponseBody());
                     assertAll(
+                        () -> assertTrue(json.isArray()),
                         () -> assertEquals(6, json.size()),
                         () -> assertEquals(1L, json.get(0).get("id").asLong()),
                         () -> assertEquals("Lee", json.get(0).get("name").asText()),

@@ -505,6 +505,7 @@ public class ProductSkuControllerTest {
     @Order(20)
     void testCreateProductSku() {
         ProductSkuCreationDto requestBody = createProductSkuCreationDto();
+        
         client.post()
                 .uri("/product-sku")
                 .contentType(MediaType.APPLICATION_JSON)
