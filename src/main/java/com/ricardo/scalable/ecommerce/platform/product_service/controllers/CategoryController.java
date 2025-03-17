@@ -1,7 +1,5 @@
 package com.ricardo.scalable.ecommerce.platform.product_service.controllers;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +17,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.ricardo.scalable.ecommerce.platform.libs_common.entities.Category;
 import com.ricardo.scalable.ecommerce.platform.product_service.repositories.dto.CategoryCreationDto;
 import com.ricardo.scalable.ecommerce.platform.product_service.services.CategoryService;
+
+import static com.ricardo.scalable.ecommerce.platform.product_service.controllers.validation.RequestBodyValidation.*;
 
 import jakarta.validation.Valid;
 
@@ -59,19 +59,10 @@ public class CategoryController {
         BindingResult result
     ) {
         if (result.hasErrors()) {
-            return this.validation(result);
+            return validation(result);
         }
 
         return ResponseEntity.status(HttpStatus.CREATED).body(categoryService.save(categoryCreation));
-    }
-
-    private ResponseEntity<?> validation(BindingResult result) {
-        Map<String, String> errors = new HashMap<>();
-
-        result.getFieldErrors()
-            .forEach(err -> errors.put(err.getField(), "El campo " + err.getField() + " " + err.getDefaultMessage()));
-
-        return ResponseEntity.badRequest().body(errors);
     }
 
     @PutMapping("/categories/{id}")
@@ -81,7 +72,7 @@ public class CategoryController {
         BindingResult result
     ) {
         if (result.hasErrors()) {
-            return this.validation(result);
+            return validation(result);
         }
         Optional<Category> categoryOptional = categoryService.update(category, id);
 

@@ -22,6 +22,8 @@ import com.ricardo.scalable.ecommerce.platform.libs_common.entities.Discount;
 import com.ricardo.scalable.ecommerce.platform.product_service.repositories.dto.DiscountDto;
 import com.ricardo.scalable.ecommerce.platform.product_service.services.DiscountService;
 
+import static com.ricardo.scalable.ecommerce.platform.product_service.controllers.validation.RequestBodyValidation.*;
+
 import jakarta.validation.Valid;
 
 @RestController
@@ -104,22 +106,13 @@ public class DiscountController {
         BindingResult result
     ) {
         if (result.hasErrors()) {
-            return this.validation(result);
+            return validation(result);
         }
         Optional<Discount> newDiscount = discountService.save(discount);
         if (newDiscount.isPresent()) {
             return ResponseEntity.status(HttpStatus.CREATED).body(newDiscount.orElseThrow());
         }
         return ResponseEntity.notFound().build();
-    }
-
-    private ResponseEntity<?> validation(BindingResult result) {
-        Map<String, String> errors = new HashMap<>();
-
-        result.getFieldErrors()
-                .forEach(err -> errors.put(err.getField(), "El campo " + err.getField() + " " + err.getDefaultMessage()));
-
-        return ResponseEntity.badRequest().body(errors);
     }
 
     @PutMapping("/discounts/{id}")
@@ -129,7 +122,7 @@ public class DiscountController {
         BindingResult result
     ) {
         if (result.hasErrors()) {
-            return this.validation(result);
+            return validation(result);
         }
         Optional<Discount> updatedDiscount = discountService.update(discount, id);
         if (updatedDiscount.isPresent()) {

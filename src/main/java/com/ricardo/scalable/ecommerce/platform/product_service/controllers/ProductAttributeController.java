@@ -1,8 +1,6 @@
 package com.ricardo.scalable.ecommerce.platform.product_service.controllers;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +18,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.ricardo.scalable.ecommerce.platform.libs_common.entities.ProductAttribute;
 import com.ricardo.scalable.ecommerce.platform.product_service.repositories.dto.ProductAttributeCreationDto;
 import com.ricardo.scalable.ecommerce.platform.product_service.services.ProductAttributeService;
+
+import static com.ricardo.scalable.ecommerce.platform.product_service.controllers.validation.RequestBodyValidation.*;
 
 import jakarta.validation.Valid;
 
@@ -74,20 +74,11 @@ public class ProductAttributeController {
         BindingResult result 
     ) {
         if (result.hasErrors()) {
-            return this.validation(result);
+            return validation(result);
         }
         ProductAttribute createdProductAttribute = productAttributeService.save(productAttribute);
         
         return ResponseEntity.status(HttpStatus.CREATED).body(createdProductAttribute);
-    }
-
-    private ResponseEntity<?> validation(BindingResult result) {
-        Map<String, String> errors = new HashMap<>();
-
-        result.getFieldErrors()
-                .forEach(err -> errors.put(err.getField(), "El campo " + err.getField() + " " + err.getDefaultMessage()));
-
-        return ResponseEntity.badRequest().body(errors);
     }
 
     @PutMapping("/product-attribute/{id}")
@@ -97,7 +88,7 @@ public class ProductAttributeController {
         BindingResult result
     ) {
         if (result.hasErrors()) {
-            return this.validation(result);
+            return validation(result);
         }
 
         Optional<ProductAttribute> productAttributeOptional = productAttributeService.update(productAttribute, id);

@@ -1,8 +1,6 @@
 package com.ricardo.scalable.ecommerce.platform.product_service.controllers;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +20,8 @@ import com.ricardo.scalable.ecommerce.platform.libs_common.entities.ProductSku;
 import com.ricardo.scalable.ecommerce.platform.product_service.repositories.dto.ProductSkuCreationDto;
 import com.ricardo.scalable.ecommerce.platform.product_service.searchService.SearchServiceClient;
 import com.ricardo.scalable.ecommerce.platform.product_service.services.ProductSkuService;
+
+import static com.ricardo.scalable.ecommerce.platform.product_service.controllers.validation.RequestBodyValidation.*;
 
 import jakarta.validation.Valid;
 
@@ -157,7 +157,7 @@ public class ProductSkuController {
     }
 
     /*
-     * BEGIN OF ALGOLIA SERVICE ENDPOINTS
+     * BEGIN OF SEARCH SERVICE ENDPOINTS
      */
     
     @GetMapping("/search")
@@ -188,7 +188,7 @@ public class ProductSkuController {
     } 
 
     /*
-     * END OF ALGOLIA SERVICE ENDPOINTS
+     * END OF SEARCH SERVICE ENDPOINTS
      */
 
     @PostMapping("/product-sku")
@@ -197,22 +197,13 @@ public class ProductSkuController {
             BindingResult result
         ) {
         if (result.hasErrors()) {
-            return this.validation(result);
+            return validation(result);
         }
         Optional<ProductSku> productSkuOptional = productSkuService.save(productSku);
         if (productSkuOptional.isPresent()) {
             return ResponseEntity.status(HttpStatus.CREATED).body(productSkuOptional.orElseThrow());
         }
         return ResponseEntity.notFound().build();
-    }
-
-    private ResponseEntity<?> validation(BindingResult result) {
-        Map<String, String> errors = new HashMap<>();
-
-        result.getFieldErrors()
-                .forEach(err -> errors.put(err.getField(), "El campo " + err.getField() + " " + err.getDefaultMessage()));
-
-        return ResponseEntity.badRequest().body(errors);
     }
 
     @PutMapping("/product-sku/{id}")
@@ -222,7 +213,7 @@ public class ProductSkuController {
         BindingResult result
     ) {
         if (result.hasErrors()) {
-            return this.validation(result);
+            return validation(result);
         }
 
         Optional<ProductSku> productSkuOptional = productSkuService.update(productSku, id);
