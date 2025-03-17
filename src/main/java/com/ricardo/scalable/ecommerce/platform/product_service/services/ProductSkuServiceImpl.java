@@ -104,7 +104,11 @@ public class ProductSkuServiceImpl implements ProductSkuService {
         Optional<ProductAttribute> sizeAttributeOptional = productAttributeRepository.findById(productSku.getSizeAttributeId());
         Optional<ProductAttribute> colorAttributeOptional = productAttributeRepository.findById(productSku.getColorAttributeId());
 
-        if (productOptional.isPresent() && sizeAttributeOptional.isPresent() && colorAttributeOptional.isPresent()) {
+        if (
+            productOptional.isPresent() && 
+            sizeAttributeOptional.isPresent() && 
+            colorAttributeOptional.isPresent()
+        ) {
             ProductSku newProductSku = new ProductSku();
 
             newProductSku.setProduct(productOptional.orElseThrow());

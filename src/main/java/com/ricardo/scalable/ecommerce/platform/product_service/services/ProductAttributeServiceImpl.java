@@ -60,6 +60,7 @@ public class ProductAttributeServiceImpl implements ProductAttributeService {
     @Transactional
     public Optional<ProductAttribute> update(ProductAttribute productAttribute, Long id) {
         Optional<ProductAttribute> attributeOptional = productAttributeRepository.findById(id);
+        
         if (attributeOptional.isPresent()) {
             ProductAttribute dbAttribute = attributeOptional.orElseThrow();
             dbAttribute.setType(productAttribute.getType());

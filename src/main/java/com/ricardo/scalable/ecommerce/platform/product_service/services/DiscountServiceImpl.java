@@ -79,7 +79,6 @@ public class DiscountServiceImpl implements DiscountService {
 
             return Optional.of(discountRepository.save(newDiscount));
         }
-
         return Optional.empty();
     }
 
@@ -108,7 +107,6 @@ public class DiscountServiceImpl implements DiscountService {
 
             return Optional.of(discountRepository.save(dbDiscount));
         }
-
         return Optional.empty();
     }
 

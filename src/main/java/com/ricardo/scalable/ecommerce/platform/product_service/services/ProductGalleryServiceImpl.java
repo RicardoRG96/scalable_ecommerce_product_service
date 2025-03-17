@@ -91,6 +91,7 @@ public class ProductGalleryServiceImpl implements ProductGalleryService {
         try {
             File imageFile = multipartFileToFile(image);
             Optional<String> storedImage = storageService.store(imageFile);
+            
             if (storedImage.isPresent()) {
                 Optional<String> imageUrl = storageService.getImageUrl(imageFile.getName());
                 return imageUrl;

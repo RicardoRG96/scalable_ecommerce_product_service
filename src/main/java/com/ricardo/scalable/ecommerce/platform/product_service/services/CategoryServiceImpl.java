@@ -42,12 +42,12 @@ public class CategoryServiceImpl implements CategoryService {
         Optional<Category> parentCategory = categoryRepository.findById(categoryCreation.getParentId());
         category.setName(categoryCreation.getName());
         category.setDescription(categoryCreation.getDescription());
+
         if (parentCategory.isPresent()) {
             category.setParent(parentCategory.orElseThrow());
         } else {
             category.setParent(null);
         }
-        
         return categoryRepository.save(category);
     }
 
@@ -63,7 +63,6 @@ public class CategoryServiceImpl implements CategoryService {
 
             return Optional.of(categoryRepository.save(dbCategory));
         }
-
         return Optional.empty();
     }
 
