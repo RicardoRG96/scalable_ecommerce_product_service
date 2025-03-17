@@ -20,24 +20,6 @@ import com.ricardo.scalable.ecommerce.platform.product_service.repositories.dto.
 
 public class ProductGalleryControllerTestData {
 
-    // public static ProductGalleryCreationDto createProductGalleryCreationDto() throws IOException {
-    //     ProductGalleryCreationDto productGallery = new ProductGalleryCreationDto();
-    //     byte[] imageBytes = createSamplePNG();
-
-    //     productGallery.setProductName("Polera Puma");
-    //     productGallery.setColorName("red");
-    //     MockMultipartFile file = 
-    //         new MockMultipartFile(
-    //             "file",
-    //             "polera-puma.png",
-    //             "image/png",
-    //             imageBytes
-    //         );
-    //     productGallery.setImage(file);
-
-    //     return productGallery;
-    // }
-
     public static MultipartBodyBuilder createProductGalleryMultipartFormRequest() throws IOException {
         String productName = "Polera Puma";
         String colorName = "red";
