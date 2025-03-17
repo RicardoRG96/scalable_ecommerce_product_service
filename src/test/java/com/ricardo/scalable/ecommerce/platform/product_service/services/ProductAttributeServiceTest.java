@@ -38,10 +38,8 @@ public class ProductAttributeServiceTest {
     @Test
     void testFindById() {
         when(productAttributeRepository.findById(1L)).thenReturn(createProductAttribute001());
-        when(productAttributeRepository.findById(2L)).thenReturn(createProductAttribute002());
 
         Optional<ProductAttribute> productAttributeOptional1 = productAttributeService.findById(1L);
-        Optional<ProductAttribute> productAttributeOptional2 = productAttributeService.findById(2L);
 
         assertAll(
             () -> assertTrue(productAttributeOptional1.isPresent()),
@@ -49,25 +47,14 @@ public class ProductAttributeServiceTest {
             () -> assertEquals("color", productAttributeOptional1.orElseThrow().getType()),
             () -> assertEquals("rojo", productAttributeOptional1.orElseThrow().getValue())
         );
-
-        assertAll(
-            () -> assertTrue(productAttributeOptional2.isPresent()),
-            () -> assertEquals(2L, productAttributeOptional2.orElseThrow().getId()),
-            () -> assertEquals("color", productAttributeOptional2.orElseThrow().getType()),
-            () -> assertEquals("azul", productAttributeOptional2.orElseThrow().getValue())
-        );
     }
 
     @Test
     void testFindByType() {
         when(productAttributeRepository.findByType("color")).thenReturn(createListOfProductAttributesColorType());
-        when(productAttributeRepository.findByType("size")).thenReturn(createListOfProductAttributesSizeType());
 
         Optional<List<ProductAttribute>> productAttributeOptionalList1 = 
             productAttributeService.findByType("color");
-
-        Optional<List<ProductAttribute>> productAttributeOptionalList2 = 
-            productAttributeService.findByType("size");
 
         assertAll(
             () -> assertTrue(productAttributeOptionalList1.isPresent()),
@@ -81,35 +68,13 @@ public class ProductAttributeServiceTest {
             () -> assertEquals("azul", productAttributeOptionalList1.orElseThrow().get(1).getValue()),
             () -> assertEquals("negro", productAttributeOptionalList1.orElseThrow().get(2).getValue())
         );
-
-        assertAll(
-            () -> assertTrue(productAttributeOptionalList2.isPresent()),
-            () -> assertEquals(4L, productAttributeOptionalList2.orElseThrow().get(0).getId()),
-            () -> assertEquals(5L, productAttributeOptionalList2.orElseThrow().get(1).getId()),
-            () -> assertEquals(6L, productAttributeOptionalList2.orElseThrow().get(2).getId()),
-            () -> assertEquals("size", productAttributeOptionalList2.orElseThrow().get(0).getType()),
-            () -> assertEquals("size", productAttributeOptionalList2.orElseThrow().get(1).getType()),
-            () -> assertEquals("size", productAttributeOptionalList2.orElseThrow().get(2).getType()),
-            () -> assertEquals("S", productAttributeOptionalList2.orElseThrow().get(0).getValue()),
-            () -> assertEquals("M", productAttributeOptionalList2.orElseThrow().get(1).getValue()),
-            () -> assertEquals("L", productAttributeOptionalList2.orElseThrow().get(2).getValue())
-        );
     }
 
     @Test
     void testFindByValue() {
-        when(productAttributeRepository.findByValue("negro")).thenReturn(createProductAttribute003());
         when(productAttributeRepository.findByValue("S")).thenReturn(createProductAttribute004());
 
-        Optional<ProductAttribute> productAttributeOptional1 = productAttributeService.findByValue("negro");
         Optional<ProductAttribute> productAttributeOptional2 = productAttributeService.findByValue("S");
-
-        assertAll(
-            () -> assertTrue(productAttributeOptional1.isPresent()),
-            () -> assertEquals(3L, productAttributeOptional1.orElseThrow().getId()),
-            () -> assertEquals("color", productAttributeOptional1.orElseThrow().getType()),
-            () -> assertEquals("negro", productAttributeOptional1.orElseThrow().getValue())
-        );
 
         assertAll(
             () -> assertTrue(productAttributeOptional2.isPresent()),

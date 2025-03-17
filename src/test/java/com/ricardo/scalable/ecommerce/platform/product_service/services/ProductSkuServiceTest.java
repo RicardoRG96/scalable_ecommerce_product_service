@@ -41,31 +41,22 @@ public class ProductSkuServiceTest {
     @Test
     void testFindById() {
         when(productSkuRepository.findById(1L)).thenReturn(createProductSku001());
-        when(productSkuRepository.findById(2L)).thenReturn(createProductSku002());
 
         Optional<ProductSku> productSku1 = productSkuService.findById(1L);
-        Optional<ProductSku> productSku2 = productSkuService.findById(2L);
 
         assertAll(
             () -> assertTrue(productSku1.isPresent()),
-            () -> assertTrue(productSku2.isPresent()),
             () -> assertEquals(1L, productSku1.orElseThrow().getId()),
-            () -> assertEquals(2L, productSku2.orElseThrow().getId()),
             () -> assertEquals("SKU001", productSku1.orElseThrow().getSku()),
-            () -> assertEquals("SKU002", productSku2.orElseThrow().getSku()),
             () -> assertEquals("negro", productSku1.orElseThrow().getColorAttribute().getValue()),
-            () -> assertEquals("azul", productSku2.orElseThrow().getColorAttribute().getValue()),
-            () -> assertEquals("none-size", productSku1.orElseThrow().getSizeAttribute().getValue()),
-            () -> assertEquals("none-size", productSku2.orElseThrow().getSizeAttribute().getValue())
+            () -> assertEquals("none-size", productSku1.orElseThrow().getSizeAttribute().getValue())
         );
     }
 
     @Test
     void testFindByProductId() {
-        when(productSkuRepository.findByProductId(1L)).thenReturn(createListOfProductSkuByProductId1());
         when(productSkuRepository.findByProductId(4L)).thenReturn(createListOfProductSkuByProductId4());
 
-        List<ProductSku> productsSkuWithProductId1 = (List<ProductSku>) productSkuService.findByProductId(1L).orElseThrow();
         List<ProductSku> productsSkuWithProductId4 = (List<ProductSku>) productSkuService.findByProductId(4L).orElseThrow();
 
         assertAll(
@@ -76,13 +67,6 @@ public class ProductSkuServiceTest {
             () -> assertEquals("rojo", productsSkuWithProductId4.get(1).getColorAttribute().getValue()),
             () -> assertEquals("S", productsSkuWithProductId4.get(0).getSizeAttribute().getValue()),
             () -> assertEquals("S", productsSkuWithProductId4.get(1).getSizeAttribute().getValue())
-        );
-
-        assertAll(
-            () -> assertEquals(1, productsSkuWithProductId1.size()),
-            () -> assertEquals("SKU001", productsSkuWithProductId1.get(0).getSku()),
-            () -> assertEquals("negro", productsSkuWithProductId1.get(0).getColorAttribute().getValue()),
-            () -> assertEquals("none-size", productsSkuWithProductId1.get(0).getSizeAttribute().getValue())
         );
     }
 

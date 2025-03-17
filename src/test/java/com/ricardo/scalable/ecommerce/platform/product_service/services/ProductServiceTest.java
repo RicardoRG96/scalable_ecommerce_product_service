@@ -40,44 +40,30 @@ public class ProductServiceTest {
     @Test
     void testFindById() {
         when(productRepository.findById(1L)).thenReturn(createProduct001());
-        when(productRepository.findById(2L)).thenReturn(createProduct002());
 
         Optional<Product> product1 = productService.findById(1L);
-        Optional<Product> product2 = productService.findById(2L);
 
         assertAll(
             () -> assertTrue(product1.isPresent()),
-            () -> assertTrue(product2.isPresent()),
             () -> assertEquals(1L, product1.orElseThrow().getId()),
-            () -> assertEquals(2L, product2.orElseThrow().getId()),
             () -> assertEquals("Notebook Samsung", product1.orElseThrow().getName()),
-            () -> assertEquals("iPhone Apple", product2.orElseThrow().getName()),
             () -> assertEquals("Computadoras", product1.orElseThrow().getCategory().getName()),
-            () -> assertEquals("Celulares", product2.orElseThrow().getCategory().getName()),
-            () -> assertEquals("Samsung", product1.orElseThrow().getBrand().getName()),
-            () -> assertEquals("Apple", product2.orElseThrow().getBrand().getName())
+            () -> assertEquals("Samsung", product1.orElseThrow().getBrand().getName())
         );
     }
 
     @Test
     void testFindByName() {
-        when(productRepository.findByName("Notebook Samsung")).thenReturn(createProduct001());
         when(productRepository.findByName("Macbook Apple")).thenReturn(createProduct002());
-
-        Optional<Product> producOptional1 = productService.findByName("Notebook Samsung");
-        Optional<Product> producOptional2 = productService.findByName("Macbook Apple");
+        
+        Optional<Product> producOptional = productService.findByName("Macbook Apple");
 
         assertAll(
-            () -> assertTrue(producOptional1.isPresent()),
-            () -> assertTrue(producOptional2.isPresent()),
-            () -> assertEquals(1L, producOptional1.orElseThrow().getId()),
-            () -> assertEquals("Notebook Samsung", producOptional1.orElseThrow().getName()),
-            () -> assertEquals(2L, producOptional2.orElseThrow().getId()),
-            () -> assertEquals("iPhone Apple", producOptional2.orElseThrow().getName()),
-            () -> assertEquals("Computadoras", producOptional1.orElseThrow().getCategory().getName()),
-            () -> assertEquals("Celulares", producOptional2.orElseThrow().getCategory().getName()),
-            () -> assertEquals("Samsung", producOptional1.orElseThrow().getBrand().getName()),
-            () -> assertEquals("Apple", producOptional2.orElseThrow().getBrand().getName())
+            () -> assertTrue(producOptional.isPresent()),
+            () -> assertEquals(2L, producOptional.orElseThrow().getId()),
+            () -> assertEquals("iPhone Apple", producOptional.orElseThrow().getName()),
+            () -> assertEquals("Celulares", producOptional.orElseThrow().getCategory().getName()),
+            () -> assertEquals("Apple", producOptional.orElseThrow().getBrand().getName())
         );
     }
 

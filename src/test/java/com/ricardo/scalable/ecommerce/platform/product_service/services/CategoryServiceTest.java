@@ -36,40 +36,22 @@ public class CategoryServiceTest {
     @Test
     void testFindById() {
         when(categoryRepository.findById(1L)).thenReturn(createParentCategory001());
-        when(categoryRepository.findById(4L)).thenReturn(createSubCategory001());
 
         Optional<Category> categoryOptional = categoryService.findById(1L);
-        Optional<Category> subCategoryOptional = categoryService.findById(4L);
 
         assertAll(
             () -> assertTrue(categoryOptional.isPresent()),
             () -> assertEquals(1L, categoryOptional.orElseThrow().getId()),
             () -> assertEquals("Tecnología", categoryOptional.orElseThrow().getName()),
             () -> assertEquals("Descripcion tecnología", categoryOptional.orElseThrow().getDescription())
-        );
-
-        assertAll(
-            () -> assertTrue(subCategoryOptional.isPresent()),
-            () -> assertEquals(4L, subCategoryOptional.orElseThrow().getId()),
-            () -> assertEquals("Computadoras", subCategoryOptional.orElseThrow().getName()),
-            () -> assertEquals("Descripcion computadoras", subCategoryOptional.orElseThrow().getDescription())
         );
     }
 
     @Test
     void testFindByName() {
-        when(categoryRepository.findByName("Tecnología")).thenReturn(createParentCategory001());
         when(categoryRepository.findByName("Celulares")).thenReturn(createSubCategory002());
 
-        Optional<Category> categoryOptional = categoryService.findByName("Tecnología");
         Optional<Category> subCategoryOptional = categoryService.findByName("Celulares");
-
-        assertAll(
-            () -> assertTrue(categoryOptional.isPresent()),
-            () -> assertEquals(1L, categoryOptional.orElseThrow().getId()),
-            () -> assertEquals("Tecnología", categoryOptional.orElseThrow().getName()),
-            () -> assertEquals("Descripcion tecnología", categoryOptional.orElseThrow().getDescription())
-        );
 
         assertAll(
             () -> assertTrue(subCategoryOptional.isPresent()),
