@@ -21,7 +21,6 @@ import org.springframework.web.reactive.function.BodyInserters;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
 
 import static com.ricardo.scalable.ecommerce.platform.product_service.services.testData.ProductGalleryControllerTestData.*;
 
@@ -41,7 +40,6 @@ public class ProductGalleryControllerTest {
     @BeforeEach
     public void setUp() {
         objectMapper = new ObjectMapper();
-        objectMapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
     }
 
     @Test
