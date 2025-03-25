@@ -37,4 +37,9 @@ public class SearchServiceClientImpl implements SearchServiceClient {
         return searchService.filterByPriceRange(minPrice, maxPrice);
     }
 
+    @Override
+    public void deleteRecord(Long id) {
+        searchService.deleteRecord(id);
+    }
+
 }

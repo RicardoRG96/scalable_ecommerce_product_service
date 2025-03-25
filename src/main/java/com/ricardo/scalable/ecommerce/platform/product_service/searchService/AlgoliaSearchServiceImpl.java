@@ -110,4 +110,10 @@ public class AlgoliaSearchServiceImpl implements SearchService {
         return searchedProductMatches;
     }
 
+    @Override
+    public void deleteRecord(Long id) {
+        String objectId = id.toString();
+        searchClient.deleteObject(indexName, objectId);
+    }
+
 }

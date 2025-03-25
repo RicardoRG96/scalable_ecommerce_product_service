@@ -147,7 +147,7 @@ public class ProductSkuServiceImpl implements ProductSkuService {
     @Override
     @Transactional
     public void delete(Long id) {
-        productSkuRepository.deleteById(id);
+        productSkuRepository.deleteById(id);        
     }
 
 }

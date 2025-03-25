@@ -1,5 +1,8 @@
 package com.ricardo.scalable.ecommerce.platform.product_service.services.testData;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import com.ricardo.scalable.ecommerce.platform.libs_common.entities.Brand;
 import com.ricardo.scalable.ecommerce.platform.libs_common.entities.Category;
 import com.ricardo.scalable.ecommerce.platform.libs_common.entities.Product;
@@ -8,6 +11,25 @@ import com.ricardo.scalable.ecommerce.platform.libs_common.entities.ProductSku;
 import com.ricardo.scalable.ecommerce.platform.product_service.repositories.dto.ProductSkuCreationDto;
 
 public class ProductSkuControllerTestData {
+
+     public static Map<String, String> createProductSkuMap() {
+        Map<String, String> productMap = new HashMap<>();
+        
+        productMap.put("name", "Polera Puma");
+        productMap.put("description", "Descripcion polera Puma");
+        productMap.put("brand", "Puma");
+        productMap.put("sku", "SKU1258");
+        productMap.put("category", "Poleras-hombre");
+        productMap.put("price", "19.99");
+        productMap.put("color", "black");
+        productMap.put("size", "M");
+        productMap.put("cover", "https://example.com/images/polera_puma.jpg");
+        productMap.put("brandId", "5");
+        productMap.put("categoryId", "5");
+        productMap.put("objectID", "11");
+
+        return productMap;
+    }
 
     public static ProductSkuCreationDto createProductSkuCreationDto() {
         ProductSkuCreationDto productSku = new ProductSkuCreationDto();

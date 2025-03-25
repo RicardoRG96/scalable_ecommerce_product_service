@@ -14,4 +14,6 @@ public interface SearchServiceClient {
 
     List<ProductSku> filterByPriceRange(Double minPrice, Double maxPrice);
 
+    void deleteRecord(Long id);
+
 }

@@ -230,6 +230,7 @@ public class ProductSkuController {
 
         if (productSkuOptional.isPresent()) {
             productSkuService.delete(id);
+            searchServiceClient.deleteRecord(id);
             return ResponseEntity.noContent().build();
         }
         return ResponseEntity.notFound().build();

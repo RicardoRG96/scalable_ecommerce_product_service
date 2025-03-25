@@ -3,18 +3,25 @@ package com.ricardo.scalable.ecommerce.platform.product_service.integrationTests
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 
+import java.util.Map;
+
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestMethodOrder;
+import org.junit.jupiter.api.TestInstance.Lifecycle;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.env.Environment;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
+import com.algolia.api.SearchClient;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ricardo.scalable.ecommerce.platform.libs_common.entities.ProductSku;
@@ -22,6 +29,7 @@ import com.ricardo.scalable.ecommerce.platform.product_service.repositories.dto.
 
 import static com.ricardo.scalable.ecommerce.platform.product_service.services.testData.ProductSkuControllerTestData.*;
 
+@TestInstance(Lifecycle.PER_CLASS)
 @ActiveProfiles("test")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @SpringBootTest(webEnvironment = RANDOM_PORT)
@@ -35,9 +43,26 @@ public class ProductSkuControllerTest {
 
     private ObjectMapper objectMapper;
 
+    @Autowired
+    private SearchClient searchClient;
+
+    @Value("${algolia.indexName}")
+    private String indexName;
+
     @BeforeEach
     void setUp() {
         objectMapper = new ObjectMapper();
+    }
+
+    @AfterAll
+    void replaceDeletedObjectFromSearchService() {
+        addDeletedRecordToSearchService();
+    }
+
+    private void addDeletedRecordToSearchService() {
+        Map<String, String> productMap = createProductSkuMap();
+        
+        searchClient.saveObject(indexName, productMap);
     }
 
     @Test
@@ -685,6 +710,11 @@ public class ProductSkuControllerTest {
                 .uri("/product-sku/11")
                 .exchange()
                 .expectStatus().isNotFound();
+    }
+
+    @Test
+    void testSearchServiceIndexName() {
+        assertEquals("products_test", indexName);
     }
 
     @Test
