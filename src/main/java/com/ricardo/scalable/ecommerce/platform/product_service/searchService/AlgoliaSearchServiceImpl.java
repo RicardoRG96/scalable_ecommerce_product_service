@@ -1,5 +1,6 @@
 package com.ricardo.scalable.ecommerce.platform.product_service.searchService;
 
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -32,9 +33,11 @@ public class AlgoliaSearchServiceImpl implements SearchService {
 
     @Override
     public List<ProductSku> searchProducts(String query) {
+        byte[] queryBytes = query.getBytes();
+        String encodedQuery = new String(queryBytes, StandardCharsets.US_ASCII);
         SearchResponse<Hit> searchResults = searchClient.searchSingleIndex(
             indexName,
-            new SearchParamsObject().setQuery(query),
+            new SearchParamsObject().setQuery(encodedQuery),
             Hit.class
         );
         
