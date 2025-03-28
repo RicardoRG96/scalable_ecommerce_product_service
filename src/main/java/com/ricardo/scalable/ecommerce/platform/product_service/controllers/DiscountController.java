@@ -22,7 +22,7 @@ import com.ricardo.scalable.ecommerce.platform.libs_common.entities.Discount;
 import com.ricardo.scalable.ecommerce.platform.product_service.repositories.dto.DiscountDto;
 import com.ricardo.scalable.ecommerce.platform.product_service.services.DiscountService;
 
-import static com.ricardo.scalable.ecommerce.platform.product_service.controllers.validation.RequestBodyValidation.*;
+import static com.ricardo.scalable.ecommerce.platform.libs_common.validation.RequestBodyValidation.*;
 
 import jakarta.validation.Valid;
 

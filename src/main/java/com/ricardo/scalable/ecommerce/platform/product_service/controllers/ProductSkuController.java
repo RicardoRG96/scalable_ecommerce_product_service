@@ -21,7 +21,7 @@ import com.ricardo.scalable.ecommerce.platform.product_service.repositories.dto.
 import com.ricardo.scalable.ecommerce.platform.product_service.searchService.SearchServiceClient;
 import com.ricardo.scalable.ecommerce.platform.product_service.services.ProductSkuService;
 
-import static com.ricardo.scalable.ecommerce.platform.product_service.controllers.validation.RequestBodyValidation.*;
+import static com.ricardo.scalable.ecommerce.platform.libs_common.validation.RequestBodyValidation.*;
 
 import jakarta.validation.Valid;
 
@@ -193,9 +193,9 @@ public class ProductSkuController {
 
     @PostMapping("/product-sku")
     public ResponseEntity<?> createProductSku(
-            @Valid @RequestBody ProductSkuCreationDto productSku, 
-            BindingResult result
-        ) {
+        @Valid @RequestBody ProductSkuCreationDto productSku, 
+        BindingResult result
+    ) {
         if (result.hasErrors()) {
             return validation(result);
         }

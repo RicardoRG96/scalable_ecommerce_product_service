@@ -18,7 +18,7 @@ import com.ricardo.scalable.ecommerce.platform.libs_common.entities.Product;
 import com.ricardo.scalable.ecommerce.platform.product_service.repositories.dto.ProductCreationDto;
 import com.ricardo.scalable.ecommerce.platform.product_service.services.ProductService;
 
-import static com.ricardo.scalable.ecommerce.platform.product_service.controllers.validation.RequestBodyValidation.*;
+import static com.ricardo.scalable.ecommerce.platform.libs_common.validation.RequestBodyValidation.*;
 
 import jakarta.validation.Valid;
 
