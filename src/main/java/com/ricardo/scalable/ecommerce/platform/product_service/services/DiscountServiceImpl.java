@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ricardo.scalable.ecommerce.platform.libs_common.entities.ProductSku;
+import com.ricardo.scalable.ecommerce.platform.libs_common.enums.DiscountType;
 import com.ricardo.scalable.ecommerce.platform.libs_common.entities.Discount;
 import com.ricardo.scalable.ecommerce.platform.product_service.repositories.DiscountRepository;
 import com.ricardo.scalable.ecommerce.platform.product_service.repositories.ProductSkuRepository;
@@ -70,7 +71,7 @@ public class DiscountServiceImpl implements DiscountService {
 
         if (areAllProductSkusPresent && !isProductSkusListEmpty) {
             Discount newDiscount = new Discount();
-            newDiscount.setDiscountType(discount.getDiscountType());
+            newDiscount.setDiscountType(DiscountType.valueOf(discount.getDiscountType()));
             newDiscount.setDiscountValue(discount.getDiscountValue());
             newDiscount.setStartDate(Timestamp.valueOf(discount.getStartDate()));
             newDiscount.setEndDate(Timestamp.valueOf(discount.getEndDate()));
@@ -98,7 +99,7 @@ public class DiscountServiceImpl implements DiscountService {
             !isProductSkusListEmpty
         ) {
             Discount dbDiscount = discountToUpdate.orElseThrow();
-            dbDiscount.setDiscountType(discount.getDiscountType());
+            dbDiscount.setDiscountType(DiscountType.valueOf(discount.getDiscountType()));
             dbDiscount.setDiscountValue(discount.getDiscountValue());
             dbDiscount.setStartDate(Timestamp.valueOf(discount.getStartDate()));
             dbDiscount.setEndDate(Timestamp.valueOf(discount.getEndDate()));

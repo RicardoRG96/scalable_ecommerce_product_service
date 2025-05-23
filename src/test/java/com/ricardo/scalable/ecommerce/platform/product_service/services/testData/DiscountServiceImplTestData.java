@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Optional;
 
 import com.ricardo.scalable.ecommerce.platform.libs_common.entities.ProductSku;
+import com.ricardo.scalable.ecommerce.platform.libs_common.enums.DiscountType;
 import com.ricardo.scalable.ecommerce.platform.libs_common.entities.Discount;
 import com.ricardo.scalable.ecommerce.platform.product_service.repositories.dto.DiscountDto;
 
@@ -32,7 +33,7 @@ public class DiscountServiceImplTestData {
         );
 
         discount.setId(1L);
-        discount.setDiscountType("percentage");
+        discount.setDiscountType(DiscountType.PERCENTAGE);
         discount.setDiscountValue(10.0);
         discount.setStartDate(Timestamp.valueOf(LocalDateTime.of(2025, 3, 10, 0, 0, 0)));
         discount.setEndDate(Timestamp.valueOf(LocalDateTime.of(2025, 4, 10, 23, 59, 59)));
@@ -52,7 +53,7 @@ public class DiscountServiceImplTestData {
         );
 
         discount.setId(2L);
-        discount.setDiscountType("fixed amount");
+        discount.setDiscountType(DiscountType.AMOUNT);
         discount.setDiscountValue(10.00);
         discount.setStartDate(Timestamp.valueOf(LocalDateTime.of(2025, 3, 1, 0, 0, 0)));
         discount.setEndDate(Timestamp.valueOf(LocalDateTime.of(2025, 3, 9, 23, 59, 59)));
@@ -72,7 +73,7 @@ public class DiscountServiceImplTestData {
         );
 
         discount.setId(3L);
-        discount.setDiscountType("free shipping");
+        discount.setDiscountType(DiscountType.AMOUNT);
         discount.setDiscountValue(5.00);
         discount.setStartDate(Timestamp.valueOf(LocalDateTime.of(2025, 3, 5, 0, 0, 0)));
         discount.setEndDate(Timestamp.valueOf(LocalDateTime.of(2025, 3, 20, 23, 59, 59)));
@@ -92,7 +93,7 @@ public class DiscountServiceImplTestData {
         );
 
         discount.setId(4L);
-        discount.setDiscountType("quantity discount");
+        discount.setDiscountType(DiscountType.PERCENTAGE);
         discount.setDiscountValue(15.0);
         discount.setStartDate(Timestamp.valueOf(LocalDateTime.of(2025, 3, 1, 0, 0, 0)));
         discount.setEndDate(Timestamp.valueOf(LocalDateTime.of(2025, 3, 8, 23, 59, 59)));
@@ -112,7 +113,7 @@ public class DiscountServiceImplTestData {
         );
 
         discount.setId(5L);
-        discount.setDiscountType("percentage");
+        discount.setDiscountType(DiscountType.PERCENTAGE);
         discount.setDiscountValue(20.0);
         discount.setStartDate(Timestamp.valueOf(LocalDateTime.of(2025, 3, 10, 0, 0, 0)));
         discount.setEndDate(Timestamp.valueOf(LocalDateTime.of(2025, 4, 10, 23, 59, 59)));
@@ -185,7 +186,7 @@ public class DiscountServiceImplTestData {
 
     public static DiscountDto createDiscountDtoCreation() {
         DiscountDto discountDto = new DiscountDto();
-        discountDto.setDiscountType("fixed amount");
+        discountDto.setDiscountType("amount");
         discountDto.setDiscountValue(12.0);
         discountDto.setStartDate(LocalDateTime.of(2025, 3, 10, 0, 0, 0));
         discountDto.setEndDate(LocalDateTime.of(2025, 4, 2, 23, 59, 59));
@@ -198,7 +199,7 @@ public class DiscountServiceImplTestData {
     public static Discount createDiscountCreationResponse() {
         Discount discount = new Discount();
         discount.setId(6L);
-        discount.setDiscountType("fixed amount");
+        discount.setDiscountType(DiscountType.AMOUNT);
         discount.setDiscountValue(12.0);
         discount.setStartDate(Timestamp.valueOf(LocalDateTime.of(2025, 3, 10, 0, 0, 0)));
         discount.setEndDate(Timestamp.valueOf(LocalDateTime.of(2025, 4, 2, 23, 59, 59)));
@@ -228,7 +229,7 @@ public class DiscountServiceImplTestData {
     public static Discount createDiscountUpdatedResponse() {
         Discount discount = new Discount();
         discount.setId(5L);
-        discount.setDiscountType("percentage");
+        discount.setDiscountType(DiscountType.PERCENTAGE);
         discount.setDiscountValue(25.0);
         discount.setStartDate(Timestamp.valueOf(LocalDateTime.of(2025, 3, 10, 0, 0, 0)));
         discount.setEndDate(Timestamp.valueOf(LocalDateTime.of(2025, 4, 12, 23, 59, 59)));
