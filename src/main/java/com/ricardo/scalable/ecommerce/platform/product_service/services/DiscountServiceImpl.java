@@ -71,7 +71,7 @@ public class DiscountServiceImpl implements DiscountService {
 
         if (areAllProductSkusPresent && !isProductSkusListEmpty) {
             Discount newDiscount = new Discount();
-            newDiscount.setDiscountType(DiscountType.valueOf(discount.getDiscountType()));
+            newDiscount.setDiscountType(DiscountType.valueOf(discount.getDiscountType().toUpperCase()));
             newDiscount.setDiscountValue(discount.getDiscountValue());
             newDiscount.setStartDate(Timestamp.valueOf(discount.getStartDate()));
             newDiscount.setEndDate(Timestamp.valueOf(discount.getEndDate()));
@@ -99,7 +99,7 @@ public class DiscountServiceImpl implements DiscountService {
             !isProductSkusListEmpty
         ) {
             Discount dbDiscount = discountToUpdate.orElseThrow();
-            dbDiscount.setDiscountType(DiscountType.valueOf(discount.getDiscountType()));
+            dbDiscount.setDiscountType(DiscountType.valueOf(discount.getDiscountType().toUpperCase()));
             dbDiscount.setDiscountValue(discount.getDiscountValue());
             dbDiscount.setStartDate(Timestamp.valueOf(discount.getStartDate()));
             dbDiscount.setEndDate(Timestamp.valueOf(discount.getEndDate()));

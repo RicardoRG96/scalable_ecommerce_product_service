@@ -42,7 +42,7 @@ public class DiscountServiceImplTest {
         assertAll(
             () -> assertTrue(discount.isPresent()),
             () -> assertEquals(1L, discount.orElseThrow().getId()),
-            () -> assertEquals("percentage", discount.orElseThrow().getDiscountType()),
+            () -> assertEquals("PERCENTAGE", discount.orElseThrow().getDiscountType().name()),
             () -> assertEquals(10.0, discount.orElseThrow().getDiscountValue()),
             () -> assertEquals("2025-03-10 00:00:00.0", discount.orElseThrow().getStartDate().toString()),
             () -> assertEquals("2025-04-10 23:59:59.0", discount.orElseThrow().getEndDate().toString()),
@@ -63,9 +63,9 @@ public class DiscountServiceImplTest {
             () -> assertEquals(2L, discount.orElseThrow().get(0).getId()),
             () -> assertEquals(4L, discount.orElseThrow().get(1).getId()),
             () -> assertEquals(5L, discount.orElseThrow().get(2).getId()),
-            () -> assertEquals("fixed amount", discount.orElseThrow().get(0).getDiscountType()),
-            () -> assertEquals("quantity discount", discount.orElseThrow().get(1).getDiscountType()),
-            () -> assertEquals("percentage", discount.orElseThrow().get(2).getDiscountType())
+            () -> assertEquals("AMOUNT", discount.orElseThrow().get(0).getDiscountType().name()),
+            () -> assertEquals("PERCENTAGE", discount.orElseThrow().get(1).getDiscountType().name()),
+            () -> assertEquals("PERCENTAGE", discount.orElseThrow().get(2).getDiscountType().name())
         );
     }
 
@@ -96,8 +96,8 @@ public class DiscountServiceImplTest {
             () -> assertEquals(2, discount.orElseThrow().size()),
             () -> assertEquals(1L, discount.orElseThrow().get(0).getId()),
             () -> assertEquals(2L, discount.orElseThrow().get(1).getId()),
-            () -> assertEquals("percentage", discount.orElseThrow().get(0).getDiscountType()),
-            () -> assertEquals("fixed amount", discount.orElseThrow().get(1).getDiscountType())
+            () -> assertEquals("PERCENTAGE", discount.orElseThrow().get(0).getDiscountType().name()),
+            () -> assertEquals("AMOUNT", discount.orElseThrow().get(1).getDiscountType().name())
         );
     }
 
@@ -110,7 +110,7 @@ public class DiscountServiceImplTest {
         assertAll(
             () -> assertTrue(discount.isPresent()),
             () -> assertEquals(1L, discount.orElseThrow().getId()),
-            () -> assertEquals("percentage", discount.orElseThrow().getDiscountType()),
+            () -> assertEquals("PERCENTAGE", discount.orElseThrow().getDiscountType().name()),
             () -> assertEquals(10.0, discount.orElseThrow().getDiscountValue()),
             () -> assertEquals("2025-03-10 00:00:00.0", discount.orElseThrow().getStartDate().toString()),
             () -> assertEquals("2025-04-10 23:59:59.0", discount.orElseThrow().getEndDate().toString()),
@@ -142,9 +142,9 @@ public class DiscountServiceImplTest {
             () -> assertEquals(1L, discounts.get(0).getId()),
             () -> assertEquals(2L, discounts.get(1).getId()),
             () -> assertEquals(3L, discounts.get(2).getId()),
-            () -> assertEquals("percentage", discounts.get(0).getDiscountType()),
-            () -> assertEquals("fixed amount", discounts.get(1).getDiscountType()),
-            () -> assertEquals("free shipping", discounts.get(2).getDiscountType())
+            () -> assertEquals("PERCENTAGE", discounts.get(0).getDiscountType().name()),
+            () -> assertEquals("AMOUNT", discounts.get(1).getDiscountType().name()),
+            () -> assertEquals("AMOUNT", discounts.get(2).getDiscountType().name())
         );
     }
 
@@ -162,7 +162,7 @@ public class DiscountServiceImplTest {
         assertAll(
             () -> assertTrue(newDiscount.isPresent()),
             () -> assertEquals(6L, newDiscount.orElseThrow().getId()),
-            () -> assertEquals("fixed amount", newDiscount.orElseThrow().getDiscountType()),
+            () -> assertEquals("AMOUNT", newDiscount.orElseThrow().getDiscountType().name()),
             () -> assertEquals(12.0, newDiscount.orElseThrow().getDiscountValue()),
             () -> assertEquals("2025-03-10 00:00:00.0", newDiscount.orElseThrow().getStartDate().toString()),
             () -> assertEquals("2025-04-02 23:59:59.0", newDiscount.orElseThrow().getEndDate().toString()),
@@ -186,7 +186,7 @@ public class DiscountServiceImplTest {
         assertAll(
             () -> assertTrue(updatedDiscount.isPresent()),
             () -> assertEquals(5L, updatedDiscount.orElseThrow().getId()),
-            () -> assertEquals("percentage", updatedDiscount.orElseThrow().getDiscountType()),
+            () -> assertEquals("PERCENTAGE", updatedDiscount.orElseThrow().getDiscountType().name()),
             () -> assertEquals(25.0, updatedDiscount.orElseThrow().getDiscountValue()),
             () -> assertEquals("2025-03-10 00:00:00.0", updatedDiscount.orElseThrow().getStartDate().toString()),
             () -> assertEquals("2025-04-12 23:59:59.0", updatedDiscount.orElseThrow().getEndDate().toString()),
