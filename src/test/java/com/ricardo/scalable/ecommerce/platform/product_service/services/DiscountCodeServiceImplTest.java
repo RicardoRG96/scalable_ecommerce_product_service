@@ -42,7 +42,7 @@ public class DiscountCodeServiceImplTest {
             () -> assertTrue(discountCode.isPresent()),
             () -> assertEquals(1L, discountCode.orElseThrow().getId()),
             () -> assertEquals("MATEO2025", discountCode.orElseThrow().getCode()),
-            () -> assertEquals("percentage", discountCode.orElseThrow().getDiscount().getDiscountType()),
+            () -> assertEquals("PERCENTAGE", discountCode.orElseThrow().getDiscount().getDiscountType().name()),
             () -> assertEquals(50, discountCode.orElseThrow().getUsageLimit()),
             () -> assertEquals(10, discountCode.orElseThrow().getUsedCount())
         );
@@ -58,7 +58,7 @@ public class DiscountCodeServiceImplTest {
             () -> assertTrue(discountCode.isPresent()),
             () -> assertEquals(2L, discountCode.orElseThrow().getId()),
             () -> assertEquals("SUMMER2025", discountCode.orElseThrow().getCode()),
-            () -> assertEquals("fixed amount", discountCode.orElseThrow().getDiscount().getDiscountType()),
+            () -> assertEquals("AMOUNT", discountCode.orElseThrow().getDiscount().getDiscountType().name()),
             () -> assertEquals(70, discountCode.orElseThrow().getUsageLimit()),
             () -> assertEquals(10, discountCode.orElseThrow().getUsedCount())
         );
@@ -77,8 +77,8 @@ public class DiscountCodeServiceImplTest {
             () -> assertEquals(5L, discountCodes.orElseThrow().get(1).getId()),
             () -> assertEquals("MATEO2025", discountCodes.orElseThrow().get(0).getCode()),
             () -> assertEquals("10OFFMARZO", discountCodes.orElseThrow().get(1).getCode()),
-            () -> assertEquals("percentage", discountCodes.orElseThrow().get(0).getDiscount().getDiscountType()),
-            () -> assertEquals("percentage", discountCodes.orElseThrow().get(1).getDiscount().getDiscountType()),
+            () -> assertEquals("PERCENTAGE", discountCodes.orElseThrow().get(0).getDiscount().getDiscountType().name()),
+            () -> assertEquals("PERCENTAGE", discountCodes.orElseThrow().get(1).getDiscount().getDiscountType().name()),
             () -> assertEquals(50, discountCodes.orElseThrow().get(0).getUsageLimit()),
             () -> assertEquals(100, discountCodes.orElseThrow().get(1).getUsageLimit()),
             () -> assertEquals(10, discountCodes.orElseThrow().get(0).getUsedCount()),
@@ -96,7 +96,7 @@ public class DiscountCodeServiceImplTest {
             () -> assertTrue(discountCode.isPresent()),
             () -> assertEquals(5L, discountCode.orElseThrow().getId()),
             () -> assertEquals("10OFFMARZO", discountCode.orElseThrow().getCode()),
-            () -> assertEquals("percentage", discountCode.orElseThrow().getDiscount().getDiscountType()),
+            () -> assertEquals("PERCENTAGE", discountCode.orElseThrow().getDiscount().getDiscountType().name()),
             () -> assertEquals(100, discountCode.orElseThrow().getUsageLimit()),
             () -> assertEquals(0, discountCode.orElseThrow().getUsedCount())
         );
@@ -115,8 +115,8 @@ public class DiscountCodeServiceImplTest {
             () -> assertEquals(4L, discountCodes.orElseThrow().get(1).getId()),
             () -> assertEquals("SUMMER2025", discountCodes.orElseThrow().get(0).getCode()),
             () -> assertEquals("LOYALTY2025", discountCodes.orElseThrow().get(1).getCode()),
-            () -> assertEquals("fixed amount", discountCodes.orElseThrow().get(0).getDiscount().getDiscountType()),
-            () -> assertEquals("quantity discount", discountCodes.orElseThrow().get(1).getDiscount().getDiscountType()),
+            () -> assertEquals("AMOUNT", discountCodes.orElseThrow().get(0).getDiscount().getDiscountType().name()),
+            () -> assertEquals("PERCENTAGE", discountCodes.orElseThrow().get(1).getDiscount().getDiscountType().name()),
             () -> assertEquals(70, discountCodes.orElseThrow().get(0).getUsageLimit()),
             () -> assertEquals(70, discountCodes.orElseThrow().get(1).getUsageLimit()),
             () -> assertEquals(10, discountCodes.orElseThrow().get(0).getUsedCount()),
@@ -137,8 +137,8 @@ public class DiscountCodeServiceImplTest {
             () -> assertEquals(2L, discountCodes.orElseThrow().get(1).getId()),
             () -> assertEquals("MATEO2025", discountCodes.orElseThrow().get(0).getCode()),
             () -> assertEquals("SUMMER2025", discountCodes.orElseThrow().get(1).getCode()),
-            () -> assertEquals("percentage", discountCodes.orElseThrow().get(0).getDiscount().getDiscountType()),
-            () -> assertEquals("fixed amount", discountCodes.orElseThrow().get(1).getDiscount().getDiscountType()),
+            () -> assertEquals("PERCENTAGE", discountCodes.orElseThrow().get(0).getDiscount().getDiscountType().name()),
+            () -> assertEquals("AMOUNT", discountCodes.orElseThrow().get(1).getDiscount().getDiscountType().name()),
             () -> assertEquals(50, discountCodes.orElseThrow().get(0).getUsageLimit()),
             () -> assertEquals(70, discountCodes.orElseThrow().get(1).getUsageLimit()),
             () -> assertEquals(10, discountCodes.orElseThrow().get(0).getUsedCount()),
@@ -175,7 +175,7 @@ public class DiscountCodeServiceImplTest {
             () -> assertTrue(createdDiscountCode.isPresent()),
             () -> assertEquals(6L, createdDiscountCode.orElseThrow().getId()),
             () -> assertEquals("20OFFMARZO2025", createdDiscountCode.orElseThrow().getCode()),
-            () -> assertEquals("percentage", createdDiscountCode.orElseThrow().getDiscount().getDiscountType()),
+            () -> assertEquals("PERCENTAGE", createdDiscountCode.orElseThrow().getDiscount().getDiscountType().name()),
             () -> assertEquals(100, createdDiscountCode.orElseThrow().getUsageLimit()),
             () -> assertEquals(0, createdDiscountCode.orElseThrow().getUsedCount())
         );
@@ -194,7 +194,7 @@ public class DiscountCodeServiceImplTest {
             () -> assertTrue(updatedDiscountCode.isPresent()),
             () -> assertEquals(5L, updatedDiscountCode.orElseThrow().getId()),
             () -> assertEquals("20OFFMARZO-ABRIL2025", updatedDiscountCode.orElseThrow().getCode()),
-            () -> assertEquals("percentage", updatedDiscountCode.orElseThrow().getDiscount().getDiscountType()),
+            () -> assertEquals("PERCENTAGE", updatedDiscountCode.orElseThrow().getDiscount().getDiscountType().name()),
             () -> assertEquals(120, updatedDiscountCode.orElseThrow().getUsageLimit()),
             () -> assertEquals(0, updatedDiscountCode.orElseThrow().getUsedCount())
         );
