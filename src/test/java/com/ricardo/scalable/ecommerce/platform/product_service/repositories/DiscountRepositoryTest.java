@@ -27,9 +27,9 @@ public class DiscountRepositoryTest {
             () -> assertTrue(discounts.isPresent()),
             () -> assertFalse(discounts.orElseThrow().isEmpty()),
             () -> assertEquals(3, discounts.orElseThrow().size()),
-            () -> assertEquals("fixed_amount", discounts.orElseThrow().get(0).getDiscountType()),
-            () -> assertEquals("percentage", discounts.orElseThrow().get(1).getDiscountType()),
-            () -> assertEquals("free_shipping", discounts.orElseThrow().get(2).getDiscountType())
+            () -> assertEquals("AMOUNT", discounts.orElseThrow().get(0).getDiscountType().name()),
+            () -> assertEquals("PERCENTAGE", discounts.orElseThrow().get(1).getDiscountType().name()),
+            () -> assertEquals("AMOUNT", discounts.orElseThrow().get(2).getDiscountType().name())
         );
     }
 
@@ -41,7 +41,7 @@ public class DiscountRepositoryTest {
         assertAll(
             () -> assertTrue(validDiscount.isPresent()),
             () -> assertFalse(invalidDiscount.isPresent()),
-            () -> assertEquals("fixed_amount", validDiscount.orElseThrow().getDiscountType()),
+            () -> assertEquals("AMOUNT", validDiscount.orElseThrow().getDiscountType().name()),
             () -> assertEquals(10.00, validDiscount.orElseThrow().getDiscountValue()),
             () -> assertThrows(
                 NoSuchElementException.class, 
