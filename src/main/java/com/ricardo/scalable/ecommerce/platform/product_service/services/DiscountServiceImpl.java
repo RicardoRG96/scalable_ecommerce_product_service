@@ -36,7 +36,7 @@ public class DiscountServiceImpl implements DiscountService {
     }
 
     @Override
-    public Optional<List<Discount>> findByDiscountType(String discountType) {
+    public Optional<List<Discount>> findByDiscountType(DiscountType discountType) {
         return discountRepository.findByDiscountType(discountType);
     }
 
@@ -67,9 +67,8 @@ public class DiscountServiceImpl implements DiscountService {
                     .collect(Collectors.toList());
 
         boolean areAllProductSkusPresent = productSkus.stream().allMatch(Optional::isPresent);
-        boolean isProductSkusListEmpty = productSkus.isEmpty();
 
-        if (areAllProductSkusPresent && !isProductSkusListEmpty) {
+        if (areAllProductSkusPresent) {
             Discount newDiscount = new Discount();
             newDiscount.setDiscountType(DiscountType.valueOf(discount.getDiscountType().toUpperCase()));
             newDiscount.setDiscountValue(discount.getDiscountValue());

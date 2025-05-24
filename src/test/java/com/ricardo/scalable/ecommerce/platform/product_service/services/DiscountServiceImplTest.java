@@ -6,6 +6,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
 import com.ricardo.scalable.ecommerce.platform.libs_common.entities.Discount;
+import com.ricardo.scalable.ecommerce.platform.libs_common.enums.DiscountType;
 import com.ricardo.scalable.ecommerce.platform.product_service.repositories.DiscountRepository;
 import com.ricardo.scalable.ecommerce.platform.product_service.repositories.ProductSkuRepository;
 import com.ricardo.scalable.ecommerce.platform.product_service.repositories.dto.DiscountDto;
@@ -71,9 +72,10 @@ public class DiscountServiceImplTest {
 
     @Test
     void testFindByDiscountType() {
-        when(discountRepository.findByDiscountType("percentage")).thenReturn(createListOfDiscountByType());
+        DiscountType discountType = DiscountType.PERCENTAGE;
+        when(discountRepository.findByDiscountType(discountType)).thenReturn(createListOfDiscountByType());
 
-        Optional<List<Discount>> discount = discountService.findByDiscountType("percentage");
+        Optional<List<Discount>> discount = discountService.findByDiscountType(discountType);
 
         assertAll(
             () -> assertTrue(discount.isPresent()),

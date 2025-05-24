@@ -9,6 +9,7 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 
 import com.ricardo.scalable.ecommerce.platform.libs_common.entities.Discount;
+import com.ricardo.scalable.ecommerce.platform.libs_common.enums.DiscountType;
 
 public interface DiscountRepository extends CrudRepository<Discount, Long> {
 
@@ -19,7 +20,7 @@ public interface DiscountRepository extends CrudRepository<Discount, Long> {
                    nativeQuery = true)
     Optional<List<Discount>> findByProductSkuId(@Param("productSkuId") Long productSkuId);
 
-    Optional<List<Discount>> findByDiscountType(String discountType);
+    Optional<List<Discount>> findByDiscountType(DiscountType discountType);
 
     Optional<List<Discount>> findByDiscountValue(Double discountValue);
 

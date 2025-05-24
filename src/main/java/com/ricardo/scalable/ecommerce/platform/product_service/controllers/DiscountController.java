@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ricardo.scalable.ecommerce.platform.libs_common.entities.Discount;
+import com.ricardo.scalable.ecommerce.platform.libs_common.enums.DiscountType;
 import com.ricardo.scalable.ecommerce.platform.product_service.repositories.dto.DiscountDto;
 import com.ricardo.scalable.ecommerce.platform.product_service.services.DiscountService;
 
@@ -54,13 +55,19 @@ public class DiscountController {
 
     @GetMapping("/discounts/discount_type/{discountType}")
     public ResponseEntity<List<Discount>> getDiscountByType(@PathVariable String discountType) {
-        Optional<List<Discount>> discount = discountService.findByDiscountType(discountType);
-        boolean isPresent = discount.isPresent();
-        boolean isEmpty = discount.orElseThrow().isEmpty();
-        if (isPresent && !isEmpty) {
-            return ResponseEntity.ok(discount.orElseThrow());
+        try {
+            DiscountType discountTypeEnum = DiscountType.valueOf(discountType.toUpperCase());
+            Optional<List<Discount>> discount = discountService.findByDiscountType(discountTypeEnum);
+            boolean isPresent = discount.isPresent();
+            boolean isEmpty = discount.orElseThrow().isEmpty();
+            if (isPresent && !isEmpty) {
+                return ResponseEntity.ok(discount.orElseThrow());
+            }
+            return ResponseEntity.notFound().build();
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.notFound().build();
+        
     }
 
     @GetMapping("/discounts/discount_value/{discountValue}")
@@ -108,11 +115,15 @@ public class DiscountController {
         if (result.hasErrors()) {
             return validation(result);
         }
-        Optional<Discount> newDiscount = discountService.save(discount);
-        if (newDiscount.isPresent()) {
-            return ResponseEntity.status(HttpStatus.CREATED).body(newDiscount.orElseThrow());
+        try {
+            Optional<Discount> newDiscount = discountService.save(discount);
+            if (newDiscount.isPresent()) {
+                return ResponseEntity.status(HttpStatus.CREATED).body(newDiscount.orElseThrow());
+            }
+            return ResponseEntity.notFound().build();
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body("Invalid discount type provided.");
         }
-        return ResponseEntity.notFound().build();
     }
 
     @PutMapping("/discounts/{id}")
